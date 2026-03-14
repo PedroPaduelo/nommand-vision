@@ -44,6 +44,10 @@
     .flow-action { color: var(--neon); font-size: 1.2rem; }
     .flow-to { background: #10b981; color: white; padding: 4px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 500; }
     .flow-data { font-size: 0.8rem; color: var(--muted); flex: 1; }
+    .module-status { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; margin-left: 8px; }
+    .status-complete { background: #10b981; color: white; }
+    .status-partial { background: #f59e0b; color: white; }
+    .status-planning { background: #6b7280; color: white; }
   </style>
 </head>
 <body>
@@ -51,7 +55,7 @@
     <header class="header">
       <div class="logo">
         <h1>Nommand Vision</h1>
-        <span class="subtitle">Documentação de Arquitetura & Sistema</span>
+        <span class="subtitle">Documentação Completa • Arquitetura & Sistema</span>
       </div>
       <nav class="nav">
         <a href="#" class="nav-link active" onclick="showSection('overview')">Visão Geral</a>
@@ -59,6 +63,8 @@
         <a href="#" class="nav-link" onclick="showSection('agents')">Agentes</a>
         <a href="#" class="nav-link" onclick="showSection('flows')">Fluxos</a>
         <a href="#" class="nav-link" onclick="showSection('integrations')">Integrações</a>
+        <a href="#" class="nav-link" onclick="showSection('database')">Banco de Dados</a>
+        <a href="#" class="nav-link" onclick="showSection('modules')">Módulos</a>
         <a href="#" class="nav-link" onclick="showSection('risks')">Riscos</a>
       </nav>
       <div class="theme-toggle" onclick="toggleTheme()"><span class="icon">🌓</span></div>
@@ -67,15 +73,16 @@
     <main class="main">
       <aside class="sidebar">
         <div class="sidebar-section">
-          <h3>🔐 Autenticação</h3>
+          <h3>📚 Guias de Uso</h3>
           <ul class="nav-list">
-            <li><a href="guia-auth.html">Login & Registro</a></li>
-            <li><a href="guia-profile.html">Perfil do Usuário</a></li>
-            <li><a href="guia-workspaces.html">Workspaces</a></li>
+            <li><a href="guia-auth.html">🔐 Autenticação</a></li>
+            <li><a href="guia-workspaces.html">🏢 Workspaces</a></li>
+            <li><a href="guia-projects.html">📁 Projetos</a></li>
+            <li><a href="guia-projeto-detalhe.html">📋 Detalhe do Projeto</a></li>
           </ul>
         </div>
         <div class="sidebar-section">
-          <h3>🤖 Agentes</h3>
+          <h3>🤖 Agentes IA</h3>
           <ul class="nav-list">
             <li><a href="guia-agents.html">CRUD Agentes</a></li>
             <li><a href="#" onclick="showSection('agents')">Lista de 15 Agentes</a></li>
@@ -85,23 +92,30 @@
           <h3>💬 Comunicação</h3>
           <ul class="nav-list">
             <li><a href="guia-chat.html">Chat & Mensagens</a></li>
-            <li><a href="guia-inbox.html">Inbox & Notificações</a></li>
+            <li><a href="guia-inbox.html">📥 Inbox & Notificações</a></li>
           </ul>
         </div>
         <div class="sidebar-section">
           <h3>🚀 Operações</h3>
           <ul class="nav-list">
-            <li><a href="guia-projects.html">Projetos</a></li>
-            <li><a href="guia-deploys.html">Deploys</a></li>
-            <li><a href="guia-automations.html">Automações</a></li>
+            <li><a href="guia-deploys.html">🚢 Deploys</a></li>
+            <li><a href="guia-automations.html">🔄 Automações</a></li>
+            <li><a href="guia-playground.html">🧪 Playground</a></li>
           </ul>
         </div>
         <div class="sidebar-section">
-          <h3>📊 Dados</h3>
+          <h3>📊 Monitoramento</h3>
           <ul class="nav-list">
-            <li><a href="guia-analytics.html">Analytics</a></li>
-            <li><a href="guia-logs.html">Logs</a></li>
-            <li><a href="guia-status.html">Status</a></li>
+            <li><a href="guia-analytics.html">📈 Analytics</a></li>
+            <li><a href="guia-logs.html">📝 Logs</a></li>
+            <li><a href="guia-status.html">📊 Status</a></li>
+          </ul>
+        </div>
+        <div class="sidebar-section">
+          <h3>⚙️ Configurações</h3>
+          <ul class="nav-list">
+            <li><a href="guia-configuracoes.html">Configurações</a></li>
+            <li><a href="guia-marketplace.html">🛒 Marketplace</a></li>
           </ul>
         </div>
       </aside>
@@ -110,27 +124,118 @@
         <!-- VISÃO GERAL -->
         <section id="overview" class="section-content active">
           <section class="hero">
-            <h1>Nommand Vision - Sistema Completo</h1>
-            <p class="lead">Plataforma de gestão de projetos com <strong>agentes de IA</strong>, deploys automatizados, chat inteligente e muito mais.</p>
+            <h1>Nommand Vision</h1>
+            <p class="lead">Plataforma completa de gestão de projetos com <strong>agentes de IA</strong>, CI/CD automatizado, chat inteligente, analytics e muito mais.</p>
           </section>
           <section class="grid-overview">
-            <div class="card"><div class="card-icon">🔐</div><h3>Autenticação</h3><p>JWT com refresh tokens, rate limiting, segurança.</p><a href="guia-auth.html" class="card-link">Ver detalhes →</a></div>
-            <div class="card"><div class="card-icon">🏢</div><h3>Workspaces</h3><p>Multitenancy com isolamento completo.</p><a href="guia-workspaces.html" class="card-link">Ver detalhes →</a></div>
-            <div class="card"><div class="card-icon">🤖</div><h3>15 Agentes</h3><p>Agentes especializados: dev, review, QA, deploy.</p><a href="#" onclick="showSection('agents')" class="card-link">Ver detalhes →</a></div>
-            <div class="card"><div class="card-icon">💬</div><h3>Chat</h3><p>Conversas com IA, streaming em tempo real.</p><a href="guia-chat.html" class="card-link">Ver detalhes →</a></div>
-            <div class="card"><div class="card-icon">🚀</div><h3>Deploys</h3><p>Pipeline CI/CD, múltiplos ambientes.</p><a href="guia-deploys.html" class="card-link">Ver detalhes →</a></div>
-            <div class="card"><div class="card-icon">📊</div><h3>Analytics</h3><p>Métricas, custos de tokens, dashboards.</p><a href="guia-analytics.html" class="card-link">Ver detalhes →</a></div>
-            <div class="card"><div class="card-icon">🔄</div><h3>Automations</h3><p>Triggers + ações automatizadas.</p><a href="guia-automations.html" class="card-link">Ver detalhes →</a></div>
-            <div class="card"><div class="card-icon">📥</div><h3>Inbox</h3><p>Central de mensagens e notificações.</p><a href="guia-inbox.html" class="card-link">Ver detalhes →</a></div>
+            <div class="card">
+              <div class="card-icon">🔐</div>
+              <h3>Autenticação Segura</h3>
+              <p>JWT com refresh tokens, rate limiting, bcrypt, verificação de workspaces.</p>
+              <a href="guia-auth.html" class="card-link">Ver detalhes →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">🏢</div>
+              <h3>Multi-tenant</h3>
+              <p>Workspaces com isolamento completo. Cada usuário pertence a um workspace.</p>
+              <a href="guia-workspaces.html" class="card-link">Ver detalhes →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">🤖</div>
+              <h3>15 Agentes Especializados <span class="module-status status-complete">COMPLETO</span></h3>
+              <p>Agentes para desenvolvimento, QA, deploy, segurança, monitoramento e orquestração.</p>
+              <a href="#" onclick="showSection('agents')" class="card-link">Ver agentes →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">💬</div>
+              <h3>Chat Inteligente</h3>
+              <p>Conversas em tempo real com streaming SSE. Integração com Claude API.</p>
+              <a href="guia-chat.html" class="card-link">Ver detalhes →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">🚀</div>
+              <h3>CI/CD Completo</h3>
+              <p>Deploys automatizados com múltiplos ambientes, logs em tempo real, rollback.</p>
+              <a href="guia-deploys.html" class="card-link">Ver detalhes →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">📊</div>
+              <h3>Analytics Avançado</h3>
+              <p>Métricas de uso, custos de tokens, dashboards, relatórios detalhados.</p>
+              <a href="guia-analytics.html" class="card-link">Ver detalhes →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">🔄</div>
+              <h3>Automações</h3>
+              <p>Triggers e ações automatizadas. Webhooks, schedules, eventos do sistema.</p>
+              <a href="guia-automations.html" class="card-link">Ver detalhes →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">📥</div>
+              <h3>Inbox & Notificações</h3>
+              <p>Central de mensagens, notificações de agentes, deploys e sistema.</p>
+              <a href="guia-inbox.html" class="card-link">Ver detalhes →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">🧪</div>
+              <h3>Playground</h3>
+              <p>Ambiente de testes para agentes, código, terminal integrado.</p>
+              <a href="guia-playground.html" class="card-link">Ver detalhes →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">🛒</div>
+              <h3>Marketplace</h3>
+              <p>Catalogo de agentes pré-configurados, templates e integrações.</p>
+              <a href="guia-marketplace.html" class="card-link">Ver detalhes →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">⚙️</div>
+              <h3>Configurações</h3>
+              <p>API keys, webhooks, integrações, aparência, notificações, billing.</p>
+              <a href="guia-configuracoes.html" class="card-link">Ver detalhes →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">📁</div>
+              <h3>Projetos</h3>
+              <p>CRUD completo de projetos, associação de agentes, deploy, analytics.</p>
+              <a href="guia-projects.html" class="card-link">Ver detalhes →</a>
+            </div>
           </section>
           <section class="stats-section">
             <h2>📈 Estatísticas do Sistema</h2>
             <div class="stats-grid">
-              <div class="stat-card"><div class="stat-value">18</div><div class="stat-label">Rotas API</div></div>
-              <div class="stat-card"><div class="stat-value">15+</div><div class="stat-label">Schemas DB</div></div>
-              <div class="stat-card"><div class="stat-value">16</div><div class="stat-label">Páginas</div></div>
-              <div class="stat-card"><div class="stat-value">15</div><div class="stat-label">Agentes IA</div></div>
-              <div class="stat-card"><div class="stat-value">Real-time</div><div class="stat-label">WebSocket</div></div>
+              <div class="stat-card">
+                <div class="stat-value">18</div>
+                <div class="stat-label">Rotas API</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value">15+</div>
+                <div class="stat-label">Schemas DB</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value">16</div>
+                <div class="stat-label">Páginas</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value">15</div>
+                <div class="stat-label">Agentes IA</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value">Real-time</div>
+                <div class="stat-label">WebSocket</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value">JWT</div>
+                <div class="stat-label">Autenticação</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value">PostgreSQL</div>
+                <div class="stat-label">Banco de Dados</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value">Drizzle</div>
+                <div class="stat-label">ORM</div>
+              </div>
             </div>
           </section>
         </section>
@@ -139,22 +244,139 @@
         <section id="architecture" class="section-content">
           <section class="hero">
             <h1>Arquitetura do Sistema</h1>
-            <p class="lead">Visão em camadas da arquitetura, tecnologias e componentes.</p>
+            <p class="lead">Visão em camadas da arquitetura completa, tecnologias utilizadas e componentes.</p>
           </section>
           <div class="architecture-section">
-            <div class="arch-layer"><h4>Frontend</h4><ul><li>React 18 + TypeScript</li><li>Vite 6</li><li>TanStack Query</li><li>Shadcn/UI + Tailwind</li><li>Zustand</li></ul></div>
-            <div class="arch-layer"><h4>Backend</h4><ul><li>Hono (HTTP)</li><li>Drizzle ORM</li><li>PostgreSQL</li><li>JWT + bcryptjs</li><li>Zod + WebSocket</li></ul></div>
-            <div class="arch-layer"><h4>IA & ML</h4><ul><li>Anthropic SDK</li><li>Claude Models</li><li>15 Agentes</li><li>Tools custom</li><li>System prompts</li></ul></div>
-            <div class="arch-layer"><h4>Infra</h4><ul><li>EasyPanel</li><li>Docker</li><li>PostgreSQL comp.</li><li>Git Integration</li><li>CI/CD</li></ul></div>
+            <div class="arch-layer">
+              <h4>🎨 Frontend</h4>
+              <ul>
+                <li>React 18 + TypeScript</li>
+                <li>Vite 6 (build)</li>
+                <li>TanStack Query 5</li>
+                <li>Shadcn/UI + Tailwind CSS</li>
+                <li>React Router DOM 7</li>
+              </ul>
+            </div>
+            <div class="arch-layer">
+              <h4>⚙️ Backend</h4>
+              <ul>
+                <li>Hono 4 (HTTP framework)</li>
+                <li>Drizzle ORM 0.45</li>
+                <li>PostgreSQL (Neon)</li>
+                <li>JWT + bcryptjs</li>
+                <li>Zod validation</li>
+              </ul>
+            </div>
+            <div class="arch-layer">
+              <h4>🤖 IA & ML</h4>
+              <ul>
+                <li>Anthropic SDK</li>
+                <li>Claude Models (Sonnet, Opus)</li>
+                <li>15 Agentes especializados</li>
+                <li>Tools & Function Calling</li>
+                <li>System prompts custom</li>
+              </ul>
+            </div>
+            <div class="arch-layer">
+              <h4>🗄️ Banco de Dados</h4>
+              <ul>
+                <li>23 tabelas principais</li>
+                <li>JSONB para flexibilidade</li>
+                <li>Enums custom (25+)</li>
+                <li>Cascade deletes</li>
+                <li>UUIDs everywhere</li>
+              </ul>
+            </div>
+            <div class="arch-layer">
+              <h4>🔌 Infra & Deploy</h4>
+              <ul>
+                <li>EasyPanel (orquestração)</li>
+                <li>Docker containers</li>
+                <li>HTTPS automático</li>
+                <li>PM2 (process manager)</li>
+                <li>PostgreSQL compartilhado</li>
+              </ul>
+            </div>
+            <div class="arch-layer">
+              <h4>📡 Comunicação</h4>
+              <ul>
+                <li>REST API (JSON)</li>
+                <li>WebSocket (WS)</li>
+                <li>SSE (Server-Sent Events)</li>
+                <li>CORS configurado</li>
+                <li>Rate limiting</li>
+              </ul>
+            </div>
           </div>
+
+          <div style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin: 24px 0;">
+            <h3>🔄 Arquitetura de Camadas</h3>
+            <div class="architecture-section" style="margin-top: 16px;">
+              <div class="arch-layer" style="text-align: center;">
+                <h4>👤 Usuário</h4>
+                <p style="font-size: 0.85rem; color: var(--muted);">Browser / App</p>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: center; font-size: 2rem;">↓</div>
+              <div class="arch-layer" style="text-align: center;">
+                <h4>🌐 Frontend</h4>
+                <p style="font-size: 0.85rem; color: var(--muted);">React SPA</p>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: center; font-size: 2rem;">↔️</div>
+              <div class="arch-layer" style="text-align: center;">
+                <h4>🔧 Backend API</h4>
+                <p style="font-size: 0.85rem; color: var(--muted);">Hono + Services</p>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: center; font-size: 2rem;">↔️</div>
+              <div class="arch-layer" style="text-align: center;">
+                <h4>🗄️ Database</h4>
+                <p style="font-size: 0.85rem; color: var(--muted);">PostgreSQL</p>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: center; font-size: 2rem;">↔️</div>
+              <div class="arch-layer" style="text-align: center;">
+                <h4>🧠 External AI</h4>
+                <p style="font-size: 0.85rem; color: var(--muted);">Anthropic API</p>
+              </div>
+            </div>
+          </div>
+
           <div style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin: 24px 0;">
             <h3>🔄 Fluxo de Dados Principal</h3>
-            <div class="flow-item"><span class="flow-from">Usuário</span><span class="flow-action">→</span><span class="flow-to">Frontend</span><span class="flow-data">Ações, clicks, formulários</span></div>
-            <div class="flow-item"><span class="flow-from">Frontend</span><span class="flow-action">→</span><span class="flow-to">API (Hono)</span><span class="flow-data">Requisições HTTP/REST</span></div>
-            <div class="flow-item"><span class="flow-from">API</span><span class="flow-action">→</span><span class="flow-to">Serviços</span><span class="flow-data">Lógica de negócio</span></div>
-            <div class="flow-item"><span class="flow-from">Serviços</span><span class="flow-action">→</span><span class="flow-to">Banco (Postgres)</span><span class="flow-data">CRUD, queries</span></div>
-            <div class="flow-item"><span class="flow-from">Agentes</span><span class="flow-action">→</span><span class="flow-to">Anthropic (Claude)</span><span class="flow-data">Prompt + tools</span></div>
-            <div class="flow-item"><span class="flow-from">Backend</span><span class="flow-action">→</span><span class="flow-to">Frontend (SSE)</span><span class="flow-data">Streaming, notificações</span></div>
+            <div class="flow-item">
+              <span class="flow-from">👤 Usuário</span>
+              <span class="flow-action">→</span>
+              <span class="flow-to">Frontend</span>
+              <span class="flow-data">Ações, clicks, formulários</span>
+            </div>
+            <div class="flow-item">
+              <span class="flow-from">Frontend</span>
+              <span class="flow-action">→</span>
+              <span class="flow-to">API (Hono)</span>
+              <span class="flow-data">Requisições HTTP/REST com JWT</span>
+            </div>
+            <div class="flow-item">
+              <span class="flow-from">API</span>
+              <span class="flow-action">→</span>
+              <span class="flow-to">Auth Middleware</span>
+              <span class="flow-data">Valida token + workspace</span>
+            </div>
+            <div class="flow-item">
+              <span class="flow-from">Services</span>
+              <span class="flow-action">→</span>
+              <span class="flow-to">Banco (Postgres)</span>
+              <span class="flow-data">CRUD via Drizzle ORM</span>
+            </div>
+            <div class="flow-item">
+              <span class="flow-from">Agents Service</span>
+              <span class="flow-action">→</span>
+              <span class="flow-to">Anthropic API</span>
+              <span class="flow-data">Prompt + tools + streaming</span>
+            </div>
+            <div class="flow-item">
+              <span class="flow-from">Backend</span>
+              <span class="flow-action">→</span>
+              <span class="flow-to">Frontend</span>
+              <span class="flow-data">SSE/WebSocket (streaming)</span>
+            </div>
           </div>
         </section>
 
@@ -162,7 +384,7 @@
         <section id="agents" class="section-content">
           <section class="hero">
             <h1>15 Agentes do Sistema</h1>
-            <p class="lead">Lista completa dos agentes de IA especializados. Clique em cada um para ver os detalhes.</p>
+            <p class="lead">Lista completa dos agentes de IA especializados. Cada agente tem funções específicas e pode ser configurado.</p>
           </section>
           <div class="nav-tabs">
             <a href="agent-01-codewriter.html" class="nav-tab">01 CodeWriter</a>
@@ -182,55 +404,140 @@
             <a href="agent-15-orchestrator.html" class="nav-tab">15 Orchestrator</a>
           </div>
           <div class="agents-grid">
-            <a href="agent-01-codewriter.html" class="agent-card"><div class="agent-icon">✍️</div><div class="agent-name">CodeWriter</div><div class="agent-desc">Escreve código de alta qualidade a partir de especificações.</div><span class="agent-category category-dev">Desenvolvimento</span></a>
-            <a href="agent-02-codereviewer.html" class="agent-card"><div class="agent-icon">🔍</div><div class="agent-name">CodeReviewer</div><div class="agent-desc">Revisa código, identifica issues e sugere melhorias.</div><span class="agent-category category-review">Code Review</span></a>
-            <a href="agent-03-qa-tester.html" class="agent-card"><div class="agent-icon">🧪</div><div class="agent-name">QA Tester</div><div class="agent-desc">Executa testes automatizados e identifica bugs.</div><span class="agent-category category-qa">QA</span></a>
-            <a href="agent-04-deployer.html" class="agent-card"><div class="agent-icon">🚀</div><div class="agent-name">Deployer</div><div class="agent-desc">Automatiza deploy para staging e produção.</div><span class="agent-category category-deploy">Deploy</span></a>
-            <a href="agent-05-security-audit.html" class="agent-card"><div class="agent-icon">🔒</div><div class="agent-name">Security Audit</div><div class="agent-desc">Escaneia vulnerabilidades e dependências.</div><span class="agent-category category-security">Segurança</span></a>
-            <a href="agent-06-db-migration.html" class="agent-card"><div class="agent-icon">🗄️</div><div class="agent-name">DB Migration</div><div class="agent-desc">Gera e executa migrações de banco de dados.</div><span class="agent-category category-dev">Database</span></a>
-            <a href="agent-07-docs-generator.html" class="agent-card"><div class="agent-icon">📚</div><div class="agent-name">Docs Generator</div><div class="agent-desc">Gera documentação automática de código.</div><span class="agent-category category-dev">Docs</span></a>
-            <a href="agent-08-refactor.html" class="agent-card"><div class="agent-icon">🔧</div><div class="agent-name">Refactor</div><div class="agent-desc">Refatora código legado, melhora legibilidade.</div><span class="agent-category category-dev">Refatoração</span></a>
-            <a href="agent-09-test-generator.html" class="agent-card"><div class="agent-icon">🧬</div><div class="agent-name">Test Generator</div><div class="agent-desc">Gera testes unitários e E2E automaticamente.</div><span class="agent-category category-qa">Testes</span></a>
-            <a href="agent-10-performance.html" class="agent-card"><div class="agent-icon">⚡</div><div class="agent-name">Performance</div><div class="agent-desc">Analisa performance e otimiza queries.</div><span class="agent-category category-dev">Performance</span></a>
-            <a href="agent-11-analytics.html" class="agent-card"><div class="agent-icon">📊</div><div class="agent-name">Analytics</div><div class="agent-desc">Gera relatórios e insights sobre uso.</div><span class="agent-category category-analytics">Analytics</span></a>
-            <a href="agent-12-monitor.html" class="agent-card"><div class="agent-icon">👁️</div><div class="agent-name">Monitor</div><div class="agent-desc">Monitora saúde do sistema e alertas.</div><span class="agent-category category-monitor">Monitoramento</span></a>
-            <a href="agent-13-notifier.html" class="agent-card"><div class="agent-icon">🔔</div><div class="agent-name">Notifier</div><div class="agent-desc">Envia notificações e alertas automáticos.</div><span class="agent-category category-notify">Notificações</span></a>
-            <a href="agent-14-integration.html" class="agent-card"><div class="agent-icon">🔗</div><div class="agent-name">Integration</div><div class="agent-desc">Gerencia integrações com APIs externas.</div><span class="agent-category category-deploy">Integração</span></a>
-            <a href="agent-15-orchestrator.html" class="agent-card"><div class="agent-icon">🎼</div><div class="agent-name">Orchestrator</div><div class="agent-desc">Orquestra múltiplos agentes e pipelines.</div><span class="agent-category category-deploy">Orquestração</span></a>
+            <a href="agent-01-codewriter.html" class="agent-card">
+              <div class="agent-icon">✍️</div>
+              <div class="agent-name">CodeWriter</div>
+              <div class="agent-desc">Escreve código de alta qualidade a partir de especificações técnicas. Gera implementações completas.</div>
+              <span class="agent-category category-dev">Desenvolvimento</span>
+            </a>
+            <a href="agent-02-codereviewer.html" class="agent-card">
+              <div class="agent-icon">🔍</div>
+              <div class="agent-name">CodeReviewer</div>
+              <div class="agent-desc">Revisa código, identifica bugs, vulnerabilidades e sugere melhorias de qualidade.</div>
+              <span class="agent-category category-review">Code Review</span>
+            </a>
+            <a href="agent-03-qa-tester.html" class="agent-card">
+              <div class="agent-icon">🧪</div>
+              <div class="agent-name">QA Tester</div>
+              <div class="agent-desc">Executa testes automatizados, valida funcionalidades e identifica regressões.</div>
+              <span class="agent-category category-qa">QA</span>
+            </a>
+            <a href="agent-04-deployer.html" class="agent-card">
+              <div class="agent-icon">🚀</div>
+              <div class="agent-name">Deployer</div>
+              <div class="agent-desc">Automatiza deploy para staging e produção. Gerencia pipelines CI/CD.</div>
+              <span class="agent-category category-deploy">Deploy</span>
+            </a>
+            <a href="agent-05-security-audit.html" class="agent-card">
+              <div class="agent-icon">🔒</div>
+              <div class="agent-name">Security Audit</div>
+              <div class="agent-desc">Escaneia vulnerabilidades, dependências inseguras e issues de segurança.</div>
+              <span class="agent-category category-security">Segurança</span>
+            </a>
+            <a href="agent-06-db-migration.html" class="agent-card">
+              <div class="agent-icon">🗄️</div>
+              <div class="agent-name">DB Migration</div>
+              <div class="agent-desc">Gera e executa migrações de banco de dados. Versionamento de schema.</div>
+              <span class="agent-category category-dev">Database</span>
+            </a>
+            <a href="agent-07-docs-generator.html" class="agent-card">
+              <div class="agent-icon">📚</div>
+              <div class="agent-name">Docs Generator</div>
+              <div class="agent-desc">Gera documentação automática de código, APIs e arquitetura.</div>
+              <span class="agent-category category-dev">Docs</span>
+            </a>
+            <a href="agent-08-refactor.html" class="agent-card">
+              <div class="agent-icon">🔧</div>
+              <div class="agent-name">Refactor</div>
+              <div class="agent-desc">Refatora código legado, melhora legibilidade e aplica padrões.</div>
+              <span class="agent-category category-dev">Refatoração</span>
+            </a>
+            <a href="agent-09-test-generator.html" class="agent-card">
+              <div class="agent-icon">🧬</div>
+              <div class="agent-name">Test Generator</div>
+              <div class="agent-desc">Gera testes unitários e E2E automaticamente baseado no código.</div>
+              <span class="agent-category category-qa">Testes</span>
+            </a>
+            <a href="agent-10-performance.html" class="agent-card">
+              <div class="agent-icon">⚡</div>
+              <div class="agent-name">Performance</div>
+              <div class="agent-desc">Analisa performance, identifica bottlenecks e otimiza queries.</div>
+              <span class="agent-category category-dev">Performance</span>
+            </a>
+            <a href="agent-11-analytics.html" class="agent-card">
+              <div class="agent-icon">📊</div>
+              <div class="agent-name">Analytics</div>
+              <div class="agent-desc">Gera relatórios de uso, métricas de sistema e insights de negócio.</div>
+              <span class="agent-category category-analytics">Analytics</span>
+            </a>
+            <a href="agent-12-monitor.html" class="agent-card">
+              <div class="agent-icon">👁️</div>
+              <div class="agent-name">Monitor</div>
+              <div class="agent-desc">Monitora saúde do sistema, uptime, recursos e gera alertas.</div>
+              <span class="agent-category category-monitor">Monitoramento</span>
+            </a>
+            <a href="agent-13-notifier.html" class="agent-card">
+              <div class="agent-icon">🔔</div>
+              <div class="agent-name">Notifier</div>
+              <div class="agent-desc">Envia notificações e alertas para usuários via email, push, in-app.</div>
+              <span class="agent-category category-notify">Notificações</span>
+            </a>
+            <a href="agent-14-integration.html" class="agent-card">
+              <div class="agent-icon">🔗</div>
+              <div class="agent-name">Integration</div>
+              <div class="agent-desc">Gerencia integrações com APIs externas, webhooks e serviços.</div>
+              <span class="agent-category category-deploy">Integração</span>
+            </a>
+            <a href="agent-15-orchestrator.html" class="agent-card">
+              <div class="agent-icon">🎼</div>
+              <div class="agent-name">Orchestrator</div>
+              <div class="agent-desc">Orquestra múltiplos agentes em workflows complexos e pipelines.</div>
+              <span class="agent-category category-deploy">Orquestração</span>
+            </a>
           </div>
         </section>
 
         <!-- FLUXOS -->
         <section id="flows" class="section-content">
-          <section class="hero"><h1>Fluxos de Dados</h1><p class="lead">Mapas visuais dos principais fluxos de informação no sistema.</p></section>
+          <section class="hero">
+            <h1>Fluxos de Dados</h1>
+            <p class="lead">Mapas visuais dos principais fluxos de informação no sistema, da entrada do usuário até o armazenamento.</p>
+          </section>
+
           <div class="flow-diagram" style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 24px;">
             <h3>1. Fluxo de Autenticação</h3>
             <div class="flow-box">
               <div class="flow-step"><span class="step-num">1</span><div class="step-content"><strong>Usuário envia credenciais</strong>POST /api/auth/login</div></div>
               <div class="flow-arrow">→</div>
-              <div class="flow-step"><span class="step-num">2</span><div class="step-content"><strong>Auth Service valida</strong>bcrypt + verificação</div></div>
+              <div class="flow-step"><span class="step-num">2</span><div class="step-content"><strong>Auth Service valida</strong>bcrypt + verificação workspace</div></div>
               <div class="flow-arrow">→</div>
               <div class="flow-step"><span class="step-num">3</span><div class="step-content"><strong>Gera JWT + Refresh</strong>Assinatura HS256</div></div>
               <div class="flow-arrow">→</div>
-              <div class="flow-step"><span class="step-num">4</span><div class="step-content"><strong>Retorna tokens</strong>access (15min) + refresh (7d)</div></div>
+              <div class="flow-step"><span class="step-num">4</span><div class="step-content"><strong>Salva sessão</strong>refresh token hash no BD</div></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step"><span class="step-num">5</span><div class="step-content"><strong>Retorna tokens</strong>access (15min) + refresh (7d)</div></div>
             </div>
           </div>
+
           <div class="flow-diagram" style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 24px;">
             <h3>2. Fluxo de Execução de Agente</h3>
             <div class="flow-box">
-              <div class="flow-step"><span class="step-num">1</span><div class="step-content"><strong>Usuário executa</strong>POST /api/agents/:id/run</div></div>
+              <div class="flow-step"><span class="step-num">1</span><div class="step-content"><strong>Usuário executa agente</strong>POST /api/agents/:id/run</div></div>
               <div class="flow-arrow">→</div>
-              <div class="flow-step"><span class="step-num">2</span><div class="step-content"><strong>Valida agente</strong>status, permissões</div></div>
+              <div class="flow-step"><span class="step-num">2</span><div class="step-content"><strong>Valida agente</strong>status ativo, workspace</div></div>
               <div class="flow-arrow">→</div>
-              <div class="flow-step"><span class="step-num">3</span><div class="step-content"><strong>Cria AgentRun</strong>status=running</div></div>
+              <div class="flow-step"><span class="step-num">3</span><div class="step-content"><strong>Cria AgentRun</strong>status=running no BD</div></div>
               <div class="flow-arrow">→</div>
-              <div class="flow-step"><span class="step-num">4</span><div class="step-content"><strong>Chama Claude API</strong>Anthropic SDK</div></div>
+              <div class="flow-step"><span class="step-num">4</span><div class="step-content"><strong>Chama Claude API</strong>Anthropic SDK com prompt</div></div>
               <div class="flow-arrow">→</div>
-              <div class="flow-step"><span class="step-num">5</span><div class="step-content"><strong>Atualiza run</strong>output + tokens</div></div>
+              <div class="flow-step"><span class="step-num">5</span><div class="step-content"><strong>Atualiza run</strong>output, tokens, duration</div></div>
               <div class="flow-arrow">→</div>
-              <div class="flow-step"><span class="step-num">6</span><div class="step-content"><strong>Notifica inbox</strong>cria mensagem</div></div>
+              <div class="flow-step"><span class="step-num">6</span><div class="step-content"><strong>Notifica inbox</strong>cria mensagem para user</div></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step"><span class="step-num">7</span><div class="step-content"><strong>Atualiza stats</strong>média móvel no agente</div></div>
             </div>
           </div>
+
           <div class="flow-diagram" style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 24px;">
             <h3>3. Fluxo de Deploy</h3>
             <div class="flow-box">
@@ -238,68 +545,317 @@
               <div class="flow-arrow">→</div>
               <div class="flow-step"><span class="step-num">2</span><div class="step-content"><strong>Cria registro</strong>status=queued</div></div>
               <div class="flow-arrow">→</div>
-              <div class="flow-step"><span class="step-num">3</span><div class="step-content"><strong>Build worker</strong>npm + test + build</div></div>
+              <div class="flow-step"><span class="step-num">3</span><div class="step-content"><strong>Build worker</strong>npm install + test + build</div></div>
               <div class="flow-arrow">→</div>
-              <div class="flow-step"><span class="step-num">4</span><div class="step-content"><strong>Stream logs</strong>SSE para UI</div></div>
+              <div class="flow-step"><span class="step-num">4</span><div class="step-content"><strong>Stream logs</strong>SSE para frontend UI</div></div>
               <div class="flow-arrow">→</div>
               <div class="flow-step"><span class="step-num">5</span><div class="step-content"><strong>Deploy ambiente</strong>Docker/EasyPanel</div></div>
               <div class="flow-arrow">→</div>
-              <div class="flow-step"><span class="step-num">6</span><div class="step-content"><strong>Atualiza status</strong>success/failed</div></div>
+              <div class="flow-step"><span class="step-num">6</span><div class="step-content"><strong>Atualiza status</strong>success/failed/cancelled</div></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step"><span class="step-num">7</span><div class="step-content"><strong>Notifica inbox</strong>mensagem de resultado</div></div>
             </div>
           </div>
+
           <div class="flow-diagram" style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 24px;">
             <h3>4. Fluxo de Chat com Agente</h3>
             <div class="flow-box">
-              <div class="flow-step"><span class="step-num">1</span><div class="step-content"><strong>Mensagem usuário</strong>POST chat message</div></div>
+              <div class="flow-step"><span class="step-num">1</span><div class="step-content"><strong>Mensagem usuário</strong>POST /api/chat/sessions/:id/messages</div></div>
               <div class="flow-arrow">→</div>
-              <div class="flow-step"><span class="step-num">2</span><div class="step-content"><strong>Chat Service</strong>cria sessão</div></div>
+              <div class="flow-step"><span class="step-num">2</span><div class="step-content"><strong>Chat Service</strong>salva mensagem user</div></div>
               <div class="flow-arrow">→</div>
-              <div class="flow-step"><span class="step-num">3</span><div class="step-content"><strong>Chama Agent</strong>run() com input</div></div>
+              <div class="flow-step"><span class="step-num">3</span><div class="step-content"><strong>Chama Agent.run()</strong>com input da mensagem</div></div>
               <div class="flow-arrow">→</div>
               <div class="flow-step"><span class="step-num">4</span><div class="step-content"><strong>Claude API</strong>streaming response</div></div>
               <div class="flow-arrow">→</div>
-              <div class="flow-step"><span class="step-num">5</span><div class="step-content"><strong>SSE stream</strong>para frontend</div></div>
+              <div class="flow-step"><span class="step-num">5</span><div class="step-content"><strong>SSE stream</strong>retorna chunks ao frontend</div></div>
               <div class="flow-arrow">→</div>
-              <div class="flow-step"><span class="step-num">6</span><div class="step-content"><strong>Salva messages</strong>no banco</div></div>
+              <div class="flow-step"><span class="step-num">6</span><div class="step-content"><strong>Frontend render</strong>em tempo real</div></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step"><span class="step-num">7</span><div class="step-content"><strong>Salva assistente</strong>mensagem completa no BD</div></div>
+            </div>
+          </div>
+
+          <div class="flow-diagram" style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+            <h3>5. Fluxo de Criação de Projeto</h3>
+            <div class="flow-box">
+              <div class="flow-step"><span class="step-num">1</span><div class="step-content"><strong>Usuário preenche formulário</strong>nome, descrição, framework</div></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step"><span class="step-num">2</span><div class="step-content"><strong>POST /api/projects</strong>dados validados (Zod)</div></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step"><span class="step-num">3</span><div class="step-content"><strong>Projects Service</strong>gera slug único</div></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step"><span class="step-num">4</span><div class="step-content"><strong>INSERT no BD</strong>com workspaceId, createdBy</div></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step"><span class="step-num">5</span><div class="step-content"><strong>Retorna projeto</strong>com ID e slug</div></div>
             </div>
           </div>
         </section>
 
         <!-- INTEGRAÇÕES -->
         <section id="integrations" class="section-content">
-          <section class="hero"><h1>Integrações do Sistema</h1><p class="lead">Tabela completa de integrações entre módulos.</p></section>
+          <section class="hero">
+            <h1>Integrações do Sistema</h1>
+            <p class="lead">Tabela completa de integrações entre módulos, serviços externos e pontos de coleta de dados.</p>
+          </section>
           <section class="table-section">
             <table class="data-table">
-              <thead><tr><th>Origem</th><th>Destino</th><th>Tipo</th><th>Dados</th><th>Trigger</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>Origem</th>
+                  <th>Destino</th>
+                  <th>Tipo</th>
+                  <th>Dados</th>
+                  <th>Trigger</th>
+                </tr>
+              </thead>
               <tbody>
-                <tr><td><strong>Frontend</strong></td><td>API Auth</td><td>HTTP POST</td><td>credentials</td><td>Login</td></tr>
+                <tr><td><strong>Frontend</strong></td><td>API Auth</td><td>HTTP POST</td><td>email, password</td><td>Login</td></tr>
                 <tr><td><strong>Frontend</strong></td><td>API Agents</td><td>HTTP POST</td><td>agentId, input</td><td>Run agent</td></tr>
                 <tr><td><strong>Frontend</strong></td><td>API Chat</td><td>SSE/WebSocket</td><td>messages</td><td>Chat</td></tr>
                 <tr><td><strong>Auth Service</strong></td><td>Database</td><td>Drizzle</td><td>users, sessions</td><td>Auth</td></tr>
-                <tr><td><strong>Agents Service</strong></td><td>Anthropic API</td><td>SDK</td><td>prompt, tools</td><td>Run</td></tr>
-                <tr><td><strong>Agents Service</strong></td><td>Inbox Service</td><td>Internal</td><td>notification</td><td>Run complete</td></tr>
-                <tr><td><strong>Deploys Service</strong></td><td>Git Provider</td><td>Git API</td><td>commit, branch</td><td>Deploy</td></tr>
+                <tr><td><strong>Agents Service</strong></td><td>Anthropic API</td><td>SDK HTTPS</td><td>prompt, tools, model</td><td>Agent run</td></tr>
+                <tr><td><strong>Agents Service</strong></td><td>Inbox Service</td><td>Internal Call</td><td>notification object</td><td>Run complete</td></tr>
+                <tr><td><strong>Deploys Service</strong></td><td>Git Provider</td><td>Git API</td><td>commit, branch</td><td>Deploy trigger</td></tr>
+                <tr><td><strong>Chat Service</strong></td><td>Agents Service</td><td>Internal Call</td><td>user message</td><td>New message</td></tr>
                 <tr><td><strong>Automations</strong></td><td>Various APIs</td><td>HTTP/Webhook</td><td>action config</td><td>Trigger fired</td></tr>
                 <tr><td><strong>Analytics</strong></td><td>All Services</td><td>Event</td><td>events, metrics</td><td>Every action</td></tr>
-                <tr><td><strong>Monitor</strong></td><td>Notifications</td><td>Internal</td><td>alert data</td><td>Anomaly detected</td></tr>
+                <tr><td><strong>Monitor Service</strong></td><td>Notifications</td><td>Internal</td><td>alert data</td><td>Anomaly detected</td></tr>
                 <tr><td><strong>Orchestrator</strong></td><td>Other Agents</td><td>Internal</td><td>task, context</td><td>Complex workflow</td></tr>
+                <tr><td><strong>Settings Service</strong></td><td>External Webhook</td><td>HTTP POST</td><td>event payload</td><td>Webhook test</td></tr>
+                <tr><td><strong>Frontend</strong></td><td>API Real-time</td><td>WebSocket</td><td>notifications</td><td>Push</td></tr>
               </tbody>
             </table>
           </section>
         </section>
 
+        <!-- BANCO DE DADOS -->
+        <section id="database" class="section-content">
+          <section class="hero">
+            <h1>Banco de Dados</h1>
+            <p class="lead">Schema completo, relacionamentos, índices e tratamento de dados sensíveis.</p>
+          </section>
+
+          <div class="table-section">
+            <h2>🗄️ Tabelas Principais (23 total)</h2>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Tabela</th>
+                  <th>Descrição</th>
+                  <th>Relacionamentos</th>
+                  <th>Campos Sensíveis</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><code>users</code></td><td>Usuários do sistema</td><td>workspace_id (FK)</td><td>password_hash, oauth_id</td></tr>
+                <tr><td><code>workspaces</code></td><td>Workspaces/organizações</td><td>-</td><td>-</td></tr>
+                <tr><td><code>sessions</code></td><td>Sessões JWT refresh</td><td>user_id (FK)</td><td>refresh_token_hash</td></tr>
+                <tr><td><code>projects</code></td><td>Projetos</td><td>workspace_id, created_by</td><td>-</td></tr>
+                <tr><td><code>agents</code></td><td>Agentes de IA</td><td>workspace_id, created_by</td><td>config (tools API keys)</td></tr>
+                <tr><td><code>agent_runs</code></td><td>Execuções de agentes</td><td>agent_id, project_id, user_id</td><td>input, output (logs)</td></tr>
+                <tr><td><code>deploys</code></td><td>Histórico de deploys</td><td>project_id, workspace_id, triggered_by</td><td>-</td></tr>
+                <tr><td><code>deploy_env_vars</code></td><td>Variáveis de ambiente</td><td>deploy_id</td><td>value_encrypted</td></tr>
+                <tr><td><code>chat_sessions</code></td><td>Sessões de chat</td><td>workspace_id, project_id, user_id</td><td>-</td></tr>
+                <tr><td><code>chat_messages</code></td><td>Mensagens</td><td>session_id</td><td>content (logs)</td></tr>
+                <tr><td><code>automations</code></td><td>Automações</td><td>workspace_id, created_by</td><td>trigger_config, actions</td></tr>
+                <tr><td><code>automation_runs</code></td><td>Execuções</td><td>automation_id</td><td>-</td></tr>
+                <tr><td><code>analytics_events</code></td><td>Eventos analytics</td><td>workspace_id, project_id, agent_id, user_id</td><td>event_data (PII?)</td></tr>
+                <tr><td><code>notifications</code></td><td>Notificações</td><td>workspace_id, user_id</td><td>-</td></tr>
+                <tr><td><code>api_keys</code></td><td>Chaves de API</td><td>workspace_id</td><td>key_hash, secret</td></tr>
+                <tr><td><code>webhooks</code></td><td>Webhooks</td><td>workspace_id</td><td>secret_hash, url</td></tr>
+                <tr><td><code>logs</code></td><td>Logs estruturados</td><td>workspace_id</td><td>message (PII?)</td></tr>
+                <tr><td><code>inbox_messages</code></td><td>Inbox</td><td>workspace_id, from_agent_id, to_user_id</td><td>body, metadata</td></tr>
+                <tr><td><code>marketplace_items</code></td><td>Itens do marketplace</td><td>-</td><td>-</td></tr>
+                <tr><td><code>marketplace_installs</code></td><td>Instalações</td><td>workspace_id, item_id, installed_by</td><td>config</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-section" style="margin-top: 24px;">
+            <h2>🔐 Tratamento de Dados Sensíveis</h2>
+            <div class="flow-item">
+              <span class="flow-from">Senhas</span>
+              <span class="flow-action">→</span>
+              <span class="flow-to">bcrypt (12 rounds)</span>
+              <span class="flow-data">Armazenado em users.password_hash</span>
+            </div>
+            <div class="flow-item">
+              <span class="flow-from">Refresh Tokens</span>
+              <span class="flow-action">→</span>
+              <span class="flow-to">SHA-256 hash</span>
+              <span class="flow-data">Armazenado em sessions.refresh_token_hash</span>
+            </div>
+            <div class="flow-item">
+              <span class="flow-from">API Keys</span>
+              <span class="flow-action">→</span>
+              <span class="flow-to">SHA-256 hash</span>
+              <span class="flow-data">Armazenado em api_keys.key_hash</span>
+            </div>
+            <div class="flow-item">
+              <span class="flow-from">Webhook Secrets</span>
+              <span class="flow-action">→</span>
+              <span class="flow-to">SHA-256 hash</span>
+              <span class="flow-data">Armazenado em webhooks.secret_hash</span>
+            </div>
+            <div class="flow-item">
+              <span class="flow-from">Deploy Env Vars</span>
+              <span class="flow-action">→</span>
+              <span class="flow-to">Criptografia AES-256</span>
+              <span class="flow-data">Armazenado em deploy_env_vars.value_encrypted</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- MÓDULOS -->
+        <section id="modules" class="section-content">
+          <section class="hero">
+            <h1>Módulos do Sistema</h1>
+            <p class="lead">Visão detalhada de cada módulo, funcionalidades e endpoints da API.</p>
+          </section>
+          <section class="grid-overview">
+            <div class="card">
+              <div class="card-icon">🔐</div>
+              <h3>Auth <span class="module-status status-complete">COMPLETO</span></h3>
+              <p>Login, registro, JWT, refresh tokens, logout, perfil.</p>
+              <a href="guia-auth.html" class="card-link">Guia completo →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">🏢</div>
+              <h3>Workspaces <span class="module-status status-complete">COMPLETO</span></h3>
+              <p>Gestão de workspaces, membros, configurações.</p>
+              <a href="guia-workspaces.html" class="card-link">Guia completo →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">📁</div>
+              <h3>Projetos <span class="module-status status-complete">COMPLETO</span></h3>
+              <p>CRUD completo,框架, stack, agentes associados.</p>
+              <a href="guia-projects.html" class="card-link">Guia completo →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">🤖</div>
+              <h3>Agentes <span class="module-status status-complete">COMPLETO</span></h3>
+              <p>15 agentes especializados, execução, stats, histórico.</p>
+              <a href="guia-agents.html" class="card-link">Guia completo →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">💬</div>
+              <h3>Chat <span class="module-status status-complete">COMPLETO</span></h3>
+              <p>Sessões, mensagens, streaming, integração com agentes.</p>
+              <a href="guia-chat.html" class="card-link">Guia completo →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">📥</div>
+              <h3>Inbox <span class="module-status status-complete">COMPLETO</span></h3>
+              <p>Central de mensagens, notificações, filtros, arquivo.</p>
+              <a href="guia-inbox.html" class="card-link">Guia completa →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">🚀</div>
+              <h3>Deploys <span class="module-status status-complete">COMPLETO</span></h3>
+              <p>Pipeline CI/CD, logs em tempo real, rollback.</p>
+              <a href="guia-deploys.html" class="card-link">Guia completo →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">🔄</div>
+              <h3>Automations <span class="module-status status-partial">PARCIAL</span></h3>
+              <p>Triggers, webhooks, schedules, execução.</p>
+              <a href="guia-automations.html" class="card-link">Guia completo →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">📊</div>
+              <h3>Analytics <span class="module-status status-complete">COMPLETO</h1></h3>
+              <p>Métricas, dashboards, custos de tokens, insights.</p>
+              <a href="guia-analytics.html" class="card-link">Guia completo →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">⚙️</div>
+              <h3>Settings <span class="module-status status-complete">COMPLETO</span></h3>
+              <p>API keys, webhooks, integrações, aparência, billing.</p>
+              <a href="guia-configuracoes.html" class="card-link">Guia completo →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">🛒</div>
+              <h3>Marketplace <span class="module-status status-complete">COMPLETO</span></h3>
+              <p>Catálogo de agentes, avaliações, instalação.</p>
+              <a href="guia-marketplace.html" class="card-link">Guia completo →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">📈</div>
+              <h3>Status <span class="module-status status-complete">COMPLETO</span></h3>
+              <p>Monitoramento, saúde, uptime, incidentes.</p>
+              <a href="guia-status.html" class="card-link">Guia completo →</a>
+            </div>
+            <div class="card">
+              <div class="card-icon">🧪</div>
+              <h3>Playground <span class="module-status status-complete">COMPLETO</span></h3>
+              <p>Ambiente de testes, editor, terminal, file tree.</p>
+              <a href="guia-playground.html" class="card-link">Guia completo →</a>
+            </div>
+          </section>
+        </section>
+
         <!-- RISCOS -->
         <section id="risks" class="section-content">
-          <section class="hero"><h1>Pontos de Risco</h1><p class="lead">Análise de riscos e mitigações do sistema.</p></section>
+          <section class="hero">
+            <h1>Pontos de Risco & Mitigações</h1>
+            <p class="lead">Análise de riscos identificados no sistema e recomendações de mitigação.</p>
+          </section>
           <div class="risks-grid">
-            <div class="risk-card high"><div class="risk-level">ALTO</div><h4>Rate Limit Insuficiente</h4><p>Auth endpoints têm rate limit por IP, mas workspaces compartilham limites.</p><code>Mitigação: Rate limit por usuário + workspace</code></div>
-            <div class="risk-card high"><div class="risk-level">ALTO</div><h4>JWT sem Revogação</h4><p>Refresh tokens estão em DB mas access tokens não têm blacklist.</p><code>Mitigação: Token blacklist ou short expiry</code></div>
-            <div class="risk-card medium"><div class="risk-level">MÉDIO</div><h4>SQL Injection via JSON</h4><p>Drizzle ORM protege, mas queries dinâmicas podem ser vulneráveis.</p><code>Mitigação: Zod validation + prepared statements</code></div>
-            <div class="risk-card medium"><div class="risk-level">MÉDIO</div><h4>Leak de Dados Cross-Workspace</h4><p>Middleware auth verifica workspaceId, mas queries podem falhar.</p><code>Mitigação: Audit de queries + RLS</code></div>
-            <div class="risk-card medium"><div class="risk-level">MÉDIO</div><h4>Agent Prompt Injection</h4><p>Usuário controla systemPrompt em agentes customizados.</p><code>Mitigação: Sandbox + review de prompts</code></div>
-            <div class="risk-card medium"><div class="risk-level">MÉDIO</div><h4>Custos de IA Descontrolados</h4><p>Sem limites, agentes podem gerar custos excessivos.</p><code>Mitigação: Budget limits + alertas</code></div>
-            <div class="risk-card low"><div class="risk-level">BAIXO</div><h4>Logs Sensíveis</h4><p>Logs podem conter tokens ou dados pessoais.</p><code>Mitigação: Auto-sanitization + redaction</code></div>
-            <div class="risk-card low"><div class="risk-level">BAIXO</div><h4>Deploy Falhos Silenciosos</h4><p>Deploys podem falhar sem notificação adequada.</p><code>Mitigação: Notificações obrigatórias</code></div>
+            <div class="risk-card high">
+              <div class="risk-level">ALTO</div>
+              <h4>Rate Limit Insuficiente</h4>
+              <p>Auth endpoints têm rate limit por IP, mas workspaces compartilham limites. Possível DoS por workspace.</p>
+              <code>Mitigação: Rate limit por usuário + workspace separadamente</code>
+            </div>
+            <div class="risk-card high">
+              <div class="risk-level">ALTO</div>
+              <h4>JWT sem Revogação Imediata</h4>
+              <p>Refresh tokens estão em BD mas access tokens não têm blacklist. Logout não invalida access token imediatamente.</p>
+              <code>Mitigação: Token blacklist com TTL ou expiry muito curto (5min)</code>
+            </div>
+            <div class="risk-card medium">
+              <div class="risk-level">MÉDIO</div>
+              <h4>SQL Injection via JSON</h4>
+              <p>Drizzle ORM protege queries, mas queries dinâmicas com JSONB podem ser vulneráveis se não validadas.</p>
+              <code>Mitigação: Zod validation estrito + Drizzle parameterized queries</code>
+            </div>
+            <div class="risk-card medium">
+              <div class="risk-level">MÉDIO</div>
+              <h4>Leak de Dados Cross-Workspace</h4>
+              <p>Middleware auth verifica workspaceId, mas queries podem falhar em edge cases. Isolamento pode falhar.</p>
+              <code>Mitigação: Audit sistemático de todas as queries + Row Level Security (RLS)</code>
+            </div>
+            <div class="risk-card medium">
+              <div class="risk-level">MÉDIO</div>
+              <h4>Agent Prompt Injection</h4>
+              <p>Usuário controla systemPrompt em agentes customizados. Pode instructions de sistema e causar behavior indesejado.</p>
+              <code>Mitigação: Sandbox de prompts + review humano + allowed list de instruções</code>
+            </div>
+            <div class="risk-card medium">
+              <div class="risk-level">MÉDIO</div>
+              <h4>Custos de IA Descontrolados</h4>
+              <p>Sem limites de tokens ou custo, agentes podem gerar custos excessivos em Anthropic API.</p>
+              <code>Mitigação: Budget limits por workspace + alertas em tempo real</code>
+            </div>
+            <div class="risk-card low">
+              <div class="risk-level">BAIXO</div>
+              <h4>Logs com Dados Sensíveis</h4>
+              <p>Logs podem conter tokens, PII ou dados sensíveis se não sanitizados.</p>
+              <code>Mitigação: Auto-sanitization no logger + scrubber de padrões sensíveis</code>
+            </div>
+            <div class="risk-card low">
+              <div class="risk-level">BAIXO</div>
+              <h4>Deploy Falhos Silenciosos</h4>
+              <p>Deploys podem falhar sem notificação adequada ao usuário.</p>
+              <code>Mitigação: Notificações obrigatórias + status dashboard</code>
+            </div>
+            <div class="risk-card low">
+              <div class="risk-level">BAIXO</div>
+              <h4>Webhooks sem Retry</h4>
+              <p>Webhooks externos podem falhar sem retry automático, causando perda de eventos.</p>
+              <code>Mitigação: Implementar dead letter queue + retry exponencial</code>
+            </div>
           </div>
         </section>
       </div>
@@ -307,13 +863,15 @@
 
     <footer class="footer">
       <p>Nommand Vision - Sistema de Gestão de Agentes IA</p>
-      <p>Documentação completa • <span id="generated-date"></span></p>
+      <p>Documentação completa • Gerado automaticamente • <span id="generated-date"></span></p>
     </footer>
   </div>
 
   <script>
     document.getElementById('generated-date').textContent = new Date().toLocaleDateString('pt-BR');
-    function toggleTheme() { document.documentElement.classList.toggle('light'); }
+    function toggleTheme() {
+      document.documentElement.classList.toggle('light');
+    }
     function showSection(sectionId) {
       document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
