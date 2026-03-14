@@ -1,0 +1,62 @@
+.preview {
+  background: #050505;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.header {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: .75rem;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  display: flex;
+  justify-content: space-between;
+}
+
+.body {
+  padding: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .78rem;
+  line-height: 1.7;
+  overflow-x: auto;
+  color: #ccc;
+  margin: 0;
+}
+
+.line {
+  display: flex;
+  gap: 0;
+}
+
+.lineNum {
+  color: #333;
+  display: inline-block;
+  width: 30px;
+  text-align: right;
+  margin-right: 16px;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+/* Syntax highlight classes for use in line.content HTML */
+.body :global(.kw) {
+  color: var(--neon);
+}
+
+.body :global(.str) {
+  color: var(--green);
+}
+
+.body :global(.cm) {
+  color: #555;
+}
+
+.body :global(.fn) {
+  color: var(--purple);
+}
+
+.body :global(.num) {
+  color: var(--yellow);
+}

@@ -1,0 +1,45 @@
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: .75rem;
+  color: var(--muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.green {
+  color: var(--green);
+}
+
+.sub {
+  font-size: .75rem;
+  color: var(--muted);
+}
+
+.trendUp {
+  color: var(--green);
+}
+
+.trendDown {
+  color: var(--red);
+}
+
+.sparkline {
+  margin-top: 8px;
+}

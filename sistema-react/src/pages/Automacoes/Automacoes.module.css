@@ -1,0 +1,370 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.metricsRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toolbarTitle {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.createBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--neon);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: .2s;
+}
+
+.createBtn:hover {
+  opacity: .9;
+  transform: scale(1.01);
+}
+
+.workflowGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.workflowCard {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color .2s;
+}
+
+.workflowCard:hover {
+  border-color: #333;
+}
+
+.workflowCardInactive {
+  opacity: .5;
+}
+
+.workflowHeader {
+  padding: 1rem 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.workflowHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.workflowIcon {
+  font-size: 1.3rem;
+}
+
+.workflowName {
+  font-size: .92rem;
+  font-weight: 600;
+}
+
+.workflowTypeBadge {
+  font-size: .65rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(234,179,8,.1);
+  color: var(--neon);
+  font-weight: 500;
+}
+
+.workflowHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.iconBtn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: .75rem;
+  padding: 0;
+  transition: .2s;
+}
+
+.iconBtn:hover {
+  border-color: #333;
+  color: var(--text);
+}
+
+.iconBtnDanger:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.workflowBody {
+  padding: 0 1.2rem 1rem;
+}
+
+.workflowDesc {
+  font-size: .8rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: .8rem;
+}
+
+.workflowPipeline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  background: var(--code-bg);
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+
+.workflowStep {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: .75rem;
+  color: var(--text);
+  background: rgba(255,255,255,.05);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.workflowArrow {
+  color: var(--muted);
+  font-size: .7rem;
+}
+
+.workflowFooter {
+  padding: .8rem 1.2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: .7rem;
+  color: var(--muted);
+}
+
+.footerStats {
+  display: flex;
+  gap: 12px;
+}
+
+.footerStat span {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.statusActive {
+  background: var(--green);
+}
+
+.statusInactive {
+  background: var(--muted);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 1rem;
+}
+
+.formLabel {
+  font-size: .78rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.formInput {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: .85rem;
+  outline: none;
+  font-family: inherit;
+  transition: .2s;
+}
+
+.formInput:focus {
+  border-color: var(--neon);
+}
+
+.formSelect {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: .85rem;
+  outline: none;
+  font-family: inherit;
+  transition: .2s;
+  cursor: pointer;
+}
+
+.formSelect:focus {
+  border-color: var(--neon);
+}
+
+.formTextarea {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: .85rem;
+  outline: none;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 60px;
+  transition: .2s;
+}
+
+.formTextarea:focus {
+  border-color: var(--neon);
+}
+
+.stepsEditor {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: .5rem;
+}
+
+.stepChip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(234,179,8,.1);
+  color: var(--neon);
+  font-size: .75rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: .2s;
+  font-family: inherit;
+}
+
+.stepChip:hover {
+  border-color: var(--neon);
+}
+
+.stepChipActive {
+  background: var(--neon);
+  color: #000;
+}
+
+.stepRemove {
+  font-size: .65rem;
+  opacity: .6;
+  margin-left: 2px;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 1.2rem;
+}
+
+.btnCancel {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  cursor: pointer;
+  font-size: .82rem;
+  font-family: inherit;
+  transition: .2s;
+}
+
+.btnCancel:hover {
+  border-color: #333;
+  color: var(--text);
+}
+
+.btnSubmit {
+  padding: 8px 20px;
+  border-radius: 8px;
+  background: var(--neon);
+  border: none;
+  color: #000;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: .82rem;
+  font-family: inherit;
+  transition: .2s;
+}
+
+.btnSubmit:hover {
+  opacity: .9;
+}
+
+.btnSubmit:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.emptyGrid {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  color: var(--muted);
+  font-size: .88rem;
+}
+
+.pipelinePreview {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 10px;
+  background: var(--code-bg);
+  border-radius: 6px;
+  flex-wrap: wrap;
+}

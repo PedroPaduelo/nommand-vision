@@ -1,0 +1,6 @@
+/* ======================== */
+/* LIGHT THEME OVERRIDES    */
+/* ======================== */
+[data-theme="light"] .ambient-glow { opacity: .02 !important; }
+[data-theme="light"] ::-webkit-scrollbar-thumb { background: var(--border); }
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover { background: var(--muted); }

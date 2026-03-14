@@ -1,0 +1,26 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: pDot 2s infinite;
+  flex-shrink: 0;
+}
+
+.label {
+  font-size: .7rem;
+  color: var(--green);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+@keyframes pDot {
+  50% { opacity: .3; }
+}

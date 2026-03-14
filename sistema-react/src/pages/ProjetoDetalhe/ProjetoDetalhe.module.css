@@ -1,0 +1,848 @@
+.projectHeaderCard {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.projectHeaderLeft {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.projectHeaderIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+.projectHeaderInfo h2 {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: .2rem;
+}
+
+.projectHeaderInfo p {
+  font-size: .82rem;
+  color: var(--muted);
+}
+
+.projectHeaderMetrics {
+  display: flex;
+  gap: 2rem;
+}
+
+.projectMetric {
+  text-align: center;
+}
+
+.projectMetric .val {
+  font-size: 1.3rem;
+  font-weight: 500;
+  font-family: 'JetBrains Mono', monospace;
+  display: block;
+}
+
+.projectMetric .lbl {
+  font-size: .65rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.projectStatusRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: .8rem;
+}
+
+.psBadge {
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-size: .68rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.psBadgeActive {
+  background: rgba(34, 197, 94, .1);
+  color: var(--green);
+  border: 1px solid rgba(34, 197, 94, .15);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.psStackTag {
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, .05);
+  font-size: .68rem;
+  font-family: 'JetBrains Mono', monospace;
+  border: 1px solid rgba(255, 255, 255, .06);
+}
+
+.projectTabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+}
+
+.projectTab {
+  background: none;
+  border: none;
+  padding: 10px 18px;
+  font-size: .85rem;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: .15s;
+  font-weight: 500;
+  margin-bottom: -1px;
+  font-family: inherit;
+}
+
+.projectTab:hover {
+  color: #ccc;
+}
+
+.projectTabActive {
+  color: #fff;
+  border-bottom-color: var(--neon);
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .82rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.breadcrumb a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: var(--neon);
+}
+
+.breadcrumbSep {
+  color: #333;
+}
+
+/* Code tab */
+.fileTree {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.fileTreeHeader {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: .78rem;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fileItem {
+  padding: 8px 16px;
+  font-size: .82rem;
+  cursor: pointer;
+  transition: .1s;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.fileItem:hover {
+  background: rgba(255, 255, 255, .03);
+}
+
+.fileItemActive {
+  background: rgba(234, 179, 8, .06);
+  color: var(--neon);
+}
+
+.fileIcon {
+  width: 16px;
+  text-align: center;
+  font-size: .7rem;
+  color: var(--muted);
+}
+
+.fileIconDir {
+  color: var(--neon);
+}
+
+.fileIndent1 {
+  padding-left: 32px;
+}
+
+.fileIndent2 {
+  padding-left: 48px;
+}
+
+.codePreview {
+  background: #050505;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.codePreviewHeader {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: .75rem;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  display: flex;
+  justify-content: space-between;
+}
+
+.codePreviewBody {
+  padding: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .78rem;
+  line-height: 1.7;
+  overflow-x: auto;
+  color: #ccc;
+  margin: 0;
+  white-space: pre;
+}
+
+.ln {
+  color: #333;
+  display: inline-block;
+  width: 30px;
+  text-align: right;
+  margin-right: 16px;
+  user-select: none;
+}
+
+.kw { color: var(--neon); }
+.str { color: var(--green); }
+.cm { color: #555; }
+.fn { color: #c026d3; }
+.num { color: var(--yellow); }
+
+.codeGrid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 1rem;
+}
+
+/* Agent cards */
+.projAgentsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.projAgentCard {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+  transition: .2s;
+}
+
+.projAgentCard:hover {
+  border-color: #333;
+}
+
+.projAgentTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.projAgentName {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .88rem;
+  font-weight: 500;
+}
+
+.projAgentName .emoji {
+  font-size: 1.1rem;
+}
+
+.projAgentStatus {
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: .6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.projAgentStatusRunning {
+  background: rgba(34, 197, 94, .1);
+  color: var(--green);
+  border: 1px solid rgba(34, 197, 94, .15);
+}
+
+.projAgentStatusIdle {
+  background: rgba(234, 179, 8, .1);
+  color: var(--yellow);
+  border: 1px solid rgba(234, 179, 8, .15);
+}
+
+.projAgentDesc {
+  font-size: .75rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.projAgentStats {
+  display: flex;
+  gap: 12px;
+  font-size: .65rem;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  padding-top: .6rem;
+  border-top: 1px solid var(--border);
+}
+
+/* Timeline */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.timelineItem {
+  display: flex;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, .04);
+  position: relative;
+}
+
+.timelineItem:last-child {
+  border-bottom: none;
+}
+
+.timelineIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .85rem;
+  flex-shrink: 0;
+}
+
+.timelineBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.timelineBody strong {
+  font-size: .85rem;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.timelineBody p {
+  font-size: .78rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.timelineBody code {
+  background: rgba(255, 255, 255, .06);
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem;
+}
+
+.timelineTime {
+  font-size: .65rem;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.timelineAgentTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: .65rem;
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(234, 179, 8, .06);
+  color: var(--neon);
+  border: 1px solid rgba(234, 179, 8, .1);
+}
+
+/* Insight / Security */
+.insightCard {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.insightHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.insightHeader h4 {
+  font-size: .85rem;
+  font-weight: 500;
+}
+
+.insightScore {
+  font-size: .78rem;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.insightBarWrap {
+  width: 100%;
+  height: 6px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.insightBar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1s ease;
+}
+
+.insightItems {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: .3rem;
+}
+
+.insightItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .78rem;
+  padding: 6px 0;
+}
+
+.check {
+  color: var(--green);
+  font-size: .7rem;
+  flex-shrink: 0;
+}
+
+.warn {
+  color: var(--yellow);
+  font-size: .7rem;
+  flex-shrink: 0;
+}
+
+.fail {
+  color: var(--red);
+  font-size: .7rem;
+  flex-shrink: 0;
+}
+
+/* Perf metrics */
+.perfGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.perfCard {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.2rem;
+}
+
+.perfCard .dLabel {
+  font-size: .72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  margin-bottom: .4rem;
+  display: block;
+}
+
+.perfCard .dBig {
+  font-size: 1.4rem;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.green { color: var(--green); }
+
+/* Row layouts */
+.row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.row3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Cards */
+.dCard {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.2rem;
+}
+
+.dLabel {
+  font-size: .72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-weight: 600;
+}
+
+.dBig {
+  font-size: 1.6rem;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+  display: block;
+  margin-top: .2rem;
+}
+
+.dSub {
+  font-size: .72rem;
+  color: var(--muted);
+  margin-top: .2rem;
+  display: block;
+}
+
+.dtag {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: .72rem;
+  background: rgba(255, 255, 255, .04);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Deploy row */
+.deployRow {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  transition: .15s;
+}
+
+.deployRow:last-child {
+  border-bottom: none;
+}
+
+.deployRow:hover {
+  background: rgba(255, 255, 255, .02);
+}
+
+.deployIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .85rem;
+}
+
+.deployInfo strong {
+  font-size: .85rem;
+  display: block;
+}
+
+.deployInfo span {
+  font-size: .72rem;
+  color: var(--muted);
+}
+
+.deployTime {
+  font-size: .68rem;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.deployBadge {
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-size: .65rem;
+  font-weight: 600;
+}
+
+.deploySuccess {
+  background: rgba(34, 197, 94, .1);
+  color: var(--green);
+}
+
+.deployFailed {
+  background: rgba(239, 68, 68, .1);
+  color: var(--red);
+}
+
+.deployBuilding {
+  background: rgba(234, 179, 8, .1);
+  color: var(--yellow);
+}
+
+/* Config form */
+.formGroup {
+  margin-bottom: 1rem;
+}
+
+.formGroup label {
+  display: block;
+  font-size: .78rem;
+  color: var(--muted);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.formInput {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: .85rem;
+  outline: none;
+  font-family: inherit;
+}
+
+.formInput:focus {
+  border-color: var(--neon);
+}
+
+.formSelect {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: .85rem;
+  outline: none;
+  font-family: inherit;
+  width: 100%;
+}
+
+.settingsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, .04);
+}
+
+.settingsRow:last-child {
+  border-bottom: none;
+}
+
+.settingsRowLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.settingsRowLeft strong {
+  font-size: .88rem;
+  font-weight: 500;
+}
+
+.settingsRowLeft span {
+  font-size: .75rem;
+  color: var(--muted);
+}
+
+.toggle {
+  width: 40px;
+  height: 22px;
+  border-radius: 11px;
+  background: var(--border);
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: .2s;
+  flex-shrink: 0;
+}
+
+.toggle::after {
+  content: '';
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #666;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: .2s;
+}
+
+.toggleOn {
+  background: var(--green);
+}
+
+.toggleOn::after {
+  left: 21px;
+  background: #fff;
+}
+
+/* Terminal / Logs */
+.fakeTerm {
+  background: #050505;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .75rem;
+  line-height: 1.8;
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+.fakeTerm p {
+  margin: 0;
+  color: #555;
+}
+
+.blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.tPath {
+  color: var(--neon);
+}
+
+.btnPrimary {
+  background: var(--neon);
+  color: #000;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .2s;
+  font-family: inherit;
+}
+
+.btnPrimary:hover {
+  opacity: .9;
+}
+
+.btnDanger {
+  background: rgba(239, 68, 68, .08);
+  color: var(--red);
+  border: 1px solid rgba(239, 68, 68, .15);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .2s;
+  font-family: inherit;
+}
+
+.btnDanger:hover {
+  background: rgba(239, 68, 68, .15);
+}
+
+.scoreBarRow {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: .6rem;
+}
+
+.scoreBarItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.scoreBarLabel {
+  display: flex;
+  justify-content: space-between;
+  font-size: .78rem;
+}
+
+.scoreBarValue {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+@media (max-width: 1024px) {
+  .projectHeaderCard {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .codeGrid {
+    grid-template-columns: 1fr;
+  }
+  .projAgentsGrid {
+    grid-template-columns: 1fr;
+  }
+  .row2 {
+    grid-template-columns: 1fr;
+  }
+  .row3 {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,60 @@
+.tree {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: .78rem;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  padding: 8px 16px;
+  font-size: .82rem;
+  cursor: pointer;
+  transition: background .1s;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  user-select: none;
+}
+
+.item:hover {
+  background: rgba(255, 255, 255, .03);
+}
+
+.active {
+  background: rgba(234, 179, 8, .06);
+  color: var(--neon);
+}
+
+.icon {
+  width: 16px;
+  text-align: center;
+  font-size: .7rem;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.dir .icon {
+  color: var(--neon);
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

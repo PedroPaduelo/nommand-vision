@@ -1,0 +1,129 @@
+.cmdkOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .65);
+  backdrop-filter: blur(8px);
+  z-index: 200;
+  display: flex;
+  justify-content: center;
+  padding-top: 14vh;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+}
+
+.cmdkOverlayOpen {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.cmdkBox {
+  width: 100%;
+  max-width: 580px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .9);
+  overflow: hidden;
+  transform: scale(.96);
+  transition: transform .2s cubic-bezier(.16, 1, .3, 1);
+  align-self: flex-start;
+}
+
+.cmdkOverlayOpen .cmdkBox {
+  transform: scale(1);
+}
+
+.cmdkTop {
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cmdkTop svg {
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.cmdkInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.cmdkInput::placeholder {
+  color: var(--muted);
+}
+
+.cmdkList {
+  padding: .5rem;
+  max-height: 380px;
+  overflow-y: auto;
+}
+
+.cmdkGroup {
+  font-size: .6rem;
+  color: var(--muted);
+  padding: .7rem 1rem .2rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-weight: 600;
+}
+
+.cmdkItem {
+  padding: .65rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--muted);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  transition: .1s;
+  outline: none;
+  font-size: .88rem;
+}
+
+.cmdkItem:hover,
+.cmdkItemFocused {
+  background: var(--card-hover);
+  color: var(--text);
+}
+
+.cmdkIcon {
+  flex-shrink: 0;
+  width: 18px;
+  text-align: center;
+  font-size: .85rem;
+}
+
+.cmdkShortcut {
+  margin-left: auto;
+  font-size: .65rem;
+  color: var(--muted);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 768px) {
+  .cmdkBox {
+    width: 95%;
+    max-width: 95%;
+    margin: 1rem;
+  }
+}

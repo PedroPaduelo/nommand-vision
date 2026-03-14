@@ -1,0 +1,28 @@
+.wrapper {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.item {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all .15s;
+}
+
+.item:hover {
+  border-color: rgba(255, 255, 255, .2);
+}
+
+.selected {
+  border-color: var(--neon);
+  background: rgba(234, 179, 8, .08);
+}

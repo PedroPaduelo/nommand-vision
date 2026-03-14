@@ -1,0 +1,138 @@
+.wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+}
+
+.searchRow {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.searchInput {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: .8rem;
+  outline: none;
+  width: 200px;
+  transition: border-color .15s;
+}
+
+.searchInput::placeholder {
+  color: #444;
+}
+
+.searchInput:focus {
+  border-color: #333;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: .7rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+  user-select: none;
+}
+
+.sortable {
+  cursor: pointer;
+}
+
+.sortable:hover {
+  color: var(--text);
+}
+
+.sortArrow {
+  font-size: .65rem;
+}
+
+.table td {
+  padding: 10px 14px;
+  font-size: .85rem;
+  border-bottom: 1px solid rgba(255, 255, 255, .04);
+}
+
+.table tr:hover td {
+  background: rgba(255, 255, 255, .02);
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: .65rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.green {
+  background: rgba(34, 197, 94, .1);
+  color: var(--green);
+  border: 1px solid rgba(34, 197, 94, .15);
+}
+
+.muted {
+  background: rgba(119, 119, 119, .1);
+  color: var(--muted);
+  border: 1px solid rgba(119, 119, 119, .15);
+}
+
+.red {
+  background: rgba(239, 68, 68, .1);
+  color: var(--red);
+  border: 1px solid rgba(239, 68, 68, .15);
+}
+
+.yellow {
+  background: rgba(234, 179, 8, .1);
+  color: var(--yellow);
+  border: 1px solid rgba(234, 179, 8, .15);
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .8rem 14px .2rem;
+  border-top: 1px solid var(--border);
+}
+
+.pageBtn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: .78rem;
+  cursor: pointer;
+  transition: color .15s, border-color .15s;
+}
+
+.pageBtn:hover:not(:disabled) {
+  color: var(--neon);
+  border-color: var(--neon);
+}
+
+.pageBtn:disabled {
+  opacity: .3;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-size: .8rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}

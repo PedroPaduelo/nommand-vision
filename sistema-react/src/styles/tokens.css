@@ -1,0 +1,47 @@
+/* ========================================
+   BREAKPOINTS (reference - cannot use CSS vars in @media)
+   --bp-sm: 640px   (small mobile)
+   --bp-md: 768px   (tablet / mobile)
+   --bp-lg: 1024px  (desktop)
+   --bp-xl: 1280px  (large desktop)
+   ======================================== */
+
+/* ======================== */
+/* TOKENS: CSS Variables    */
+/* ======================== */
+:root, [data-theme="dark"] {
+  --bg: #000;
+  --panel: #0a0a0a;
+  --border: #1a1a1a;
+  --text: #fff;
+  --muted: #777;
+  --neon: #eab308;
+  --green: #22c55e;
+  --yellow: #eab308;
+  --blue: #3b82f6;
+  --red: #ef4444;
+  --purple: #8b5cf6;
+  --kbd-bg: #1a1a1a;
+  --kbd-border: #2a2a2a;
+  --kbd-color: #555;
+  --card-hover: rgba(255,255,255,.05);
+  --code-bg: #050505;
+}
+
+[data-theme="light"] {
+  --bg: #f5f5f5;
+  --panel: #ffffff;
+  --border: #e0e0e0;
+  --text: #111;
+  --muted: #666;
+  --green: #16a34a;
+  --yellow: #ca8a04;
+  --blue: #2563eb;
+  --red: #dc2626;
+  --purple: #7c3aed;
+  --kbd-bg: #e5e5e5;
+  --kbd-border: #d4d4d4;
+  --kbd-color: #888;
+  --card-hover: rgba(0,0,0,.04);
+  --code-bg: #f0f0f0;
+}

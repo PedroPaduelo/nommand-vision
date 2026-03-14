@@ -1,0 +1,389 @@
+/* Welcome Banner */
+.welcomeBanner {
+  background: linear-gradient(135deg, rgba(234, 179, 8, .08), rgba(139, 92, 246, .08));
+  border: 1px solid rgba(234, 179, 8, .12);
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  margin-bottom: .5rem;
+}
+
+.welcomeBanner h2 {
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin-bottom: .3rem;
+}
+
+.welcomeBanner p {
+  color: var(--muted);
+  font-size: .88rem;
+}
+
+/* Grid Rows */
+.row4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.row3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Dashboard Cards */
+.dCard {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.2rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  transition: .2s;
+}
+
+.dCard:hover {
+  border-color: #222;
+}
+
+.metricCard {
+  position: relative;
+  overflow: hidden;
+}
+
+.dLabel {
+  font-size: .7rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-weight: 600;
+}
+
+.dBig {
+  font-size: 1.6rem;
+  font-weight: 500;
+  font-family: 'JetBrains Mono';
+}
+
+.dBigGreen {
+  color: var(--green);
+}
+
+.dSub {
+  font-size: .75rem;
+  color: var(--muted);
+}
+
+.trendUp {
+  color: var(--green) !important;
+}
+
+/* Stack Tags */
+.tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+
+.dtag {
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, .05);
+  font-size: .78rem;
+  border: 1px solid rgba(255, 255, 255, .07);
+  font-weight: 500;
+}
+
+/* Mini Bar (CPU) */
+.miniBarWrap {
+  width: 100%;
+  height: 6px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: .3rem;
+}
+
+.miniBar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--neon), var(--green));
+  border-radius: 4px;
+  transition: width 2s ease;
+}
+
+.resourceRow {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: .3rem;
+}
+
+.resourceRow strong {
+  color: #ccc;
+}
+
+/* Sparkline */
+.sparkline {
+  width: 100%;
+  height: 28px;
+  margin-top: auto;
+}
+
+.sparkline polyline {
+  fill: none;
+  stroke: var(--neon);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Uptime Bar */
+.uptimeBar {
+  display: flex;
+  gap: 2px;
+  margin-top: auto;
+  height: 14px;
+  align-items: flex-end;
+}
+
+.ub {
+  flex: 1;
+  border-radius: 2px;
+  min-height: 4px;
+  transition: height .4s ease;
+}
+
+/* Activity List */
+.activity {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: .3rem;
+}
+
+.activity li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .82rem;
+  color: #ccc;
+}
+
+.actDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.actDotGreen { background: var(--green); }
+.actDotBlue { background: var(--blue); }
+.actDotYellow { background: var(--yellow); }
+
+.actTime {
+  margin-left: auto;
+  font-size: .7rem;
+  color: var(--muted);
+  font-family: 'JetBrains Mono';
+  flex-shrink: 0;
+}
+
+/* Deploy List */
+.deploysList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: .3rem;
+}
+
+.deployItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, .04);
+}
+
+.deployItem:last-child {
+  border-bottom: none;
+}
+
+.deployStatus {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.deployStatusSuccess { background: var(--green); }
+.deployStatusFail { background: var(--red); }
+
+.deployInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.deployInfo strong {
+  font-size: .82rem;
+  display: block;
+  font-weight: 500;
+}
+
+.deployInfo span {
+  font-size: .7rem;
+  color: var(--muted);
+}
+
+.deployTime {
+  font-size: .7rem;
+  color: var(--muted);
+  font-family: 'JetBrains Mono';
+  flex-shrink: 0;
+}
+
+/* Terminal Card */
+.terminalCard {
+  overflow: hidden;
+}
+
+.fakeTerm {
+  background: #000;
+  padding: 1rem;
+  border-radius: 8px;
+  font-family: 'JetBrains Mono';
+  font-size: .78rem;
+  border: 1px solid var(--border);
+  flex: 1;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tPath {
+  color: var(--neon);
+}
+
+.tOut {
+  color: var(--muted);
+  padding-left: 2px;
+  line-height: 1.5;
+}
+
+.blink {
+  animation: blink 1s step-start infinite;
+  font-weight: 700;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* Tour Overlay */
+.tourOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .7);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn .3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.tourCard {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+}
+
+.tourCard h3 {
+  font-size: 1.1rem;
+  margin-bottom: .5rem;
+}
+
+.tourCard p {
+  font-size: .88rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.tourActions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.tourSkipBtn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 8px 16px;
+  font-size: .82rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: .15s;
+  font-family: inherit;
+}
+
+.tourSkipBtn:hover {
+  border-color: #333;
+  color: #fff;
+}
+
+.tourNextBtn {
+  background: #fff;
+  color: #000;
+  border: none;
+  padding: 8px 20px;
+  font-size: .82rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: .2s;
+  font-family: inherit;
+}
+
+.tourNextBtn:hover {
+  opacity: .9;
+  transform: scale(1.02);
+}
+
+.tourDots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 1rem;
+}
+
+.tourDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+.tourDotActive {
+  background: var(--neon);
+  width: 16px;
+  border-radius: 3px;
+}

@@ -1,0 +1,59 @@
+.container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 280px;
+  max-width: 400px;
+  animation: slideIn .3s cubic-bezier(.16, 1, .3, 1) forwards;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.success { border-left: 3px solid #22c55e; }
+.error   { border-left: 3px solid #ef4444; }
+.warning { border-left: 3px solid #eab308; }
+.info    { border-left: 3px solid #3b82f6; }
+
+.icon {
+  font-size: .9rem;
+  flex-shrink: 0;
+  width: 20px;
+  text-align: center;
+}
+
+.iconSuccess { color: #22c55e; }
+.iconError   { color: #ef4444; }
+.iconWarning { color: #eab308; }
+.iconInfo    { color: #3b82f6; }
+
+.message {
+  font-size: .82rem;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

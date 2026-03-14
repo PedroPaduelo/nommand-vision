@@ -1,0 +1,131 @@
+.dashHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 2rem 2.5rem 0;
+}
+
+.dashHeader h1 {
+  font-size: 1.6rem;
+  font-weight: 500;
+  letter-spacing: -.02em;
+}
+
+.dashSub {
+  color: var(--muted);
+  font-size: .9rem;
+  margin-top: .3rem;
+}
+
+.dashHeaderActions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.cmdkTrigger {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: .82rem;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  cursor: pointer;
+  transition: .15s;
+  outline: none;
+  white-space: nowrap;
+}
+
+.cmdkTrigger:hover {
+  border-color: #333;
+  color: #fff;
+}
+
+.cmdkTrigger svg {
+  flex-shrink: 0;
+}
+
+.dashNotifBtn {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 10px;
+  cursor: pointer;
+  transition: .15s;
+  display: flex;
+  align-items: center;
+}
+
+.dashNotifBtn:hover {
+  border-color: #333;
+}
+
+.dashNotifBtn svg {
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.notifBadge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--red);
+  color: #fff;
+  font-size: .6rem;
+  font-weight: 700;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.mobileMenuBtn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .dashHeader {
+    flex-direction: column;
+    gap: .8rem;
+    padding: 1rem 1rem 0;
+  }
+
+  .dashHeader h1 {
+    font-size: 1.2rem;
+  }
+
+  .dashHeaderActions {
+    width: 100%;
+  }
+
+  .cmdkTrigger {
+    flex: 1;
+  }
+
+  .mobileMenuBtn {
+    display: flex;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobileMenuBtn {
+    display: none !important;
+  }
+}

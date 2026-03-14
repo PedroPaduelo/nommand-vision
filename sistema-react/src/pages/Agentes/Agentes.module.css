@@ -1,0 +1,453 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.metricsRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.agentsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.agentCard {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.agentCard:hover {
+  border-color: #333;
+  transform: translateY(-2px);
+}
+
+.agentTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.agentName {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.agentEmoji {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.agentNameText {
+  font-size: .92rem;
+  font-weight: 500;
+}
+
+.agentModel {
+  font-size: .68rem;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.agentStatusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: .65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.badgeRunning {
+  background: rgba(34, 197, 94, .1);
+  color: var(--green);
+  border: 1px solid rgba(34, 197, 94, .15);
+}
+
+.badgeIdle {
+  background: rgba(234, 179, 8, .1);
+  color: var(--yellow);
+  border: 1px solid rgba(234, 179, 8, .15);
+}
+
+.badgeStopped {
+  background: rgba(119, 119, 119, .1);
+  color: var(--muted);
+  border: 1px solid rgba(119, 119, 119, .15);
+}
+
+.badgeError {
+  background: rgba(239, 68, 68, .1);
+  color: var(--red);
+  border: 1px solid rgba(239, 68, 68, .15);
+}
+
+.pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+  animation: pulseDot 1.5s infinite;
+}
+
+@keyframes pulseDot {
+  50% { opacity: .3; }
+}
+
+.agentDesc {
+  font-size: .78rem;
+  color: var(--muted);
+  line-height: 1.4;
+  flex: 1;
+}
+
+.agentStats {
+  display: flex;
+  gap: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .7rem;
+  padding-top: .8rem;
+  border-top: 1px solid var(--border);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.statLabel {
+  font-size: .62rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  font-weight: 600;
+}
+
+.statValue {
+  font-size: .7rem;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text);
+}
+
+.agentAdd {
+  border: 1px dashed var(--border);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: .88rem;
+  gap: 8px;
+  min-height: 260px;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: .2s;
+  font-family: inherit;
+}
+
+.agentAdd:hover {
+  border-color: var(--neon);
+  color: var(--neon);
+  background: rgba(234, 179, 8, .03);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 1.2rem;
+}
+
+.formGroup label {
+  font-size: .78rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.formInput {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: .85rem;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+}
+
+.formInput:focus {
+  border-color: #333;
+}
+
+.formTextarea {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: .85rem;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.formTextarea:focus {
+  border-color: #333;
+}
+
+.formSelect {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: .85rem;
+  outline: none;
+  -webkit-appearance: none;
+  font-family: 'Inter', sans-serif;
+}
+
+.formActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--border);
+}
+
+.btnPrimary {
+  background: var(--neon);
+  color: #000;
+  border: none;
+  padding: 8px 16px;
+  font-size: .82rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: .2s;
+  font-family: inherit;
+}
+
+.btnPrimary:hover {
+  opacity: .9;
+}
+
+.btnSecondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 8px 16px;
+  font-size: .82rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: .15s;
+  font-family: inherit;
+}
+
+.btnSecondary:hover {
+  border-color: #333;
+  color: #fff;
+}
+
+.detailTop {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.detailIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.detailInfo {
+  flex: 1;
+}
+
+.detailInfo h3 {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: .2rem;
+}
+
+.detailType {
+  font-size: .72rem;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.detailSection {
+  margin-bottom: 1.5rem;
+}
+
+.detailSection h4 {
+  font-size: .78rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-weight: 600;
+  margin-bottom: .6rem;
+}
+
+.detailDesc {
+  font-size: .88rem;
+  color: #ccc;
+  line-height: 1.6;
+}
+
+.detailMeta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.metaItem {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.metaLabel {
+  font-size: .65rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.metaValue {
+  font-size: .95rem;
+  font-weight: 500;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.detailActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 1.5rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--border);
+}
+
+.btnRun {
+  background: var(--green);
+  color: #000;
+  border: none;
+  padding: 8px 16px;
+  font-size: .82rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: .2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+}
+
+.btnRun:hover {
+  opacity: .9;
+}
+
+.btnStop {
+  background: rgba(239, 68, 68, .1);
+  border: 1px solid rgba(239, 68, 68, .2);
+  color: var(--red);
+  padding: 8px 16px;
+  font-size: .82rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: .15s;
+  font-family: inherit;
+}
+
+.btnStop:hover {
+  background: rgba(239, 68, 68, .2);
+}
+
+.btnEdit {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 8px 16px;
+  font-size: .82rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: .15s;
+  font-family: inherit;
+}
+
+.btnEdit:hover {
+  border-color: #333;
+  color: #fff;
+}
+
+.btnDelete {
+  background: transparent;
+  border: 1px solid rgba(239, 68, 68, .2);
+  color: var(--red);
+  padding: 8px 16px;
+  font-size: .82rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: .15s;
+  margin-left: auto;
+  font-family: inherit;
+}
+
+.btnDelete:hover {
+  background: rgba(239, 68, 68, .1);
+}
+
+@media (max-width: 1024px) {
+  .agentsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .metricsRow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .agentsGrid {
+    grid-template-columns: 1fr;
+  }
+  .metricsRow {
+    grid-template-columns: 1fr;
+  }
+}

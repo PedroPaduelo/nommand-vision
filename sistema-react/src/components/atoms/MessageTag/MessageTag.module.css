@@ -1,0 +1,39 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: .65rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.deploy {
+  background: rgba(34, 197, 94, .1);
+  color: var(--green);
+  border: 1px solid rgba(34, 197, 94, .15);
+}
+
+.mention {
+  background: rgba(59, 130, 246, .1);
+  color: var(--blue);
+  border: 1px solid rgba(59, 130, 246, .15);
+}
+
+.ai {
+  background: rgba(139, 92, 246, .1);
+  color: var(--purple);
+  border: 1px solid rgba(139, 92, 246, .15);
+}
+
+.alert {
+  background: rgba(239, 68, 68, .1);
+  color: var(--red);
+  border: 1px solid rgba(239, 68, 68, .15);
+}
+
+.review {
+  background: rgba(234, 179, 8, .1);
+  color: var(--yellow);
+  border: 1px solid rgba(234, 179, 8, .15);
+}

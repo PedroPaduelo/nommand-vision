@@ -1,0 +1,267 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ---- Header ---- */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.titleBlock h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.titleBlock p {
+  font-size: .8rem;
+  color: var(--muted);
+  margin: 0;
+}
+
+.controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Period selector */
+.periodSelect {
+  display: flex;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.periodBtn {
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  font-size: .75rem;
+  color: var(--muted);
+  cursor: pointer;
+  transition: .15s;
+  font-weight: 500;
+}
+
+.periodBtn:hover {
+  color: var(--text);
+}
+
+.periodBtnActive {
+  background: var(--neon);
+  color: #000;
+}
+
+/* Refresh */
+.refreshBtn {
+  width: 36px;
+  height: 36px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: .2s;
+  color: var(--muted);
+  padding: 0;
+}
+
+.refreshBtn:hover {
+  border-color: var(--neon);
+  color: var(--neon);
+}
+
+.refreshIcon {
+  transition: transform .2s;
+}
+
+.refreshSpinning .refreshIcon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ---- Metrics Grid ---- */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 1280px) {
+  .metricsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ---- Charts Row ---- */
+.chartsRow {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 1280px) {
+  .chartsRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- Chart Card ---- */
+.chartCard {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  animation: fadeIn .4s ease-out forwards;
+}
+
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.chartTitle {
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}
+
+.chartBody {
+  padding: 20px;
+  min-height: 200px;
+}
+
+.chartBodyTall {
+  min-height: 280px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- Geo List ---- */
+.geoList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.geoItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.geoFlag {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.geoInfo {
+  flex: 1;
+}
+
+.geoRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.geoName {
+  font-size: .8rem;
+  color: var(--text);
+}
+
+.geoPercent {
+  font-size: .75rem;
+  color: var(--muted);
+}
+
+.geoBarTrack {
+  height: 6px;
+  background: rgba(255, 255, 255, .05);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.geoBarFill {
+  height: 100%;
+  background: var(--neon);
+  border-radius: 3px;
+  transition: width .5s ease;
+}
+
+/* ---- Live Indicator inside chart ---- */
+.liveWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .7rem;
+  color: var(--muted);
+}
+
+.liveDot {
+  width: 8px;
+  height: 8px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .5; }
+}
+
+/* ---- Data Table Card ---- */
+.tableCard {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  animation: fadeIn .4s ease-out forwards;
+}
+
+.tableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tableTitle {
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}

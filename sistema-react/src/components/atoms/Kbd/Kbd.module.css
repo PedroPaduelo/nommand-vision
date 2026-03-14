@@ -1,0 +1,10 @@
+.kbd {
+  background: var(--kbd-bg);
+  border: 1px solid var(--kbd-border);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .7em;
+  color: var(--kbd-color);
+  display: inline-block;
+}

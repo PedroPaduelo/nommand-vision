@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deployer - Nommand Vision</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .hero-agent { text-align: center; padding: 40px 20px; }
+    .hero-agent h1 { font-size: 2.5rem; margin: 0 0 10px 0; color: #f59e0b; }
+    .hero-agent .icon { font-size: 4rem; margin-bottom: 16px; display: block; }
+    .hero-agent .subtitle { font-size: 1.1rem; color: var(--muted); }
+    .badge-category { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; background: #f59e0b; color: white; margin-bottom: 20px; }
+    .app-container { max-width: 940px; margin: 0 auto; padding: 24px; }
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin: 24px 0; }
+    .info-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+    .info-card h3 { margin: 0 0 12px 0; color: var(--accent); font-size: 0.9rem; text-transform: uppercase; }
+    .info-card ul { margin: 0; padding-left: 20px; }
+    .info-card li { margin: 6px 0; color: var(--fg-secondary); font-size: 0.9rem; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-top: 20px; }
+    .nav-back { display: inline-flex; align-items: center; gap: 8px; color: #f59e0b; text-decoration: none; padding: 10px 20px; border: 1px solid #f59e0b; border-radius: 8px; margin: 5px; }
+    .nav-back:hover { background: #f59e0b; color: white; }
+    .code-block { background: var(--bg-primary); border: 1px solid var(--border); border-radius: 8px; padding: 12px; font-family: monospace; color: var(--accent-glow); overflow-x: auto; margin: 8px 0; }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <a href="index.html" class="nav-back">← Voltar ao Índice</a>
+
+    <div class="hero-agent">
+      <span class="icon">🚀</span>
+      <h1>Deployer</h1>
+      <span class="badge-category">Deploy</span>
+      <p class="subtitle">Automatiza o processo de deploy para staging e produção com CI/CD completo.</p>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <h3>📋 Descrição</h3>
+        <p>Automatiza o processo de deploy para staging e produção com CI/CD completo.</p>
+      </div>
+      <div class="info-card">
+        <h3>🎯 Responsabilidades</h3>
+        <ul>
+          <li>Build de artifacts (bundle, minificação)</li><li>Executar testes automatizados</li><li>Deploy multi-ambiente (preview, staging, prod)</li><li>Health check pós-deploy</li><li>Rollback automático em falha</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3>🔧 Tecnologias</h3>
+        <ul>
+          <li>Docker</li><li>EasyPanel</li><li>GitHub Actions</li><li>Shell scripts</li><li>Kubernetes</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3>⚡ Como Usar</h3>
+        <ul>
+          <li>Acesse a página Agentes</li>
+          <li>Selecione Deployer</li>
+          <li>Forneça input ou contexto</li>
+          <li>Execute e aguarde resultado</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🔄 Fluxo de Execução</h2>
+      <ol>
+        <li><strong>Recebe trigger (push, webhook, botão):</strong> Recebe trigger (push, webhook, botão)</li><li><strong>Instala dependencies (npm ci):</strong> Instala dependencies (npm ci)</li><li><strong>Roda testes e build:</strong> Roda testes e build</li><li><strong>Stream de logs em tempo real:</strong> Stream de logs em tempo real</li><li><strong>Deploy + health check:</strong> Deploy + health check</li><li><strong>Atualiza status no banco:</strong> Atualiza status no banco</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h2>📡 API Endpoint</h2>
+      <div class="code-block"><code>POST /api/deploys</code></div>
+      <p><strong>Exemplo de requisição:</strong></p>
+      <div class="code-block"><code>{ "projectId": "uuid", "environment": "production", "branch": "main" }</code></div>
+    </div>
+
+    <div class="card">
+      <h2>📊 Dados Coletados</h2>
+      <ul>
+        <li><strong>Entrada:</strong> Prompt, arquivos, contexto do projeto</li>
+        <li><strong>Saída:</strong> Resultado processado (código, relatório, etc.)</li>
+        <li><strong>Métricas:</strong> Total de execuções, taxa de sucesso, tempo médio, tokens usados</li>
+        <li><strong>Logs:</strong> Histórico completo de cada execução</li>
+      </ul>
+    </div>
+
+    <div style="margin-top: 40px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+      <a href="03-qa-tester.html" class="nav-back">← Anterior</a>
+      <a href="05-security-audit.html" class="nav-back">Próximo: Security Audit →</a>
+    </div>
+  </div>
+</body>
+</html>

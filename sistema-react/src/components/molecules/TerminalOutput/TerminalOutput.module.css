@@ -1,0 +1,35 @@
+.terminal {
+  background: #050505;
+  padding: 1rem;
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .78rem;
+  border: 1px solid var(--border);
+  overflow-x: auto;
+  line-height: 1.6;
+}
+
+.line {
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.path    { color: var(--neon); }
+.output  { color: var(--muted); }
+.warn    { color: var(--yellow); }
+.error   { color: var(--red); }
+.success { color: var(--green); }
+
+.cursor {
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  background: var(--neon);
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}

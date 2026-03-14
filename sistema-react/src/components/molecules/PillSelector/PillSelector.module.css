@@ -1,0 +1,29 @@
+.wrapper {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pill {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  font-size: .78rem;
+  font-family: 'JetBrains Mono', monospace;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+}
+
+.pill:hover {
+  border-color: rgba(255, 255, 255, .15);
+  color: var(--text);
+}
+
+.selected {
+  border-color: var(--neon);
+  color: var(--neon);
+  background: rgba(234, 179, 8, .06);
+}

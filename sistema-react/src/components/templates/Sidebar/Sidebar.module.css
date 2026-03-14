@@ -1,0 +1,284 @@
+.side {
+  width: 260px;
+  border-right: 1px solid var(--border);
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
+.sideLogo {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border);
+  font-weight: 700;
+  letter-spacing: .08em;
+  font-size: .85rem;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.badge {
+  padding: 2px 7px;
+  background: rgba(234, 179, 8, .1);
+  color: var(--neon);
+  border: 1px solid rgba(234, 179, 8, .2);
+  border-radius: 4px;
+  font-size: .6rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  margin-left: auto;
+}
+
+.sideSection {
+  padding: .8rem .8rem 0;
+}
+
+.sideSectionLabel {
+  font-size: .6rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-weight: 600;
+  padding: 8px 12px 4px;
+  margin-top: .3rem;
+}
+
+.sideNav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.si {
+  padding: 8px 12px;
+  color: var(--muted);
+  font-size: .85rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: .15s;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-weight: 500;
+  position: relative;
+  text-decoration: none;
+}
+
+.si:hover,
+.siActive {
+  background: var(--card-hover);
+  color: var(--text);
+}
+
+.siBadge {
+  margin-left: auto;
+  padding: 1px 7px;
+  border-radius: 10px;
+  font-size: .65rem;
+  font-weight: 600;
+  background: rgba(234, 179, 8, .15);
+  color: var(--neon);
+}
+
+.siBadgeRed {
+  background: rgba(239, 68, 68, .15);
+  color: var(--red);
+}
+
+.favColor {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.teamAv {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .55rem;
+  font-weight: 700;
+  color: #000;
+  flex-shrink: 0;
+}
+
+.onlineDot {
+  margin-left: auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 4px var(--green);
+}
+
+.offlineDot {
+  margin-left: auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.sideBottom {
+  margin-top: auto;
+  padding: 1rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+}
+
+.sideUpgrade {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  background: linear-gradient(135deg, rgba(234, 179, 8, .08), rgba(139, 92, 246, .08));
+  border: 1px solid rgba(234, 179, 8, .15);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: .2s;
+  text-decoration: none;
+}
+
+.sideUpgrade:hover {
+  border-color: rgba(234, 179, 8, .3);
+}
+
+.upgradeIcon {
+  font-size: 1.1rem;
+}
+
+.upgradeStrong {
+  font-size: .78rem;
+  display: block;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.upgradeSpan {
+  font-size: .68rem;
+  color: var(--muted);
+}
+
+.avatarRow {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--neon);
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: .75rem;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.avatarInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.avatarName {
+  font-size: .82rem;
+  display: block;
+  font-weight: 600;
+}
+
+.avatarRole {
+  font-size: .68rem;
+  color: var(--muted);
+}
+
+.settingsBtn {
+  margin-left: auto;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px;
+  cursor: pointer;
+  transition: .15s;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.settingsBtn:hover {
+  border-color: var(--muted);
+  background: var(--card-hover);
+}
+
+.settingsBtn svg {
+  color: var(--muted);
+}
+
+.langSwitcher {
+  display: flex;
+  gap: 4px;
+  padding: 2px;
+  background: var(--card-hover);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.langBtn {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: .68rem;
+  font-weight: 600;
+  padding: 5px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: .15s;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.langBtn:hover {
+  color: var(--text);
+  background: var(--card-hover);
+}
+
+.langBtnActive {
+  background: var(--card-hover);
+  color: var(--text);
+}
+
+@media (max-width: 1024px) {
+  .side {
+    width: 220px;
+  }
+}
+
+@media (max-width: 768px) {
+  .side {
+    width: 280px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    z-index: 100;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    transition: left .3s ease;
+  }
+
+  .mobileOpen {
+    left: 0;
+  }
+}

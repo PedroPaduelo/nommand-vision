@@ -1,0 +1,24 @@
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.running {
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+}
+
+.idle {
+  background: var(--yellow);
+}
+
+.stopped {
+  background: #444;
+}
+
+.error {
+  background: var(--red);
+}

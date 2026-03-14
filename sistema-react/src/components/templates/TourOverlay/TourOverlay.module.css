@@ -1,0 +1,96 @@
+.tourOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+}
+
+.tourSpotlight {
+  position: fixed;
+  z-index: 9999;
+  border-radius: 8px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, .7);
+  pointer-events: none;
+  transition: all .4s cubic-bezier(.16, 1, .3, 1);
+}
+
+.tourTooltip {
+  position: fixed;
+  z-index: 10000;
+  background: #0d0d0d;
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 12px;
+  padding: 1.2rem 1.4rem;
+  width: 320px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .8);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all .3s cubic-bezier(.16, 1, .3, 1);
+}
+
+.tourTooltipShow {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tourTooltipTitle {
+  font-size: .95rem;
+  font-weight: 600;
+  margin-bottom: .4rem;
+}
+
+.tourTooltipDesc {
+  font-size: .82rem;
+  color: #999;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.tourTooltipFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tourTooltipProgress {
+  font-size: .72rem;
+  color: #555;
+  font-family: 'JetBrains Mono';
+}
+
+.tourTooltipActions {
+  display: flex;
+  gap: 8px;
+}
+
+.tourBtnSkip {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, .1);
+  color: #777;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: .78rem;
+  cursor: pointer;
+  transition: .15s;
+}
+
+.tourBtnSkip:hover {
+  color: #ccc;
+  border-color: #333;
+}
+
+.tourBtnNext {
+  background: #fff;
+  color: #000;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: .78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .15s;
+}
+
+.tourBtnNext:hover {
+  opacity: .9;
+}
