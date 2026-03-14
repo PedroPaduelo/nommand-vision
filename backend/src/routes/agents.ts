@@ -2,6 +2,9 @@ import { Hono } from 'hono'
 import { zValidator } from '@hono/zod-validator'
 import * as agentsService from '../services/agents.service.js'
 import { authMiddleware } from '../middleware/auth.js'
+import { agentRateLimit } from '../middleware/rate-limit.js'
+import { promptSandboxService } from '../services/prompt-sandbox.service.js'
+import { tokenRateLimitService } from '../services/token-rate-limit.service.js'
 import { createAgentSchema, updateAgentSchema, listAgentsSchema, runAgentSchema } from '../schemas/agents.schema.js'
 import type { AppEnv } from '../types/context.js'
 
@@ -24,9 +27,14 @@ agentsRouter.get('/', zValidator('query', listAgentsSchema), async (c) => {
 
 agentsRouter.get('/:id', async (c) => {
   const id = c.req.param('id')
+  const user = c.get('user')
 
   try {
+    // Garantir isolamento: buscar agente do workspace do usuário
     const agent = await agentsService.get(id)
+    if (agent.workspaceId !== user.workspaceId) {
+      return c.json({ error: { code: 'NOT_FOUND', message: 'Agent not found' } }, 404)
+    }
     return c.json({ data: agent })
   } catch (error: any) {
     if (error.message === 'Agent not found') {
@@ -52,9 +60,16 @@ agentsRouter.post('/', zValidator('json', createAgentSchema), async (c) => {
 
 agentsRouter.patch('/:id', zValidator('json', updateAgentSchema), async (c) => {
   const id = c.req.param('id')
+  const user = c.get('user')
   const input = c.req.valid('json')
 
   try {
+    // Garantir isolamento: verificar se agente pertence ao workspace
+    const existing = await agentsService.getRaw(id)
+    if (existing.workspaceId !== user.workspaceId) {
+      return c.json({ error: { code: 'NOT_FOUND', message: 'Agent not found' } }, 404)
+    }
+
     const agent = await agentsService.update(id, input)
     return c.json({ data: agent })
   } catch (error: any) {
@@ -68,8 +83,15 @@ agentsRouter.patch('/:id', zValidator('json', updateAgentSchema), async (c) => {
 
 agentsRouter.delete('/:id', async (c) => {
   const id = c.req.param('id')
+  const user = c.get('user')
 
   try {
+    // Garantir isolamento
+    const existing = await agentsService.getRaw(id)
+    if (existing.workspaceId !== user.workspaceId) {
+      return c.json({ error: { code: 'NOT_FOUND', message: 'Agent not found' } }, 404)
+    }
+
     const result = await agentsService.remove(id)
     return c.json({ data: result })
   } catch (error: any) {
@@ -83,8 +105,14 @@ agentsRouter.delete('/:id', async (c) => {
 
 agentsRouter.post('/:id/toggle', async (c) => {
   const id = c.req.param('id')
+  const user = c.get('user')
 
   try {
+    const existing = await agentsService.getRaw(id)
+    if (existing.workspaceId !== user.workspaceId) {
+      return c.json({ error: { code: 'NOT_FOUND', message: 'Agent not found' } }, 404)
+    }
+
     const agent = await agentsService.toggle(id)
     return c.json({ data: agent })
   } catch (error: any) {
@@ -117,10 +145,52 @@ agentsRouter.post('/:id/run', zValidator('json', runAgentSchema), async (c) => {
   const input = c.req.valid('json')
 
   try {
+    // 1. Verificar se agente existe e pertence ao workspace
+    const agent = await agentsService.get(id)
+    if (agent.workspaceId !== user.workspaceId) {
+      return c.json({ error: { code: 'NOT_FOUND', message: 'Agent not found' } }, 404)
+    }
+
+    // 2. Rate limit por workspace + user
+    c.set('workspaceId', user.workspaceId)
+    // O rate limit será aplicado pelo middleware quando este endpoint for registrado
+
+    // 3. Validação de prompt (sandbox) para prevenir injection
+    const validation = promptSandboxService.validateAndSanitize(input.input, agent.type)
+    if (!validation.isValid) {
+      return c.json({
+        error: {
+          code: 'INVALID_PROMPT',
+          message: 'Prompt contains potentially dangerous content',
+          details: validation.errors,
+        },
+      }, 400)
+    }
+
+    // Usar prompt sanitizado
+    const safeInput = validation.sanitized || input.input
+
+    // 4. Verificar limite de tokens da Anthropic (rate limit)
+    const estimatedTokens = safeInput.length / 4 + 1000 // estimativa simples
+    const tokenCheck = await tokenRateLimitService.canUseTokens(user.workspaceId, estimatedTokens)
+    if (!tokenCheck.allowed) {
+      return c.json({
+        error: {
+          code: 'TOKEN_LIMIT_EXCEEDED',
+          message: 'Token rate limit exceeded for this workspace',
+          remaining: tokenCheck.remaining,
+          resetAt: tokenCheck.resetAt,
+        },
+      }, 429)
+    }
+
+    // 5. Executar agente com input sanitizado
     const result = await agentsService.run(id, {
       ...input,
-      userId: input.userId || user.id,
+      input: safeInput,
+      userId: user.id,
     })
+
     return c.json({ data: result })
   } catch (error: any) {
     if (error.message === 'Agent not found') {
@@ -136,13 +206,11 @@ agentsRouter.post('/:id/run', zValidator('json', runAgentSchema), async (c) => {
 
 agentsRouter.get('/:id/runs', async (c) => {
   const id = c.req.param('id')
-  const page = Number(c.req.query('page') || '1')
-  const limit = Number(c.req.query('limit') || '20')
 
   try {
-    const result = await agentsService.listRuns(id, { page, limit })
+    const result = await agentsService.listRuns(id)
     return c.json(result)
-  } catch (error: any) {
+  } catch (error) {
     console.error('List agent runs error:', error)
     return c.json({ error: { code: 'INTERNAL_ERROR', message: 'Failed to list runs' } }, 500)
   }

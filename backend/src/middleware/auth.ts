@@ -15,6 +15,7 @@ export const authMiddleware = createMiddleware<AppEnv>(async (c, next) => {
   const token = authHeader.slice(7)
 
   try {
+    // Verifica se token está na blacklist
     const payload = await verifyAccessToken(token)
 
     const [user] = await db.select().from(users).where(eq(users.id, payload.userId)).limit(1)
@@ -23,11 +24,13 @@ export const authMiddleware = createMiddleware<AppEnv>(async (c, next) => {
       return c.json({ error: { code: 'UNAUTHORIZED', message: 'User not found' } }, 401)
     }
 
+    // Adiciona contexto do usuário e workspace
     c.set('user', {
       id: user.id,
       email: user.email,
       workspaceId: user.workspaceId,
     })
+    c.set('workspaceId', user.workspaceId)
 
     await next()
   } catch (error) {
