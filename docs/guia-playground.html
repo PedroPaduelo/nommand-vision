@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guia: Playground - Nommand Vision</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <div class="logo">
+        <h1>NOMMAND VISION</h1>
+        <span class="subtitle">Documentação de Arquitetura & Sistema</span>
+      </div>
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Visão Geral</a>
+        <a href="#" class="nav-link active">Módulos</a>
+        <a href="#" class="nav-link">Fluxos</a>
+        <a href="#" class="nav-link">Integrações</a>
+        <a href="#" class="nav-link">Riscos</a>
+      </nav>
+      <div class="theme-toggle" onclick="toggleTheme()">
+        <span class="icon">🌓</span>
+      </div>
+    </header>
+
+    <main class="main">
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <h3>Módulos Backend</h3>
+          <ul class="nav-list">
+            <li><a href="guia-auth.html">🔐 Auth & Users</a></li>
+            <li><a href="guia-workspaces.html">🏢 Workspaces</a></li>
+            <li><a href="guia-projects.html">📁 Projects</a></li>
+            <li><a href="guia-agents.html">🤖 Agents</a></li>
+            <li><a href="guia-chat.html">💬 Chat</a></li>
+            <li><a href="guia-deploys.html">🚀 Deploys</a></li>
+            <li><a href="guia-inbox.html">📥 Inbox</a></li>
+            <li><a href="guia-analytics.html">📊 Analytics</a></li>
+            <li><a href="guia-automations.html">🔄 Automations</a></li>
+          </ul>
+        </div>
+
+        <div class="sidebar-section">
+          <h3>Módulos Frontend</h3>
+          <ul class="nav-list">
+            <li><a href="guia-dashboard.html">🎨 Dashboard</a></li>
+            <li><a href="guia-playground.html" class="active">💻 Playground</a></li>
+            <li><a href="guia-projeto-detalhe.html">📱 Projeto Detalhe</a></li>
+            <li><a href="guia-marketplace.html">🛒 Marketplace</a></li>
+            <li><a href="guia-configuracoes.html">⚙️ Configurações</a></li>
+            <li><a href="guia-status.html">📈 Status</a></li>
+          </ul>
+        </div>
+
+        <div class="sidebar-section">
+          <h3>Arquitetura</h3>
+          <ul class="nav-list">
+            <li><a href="#">🗺️ Mapas de Fluxo</a></li>
+            <li><a href="#">🔗 Integrações</a></li>
+            <li><a href="#">⚠️ Riscos</a></li>
+            <li><a href="#">📝 Glossary</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="content">
+        <section class="hero">
+          <h1>PLAYGROUND</h1>
+          <p class="lead">
+            Ambiente de edição de código integrado com preview em tempo real, terminal emulado e assistente AI. Permite experimentação de stacks web sem sair da plataforma.
+          </p>
+        </section>
+
+        <!-- Propósito -->
+        <section class="grid-overview">
+          <div class="card">
+            <div class="card-icon">🎯</div>
+            <h3>Propósito</h3>
+            <p>O Playground oferece um editor de código integrado com sistema de arquivos virtuais, preview renderizado e terminal simulado, permitindo aos usuários testar e prototipar interfaces e componentes de forma interativa.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">📦</div>
+            <h3>Stack</h3>
+            <p>React (TypeScript) + Tailwind CSS. Editor customizado sem Monaco/CodeMirror (linhas simples). Preview via innerHTML sanitizado. Terminal emulado via dicionário de comandos.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🤖</div>
+            <h3>AI Integration</h3>
+            <p>Assistente AI integrado na barra inferior do editor. Permite prompts que adicionam linhas de código via diff visual. Processamento simulado com timeouts.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔒</div>
+            <h3>Segurança</h3>
+            <p>Sanitização de HTML com DOMPurify antes de renderizar preview. Forbidden tags: script, iframe, form, input. Nenhuma execução real de código ou comandos.</p>
+          </div>
+        </section>
+
+        <!-- Arquitetura -->
+        <section class="table-section">
+          <h2>🗃️ Arquitetura do Módulo</h2>
+          <p>O Playground é 100% frontend, rodando inteiramente no navegador. Não há integração com APIs backend para salvar ou carregar arquivos — todo o estado é local (React hooks).</p>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Componente</th>
+                <th>Responsabilidade</th>
+                <th>Props Principais</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>index.tsx</code></td>
+                <td>Container principal. Gerencia estado global: arquivos abertos, codeMap, terminal lines, AI processing.</td>
+                <td>Nenhuma (página raiz)</td>
+              </tr>
+              <tr>
+                <td><code>FileTreePanel.tsx</code></td>
+                <td>Painel esquerdo com árvore de arquivos virtuais. Navegação por tabs nao implementada (abre arquivos diretamente).</td>
+                <td><code>files</code> (TreeFile[]), <code>activeFile</code>, <code>onFileClick</code></td>
+              </tr>
+              <tr>
+                <td><code>EditorPanel.tsx</code></td>
+                <td>Editor de código customizado (sem syntax highlighting). Mostra tabs abertas, linhas numeradas, barra de AI.</td>
+                <td><code>codeLines</code>, <code>lang</code>, <code>onAiSubmit</code>, <code>aiProcessing</code></td>
+              </tr>
+              <tr>
+                <td><code>PreviewPanel.tsx</code></td>
+                <td>Renderiza HTML do preview via <code>dangerouslySetInnerHTML</code> (sanitizado). Mostra badge de Hot Reload.</td>
+                <td><code>previewHtml</code> (string pré-definida)</td>
+              </tr>
+              <tr>
+                <td><code>TerminalPanel.tsx</code></td>
+                <td>Terminal emulado com input. Interpreta comandos via dicionário <code>termCommands</code>.</td>
+                <td><code>lines</code> (TermLine[]), <code>onCommand</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Estrutura de Dados -->
+        <section class="table-section">
+          <h2>📊 Estruturas de Dados</h2>
+
+          <h3>TreeFile (FileTreePanel)</h3>
+          <table class="data-table">
+            <thead><tr><th>Campo</th><th>Tipo</th><th>Descrição</th></tr></thead>
+            <tbody>
+              <tr><td><code>type</code></td><td>'file' | 'folder'</td><td>Tipo do item</td></tr>
+              <tr><td><code>name</code></td><td>string</td><td>Nome do arquivo/pasta</td></tr>
+              <tr><td><code>indent</code></td><td>number</td><td>Nível de indentação (0 = raiz)</td></tr>
+              <tr><td><code>icon</code></td><td>string (optional)</td><td>Emoji como ícone</td></tr>
+              <tr><td><code>lang</code></td><td>string (optional)</td><td>Linguagem para display no editor</td></tr>
+              <tr><td><code>open</code></td><td>boolean (folders)</td><td>Pasta expandida</td></tr>
+            </tbody>
+          </table>
+
+          <h3>CodeLine (Editor)</h3>
+          <table class="data-table">
+            <thead><tr><th>Campo</th><th>Tipo</th><th>Descrição</th></tr></thead>
+            <tbody>
+              <tr><td><code>text</code></td><td>string</td><td>Conteúdo da linha</td></tr>
+              <tr><td><code>diff</code></td><td>'added' | 'removed'</td><td>Estado de diff visual (verde/vermelho)</td></tr>
+            </tbody>
+          </table>
+
+          <h3>TermLine (Terminal)</h3>
+          <table class="data-table">
+            <thead><tr><th>Campo</th><th>Tipo</th><th>Descrição</th></tr></thead>
+            <tbody>
+              <tr><td><code>html</code></td><td>string</td><td>HTML sanitizado para renderização</td></tr>
+            </tbody>
+          </table>
+
+          <h3>State Principal (index.tsx)</h3>
+          <table class="data-table">
+            <thead><tr><th>Estado</th><th>Tipo</th><th>Uso</td></tr></thead>
+            <tbody>
+              <tr><td><code>activeFile</code></td><td>string</td><td>Arquivo atualmente selecionado</td></tr>
+              <tr><td><code>openTabs</code></td><td>string[]</td><td>Tabs abertas (fila de arquivos)</td></tr>
+              <tr><td><code>codeMap</code></td><td>Record&lt;string, string[]&gt;</td><td>Mapa de filename → array de linhas</td></tr>
+              <tr><td><code>diffState</code></td><td>Record&lt;number, 'added'|'removed'&gt;</td><td>Linhas em diff temporário</td></tr>
+              <tr><td><code>termLines</code></td><td>TermLine[]</td><td>Histórico do terminal</td></tr>
+              <tr><td><code>aiProcessing</code></td><td>boolean</td><td>Loading de IA ativo</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Comandos do Terminal -->
+        <section class="table-section">
+          <h2>💻 Comandos do Terminal</h2>
+          <p>O terminal emulado suporta um conjunto fixo de comandos definidos em <code>termCommands</code> no index.tsx.</p>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Comando</th>
+                <th>Resposta</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>ls</code></td><td>Lista diretórios e arquivos</td><td>Exibe estrutura fixa do projeto virtual</td></tr>
+              <tr><td><code>pwd</code></td><td>/home/dev/project</td><td>Diretório atual (fijo)</td></tr>
+              <tr><td><code>clear</code></td><td>Limpa terminal</td><td>Reseta termLines para []</td></tr>
+              <tr><td><code>git status</code></td><td>Output simulado</td><td>Mostra arquivos modificados</td></tr>
+              <tr><td><code>git log --oneline</code></td><td>Log simulado</td><td>3 commits fictícios</td></tr>
+              <tr><td><code>whoami</code></td><td>dev</td><td>Usuário atual</td></tr>
+              <tr><td><code>node -v</code></td><td>v20.11.0</td><td>Versão do Node</td></tr>
+              <tr><td><code>npm -v</code></td><td>10.2.4</td><td>Versão do npm</td></tr>
+              <tr><td><code>npm run</code></td><td>"Executando..." → concluído</td><td>Qualquer npm run simula execução</td></tr>
+              <tr><td><code>npm</code></td><td>"tudo atualizado..."</td><td>Qualquer npm não-command</td></tr>
+              <tr><td><code>help</code></td><td>Lista de comandos</td><td>Exibe ajuda</td></tr>
+              <tr><td><code>outro</code></td><td>"comando nao encontrado"</td><td>Comando desconhecido</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Fluxo de Dados -->
+        <section class="flows-section">
+          <h2>🌊 Fluxo de Dados</h2>
+
+          <h3>1. Navegação e Edição</h3>
+          <div class="flow-box">
+            <div class="flow-step">
+              <span class="step-num">1</span>
+              <div class="step-content">
+                <strong>FileTreePanel click</strong><br>
+                onFileClick(filename) → setActiveFile + add to openTabs
+              </div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+              <span class="step-num">2</span>
+              <div class="step-content">
+                <strong>EditorPanel render</strong><br>
+                codeMap[activeFile] → CodeLine[] (map com diffState)
+              </div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+              <span class="step-num">3</span>
+              <div class="step-content">
+                <strong>Preview render</strong><br>
+                PreviewPanel recebe previewHtml estática (não reativa ao código atual)
+              </div>
+            </div>
+          </div>
+
+          <h3>2. Comando no Terminal</h3>
+          <div class="flow-box">
+            <div class="flow-step">
+              <span class="step-num">1</span>
+              <div class="step-content">
+                <strong>Enter no input</strong><br>
+                cmd = trim()
+              </div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+              <span class="step-num">2</span>
+              <div class="step-content">
+                <strong>handleCommand</strong><br>
+                Adiciona linha do comando ao terminal
+              </div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+              <span class="step-num">3</span>
+              <div class="step-content">
+                <strong>Lookup em termCommands</strong><br>
+                Se encontrado: resultado (ou __CLEAR__, __HELP__)
+              </div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+              <span class="step-num">4</span>
+              <div class="step-content">
+                <strong>Simulação</strong><br>
+                setTimeout em 150-1200ms adiciona output
+              </div>
+            </div>
+          </div>
+
+          <h3>3. Assistente AI</h3>
+          <div class="flow-box">
+            <div class="flow-step">
+              <span class="step-num">1</span>
+              <div class="step-content">
+                <strong>Submit prompt</strong><br>
+                onAiSubmit(prompt) → setAiProcessing(true)
+              </div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+              <span class="step-num">2</span><div class="step-content">
+                <strong>Echo no terminal</strong><br>
+                Adiciona linha "ai \"prompt\"" + "Analisando..."
+              </div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+              <span class="step-num">3</span>
+              <div class="step-content">
+                <strong>Simulação (1.5s)</strong><br>
+                setCodeMap: prepend "// AI: {prompt}" ao arquivo ativo
+              </div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+              <span class="step-num">4</span>
+              <div class="step-content">
+                <strong>Finalização (2.5s)</strong><br>
+                Clear diff, mensagem de sucesso no terminal, setAiProcessing(false)
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Integrações (Nenhuma com backend) -->
+        <section class="table-section">
+          <h2>🔗 Integrações com Backend</h2>
+          <div class="alert-box warning">
+            <strong>Observação:</strong> O Playground atual é <strong>isolado do backend</strong>. Não há integração real com Projects, Deploys ou API.
+          </div>
+          <p>Todos os dados são estáticos (hardcoded) no componente <code>index.tsx</code>:</p>
+          <ul>
+            <li><code>treeFiles</code>: estrutura de arquivos simulada</li>
+            <li><code>initialCodeMap</code>: conteúdo inicial de cada arquivo</li>
+            <li><code>previewHtml</code>: HTML renderizado no preview (não derivado do código)</li>
+            <li><code>termCommands</code>: dicionário de comandos e respostas</li>
+          </ul>
+
+          <h3>Pontos de Integração Futura</h3>
+          <table class="data-table">
+            <thead><tr><th>Funcionalidade</th><th>Endpoint Sugerido</th><th>Body/Params</th></tr></thead>
+            <tbody>
+              <tr><td>Carregar projeto</td><td><code>GET /api/projects/:id/files</code></td><td>Lista de arquivos com conteúdo</td></tr>
+              <tr><td>Salvar arquivo</td><td><code>POST /api/projects/:id/files</code></td><td>{ path, content }</td></tr>
+              <tr><td>Executar build</td><td><code>POST /api/projects/:id/build</code></td><td>Commands, output stream via WebSocket</td></tr>
+              <tr><td>AI Assistant real</td><td><code>POST /api/agents/:id/run</code></td><td>{ context: code, prompt }</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Segurança -->
+        <section class="table-section">
+          <h2>🔒 Segurança</h2>
+
+          <h3>Sanitização HTML (DOMPurify)</h3>
+          <p>Localizado em <code>src/utils/sanitize.ts</code>. Aplicado tanto no PreviewPanel quanto no TerminalPanel antes de usar <code>dangerouslySetInnerHTML</code>.</p>
+
+          <table class="data-table">
+            <thead><tr><th>Config</th><th>Valor</th></tr></thead>
+            <tbody>
+              <tr><td><code>ALLOWED_TAGS</code></td><td>p, br, b, i, u, strong, em, code, pre, h1–h6, ul, ol, li, a, span, div, table, thead, tbody, tr, th, td, blockquote, hr, img</td></tr>
+              <tr><td><code>ALLOWED_ATTR</code></td><td>href, src, alt, title, class, id, target, rel, width, height</td></tr>
+              <tr><td><code>FORBID_TAGS</code></td><td>script, style, iframe, form, input, button, object, embed</td></tr>
+              <tr><td><code>FORBID_ATTR</code></td><td>onerror, onload, onclick, onmouseover, onfocus, onblur</td></tr>
+              <tr><td><code>ALLOW_DATA_ATTR</code></td><td>false</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Riscos Remanescentes</h3>
+          <ul>
+            <li><strong>CSS Injection</strong>: Even com tags sanitizadas, CSS inline dentro de span/div pode alterar layout da página (isolation via shadow DOM não implementado).</li>
+            <li><strong>Eventos via URL</strong>: Links com <code>javascript:</code> são removidos, mas <code>href</code> malicioso pode abrir páginas externas.</li>
+            <li><strong>Resource Loading</strong>: <code>img src</code> pode apontar para URLs externas (tracking/exfiltration possível via beacon).</li>
+            <li><strong>State isolation</strong>: Como não há persistência e o código roda apenas no cliente, risco é limitado ao próprio XSS.</li>
+          </ul>
+        </section>
+
+        <!-- Como Usar -->
+        <section class="table-section">
+          <h2>📖 Como Usar</h2>
+
+          <h3>Fluxo do Usuário</h3>
+          <ol style="margin-left: 1.5rem; color: var(--fg-secondary); line-height: 2;">
+            <li>Navegar até <strong>Playground</strong> via menu lateral</li>
+            <li>Ver o Explorador de Arquivos à esquerda (FileTreePanel)</li>
+            <li>Clicar em um arquivo para abri-lo no editor (acentivo)</li>
+            <li>Editar código no painel central (alterações ficam apenas em memória)</li>
+            <li>Ver o painel Preview à direita (renderização HTML estática)</li>
+            <li>Abrir o Terminal (aba inferior direita) para comandos simulados</li>
+            <li>Usar a barra de AI no rodapé do editor para sugestões simuladas</li>
+          </ol>
+
+          <h3>Limitações Atuais</h3>
+          <ul>
+            <li>Código editado <strong>não afeta</strong> a preview (previewHtml é constante)</li>
+            <li>Arquivos não são salvos em lugar algum (refresh perde alterações)</li>
+            <li>Editor não possui syntax highlighting</li>
+            <li>AI é apenas mock (adiciona comentário no arquivo ativo)</li>
+          </ul>
+        </section>
+
+        <!-- Referência -->
+        <section class="table-section">
+          <h2>📋 Referência Rápida</h2>
+          <table class="data-table">
+            <thead><tr><th>Arquivo</th><th>Responsabilidade</th></tr></thead>
+            <tbody>
+              <tr><td><code>sistema-react/src/pages/Playground/index.tsx</code></td><td>Container principal, estado global, dicionários, simulações</td></tr>
+              <tr><td><code>sistema-react/src/pages/Playground/EditorPanel.tsx</code></td><td>Editor customizado + barra AI</td></tr>
+              <tr><td><code>sistema-react/src/pages/Playground/FileTreePanel.tsx</code></td><td>Árvore de arquivos</td></tr>
+              <tr><td><code>sistema-react/src/pages/Playground/TerminalPanel.tsx</code></td><td>Terminal emulado com sanitização</td></tr>
+              <tr><td><code>sistema-react/src/pages/Playground/PreviewPanel.tsx</code></td><td>Preview renderizado (sanitizado)</td></tr>
+              <tr><td><code>sistema-react/src/pages/Playground/Playground.module.css</code></td><td>Estilos CSS do módulo</td></tr>
+              <tr><td><code>sistema-react/src/utils/sanitize.ts</code></td><td>Configuração DOMPurify</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Exemplos (layout simples sem componentes UI): mais código puro -->
+        <section class="table-section">
+          <h2>💡 Exemplos Práticos (estrutura)</h2>
+
+          <h3>Theme Toggle (header)</h3>
+          <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; overflow-x: auto;">
+            <pre style="margin: 0; color: var(--fg-secondary); font-size: 0.85rem;"><code>&lt;div class="theme-toggle" onclick="toggleTheme()"&gt;
+  &lt;span class="icon"&gt;🌓&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+function toggleTheme() {
+  document.documentElement.classList.toggle('light');
+  localStorage.setItem('theme',
+    document.documentElement.classList.contains('light') ? 'light' : 'dark');
+}
+&lt;/script&gt;</code></pre>
+          </div>
+
+          <h3>Grid Layout do Playground</h3>
+          <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; overflow-x: auto; margin-top: 1rem;">
+            <pre style="margin: 0; color: var(--fg-secondary); font-size: 0.85rem;"><code>/* Playground.module.css */
+.pgLayout {
+  display: grid;
+  grid-template-columns: 200px 1fr 400px; /* tree | editor | right */
+  height: 100%;
+}
+
+.pgRightPanel {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--border);
+}
+
+.pgPreview { flex: 1; border-bottom: 1px solid var(--border); }
+.pgTerminal { height: 150px; }</code></pre>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>Nommand Vision - Sistema de Gestão de Agentes IA</p>
+      <p>Documentação gerada automaticamente • <span id="generated-date"></span></p>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('generated-date').textContent = new Date().toLocaleDateString('pt-BR');
+    function toggleTheme() {
+      const currentLink = document.querySelector('link[href="styles.css"]');
+      const isDark = !document.documentElement.classList.contains('light');
+      if (isDark) {
+        document.documentElement.classList.add('light');
+      } else {
+        document.documentElement.classList.remove('light');
+      }
+    }
+    // Set initial theme from localStorage
+    if (localStorage.getItem('theme') === 'light') {
+      document.documentElement.classList.add('light');
+    }
+    // Toggle and save
+    window.toggleTheme = function() {
+      document.documentElement.classList.toggle('light');
+      localStorage.setItem('theme', document.documentElement.classList.contains('light') ? 'light' : 'dark');
+    };
+  </script>
+</body>
+</html>

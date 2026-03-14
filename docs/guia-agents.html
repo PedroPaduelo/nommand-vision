@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agents & Execuções - Nommand Vision</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <div class="logo">
+        <h1>Nommand Vision</h1>
+        <span class="subtitle">Documentação de Arquitetura & Sistema</span>
+      </div>
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Visão Geral</a>
+        <a href="#" class="nav-link active">Módulos</a>
+        <a href="#" class="nav-link">Fluxos</a>
+        <a href="#" class="nav-link">Integrações</a>
+        <a href="#" class="nav-link">Riscos</a>
+      </nav>
+      <div class="theme-toggle" onclick="toggleTheme()">
+        <span class="icon">🌓</span>
+      </div>
+    </header>
+
+    <main class="main">
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <h3>Módulos Backend</h3>
+          <ul class="nav-list">
+            <li><a href="guia-auth.html">🔐 Auth & Users</a></li>
+            <li><a href="guia-workspaces.html">🏢 Workspaces</a></li>
+            <li><a href="guia-projects.html">📁 Projects</a></li>
+            <li><a href="guia-agents.html" class="active">🤖 Agents</a></li>
+            <li><a href="guia-chat.html">💬 Chat</a></li>
+            <li><a href="guia-deploys.html">🚀 Deploys</a></li>
+            <li><a href="guia-inbox.html">📥 Inbox</a></li>
+            <li><a href="guia-analytics.html">📊 Analytics</a></li>
+            <li><a href="guia-automations.html">🔄 Automations</a></li>
+          </ul>
+        </div>
+
+        <div class="sidebar-section">
+          <h3>Módulos Frontend</h3>
+          <ul class="nav-list">
+            <li><a href="guia-dashboard.html">🎨 Dashboard</a></li>
+            <li><a href="guia-playground.html">💻 Playground</a></li>
+            <li><a href="guia-projeto-detalhe.html">📱 Projeto Detalhe</a></li>
+            <li><a href="guia-marketplace.html">🛒 Marketplace</a></li>
+            <li><a href="guia-configuracoes.html">⚙️ Configurações</a></li>
+            <li><a href="guia-status.html">📈 Status</a></li>
+          </ul>
+        </div>
+
+        <div class="sidebar-section">
+          <h3>Neste Documento</h3>
+          <ul class="nav-list">
+            <li><a href="#proposito">Propósito</a></li>
+            <li><a href="#schema">Schema de Dados</a></li>
+            <li><a href="#endpoints">Endpoints API</a></li>
+            <li><a href="#execucao">Fluxo de Execução</a></li>
+            <li><a href="#validacao">Validação</a></li>
+            <li><a href="#seguranca">Segurança</a></li>
+            <li><a href="#riscos">Riscos</a></li>
+            <li><a href="#monitoramento">Monitoramento</a></li>
+            <li><a href="#integracoes">Integrações</a></li>
+            <li><a href="#uso">Como Usar</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="content">
+        <section class="hero">
+          <h1>🤖 Agents & Execuções</h1>
+          <p class="lead">
+            Sistema completo para criação, configuração e execução de agentes de IA.
+            Suporta múltiplos tipos de agentes, personalização de prompts, ferramentas externas
+            e tracking detalhado de execuções.
+          </p>
+        </section>
+
+        <section class="grid-overview" id="proposito">
+          <div class="card">
+            <div class="card-icon">🎯</div>
+            <h3>Propósito</h3>
+            <p>Permitir que usuários criem e configurem agentes de IA personalizados com diferentes tipos, modelos, prompts system e ferramentas.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">⚙️</div>
+            <h3>Configuração</h3>
+            <p>Definir tipo de agente, modelo Claude, temperatura, maxTokens, tools array e systemPrompt para customizar o comportamento.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">▶️</div>
+            <h3>Execução</h3>
+            <p>Executar agentes via API com entrada de texto, opcionalmente vinculado a projetos ou usuários específicos.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">📊</div>
+            <h3>Tracking</h3>
+            <p>Registrar cada execução (AgentRun) com duração, tokens usados, status e output para análise posterior.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">📈</div>
+            <h3>Estatísticas</h3>
+            <p>Acumular métricas agregadas: total de runs, duração média e taxa de sucesso por agente.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">🔔</div>
+            <h3>Notificações</h3>
+            <p>Criar notificações automaticamente após conclusão de execuções importantes ou erros.</p>
+          </div>
+        </section>
+
+        <section class="table-section" id="schema">
+          <h2>📋 Schema de Dados</h2>
+
+          <h3 style="margin: 1.5rem 0 1rem; color: var(--accent-glow);">Tabela: agents</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Tipo</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>id</code></td><td>uuid PK</td><td>Identificador único do agente</td></tr>
+              <tr><td><code>workspaceId</code></td><td>uuid FK</td><td>Workspace ao qual o agente pertence (RESTRITIVO)</td></tr>
+              <tr><td><code>name</code></td><td>varchar(100)</td><td>Nome exibido do agente</td></tr>
+              <tr><td><code>description</code></td><td>text</td><td>Descrição opcional do propósito do agente</td></tr>
+              <tr><td><code>type</code></td><td>enum</td><td>Tipo: <code>assistant</code>, <code>custom</code>, <code>tool</code>, <code>supervisor</code></td></tr>
+              <tr><td><code>model</code></td><td>varchar(50)</td><td>Modelo Claude (default: <code>claude-sonnet-4-20250514</code>)</td></tr>
+              <tr><td><code>systemPrompt</code></td><td>text</td><td>Prompt de sistema que define comportamento</td></tr>
+              <tr><td><code>config</code></td><td>jsonb</td><td>Configurações extras (ex: integrações externas)</td></tr>
+              <tr><td><code>temperature</code></td><td>varchar(5)</td><td>Criatividade 0-2 (default: 0.7)</td></tr>
+              <tr><td><code>maxTokens</code></td><td>integer</td><td>Limite de tokens na resposta (default: 4096)</td></tr>
+              <tr><td><code>tools</code></td><td>jsonb (string[])</td><td>Array de ferramentas disponíveis (ex: <code>["search", "code_review"]</code>)</td></tr>
+              <tr><td><code>iconColor</code></td><td>varchar(7)</td><td>Cor do ícone (hex: #RRGGBB)</td></tr>
+              <tr><td><code>isActive</code></td><td>char(1)</td><td>Flag ativo/inativo ('1' ou '0')</td></tr>
+              <tr><td><code>status</code></td><td>enum</td><td>Status operacional: <code>active</code>, <code>inactive</code>, <code>error</code></td></tr>
+              <tr><td><code>category</code></td><td>enum</td><td>Categoria: <code>dev</code>, <code>review</code>, <code>qa</code>, <code>deploy</code>, <code>custom</code></td></tr>
+              <tr><td><code>statsTotalRuns</code></td><td>integer</td><td>Total acumulado de execuções</td></tr>
+              <tr><td><code>statsAvgDurationMs</code></td><td>integer</td><td>Duração média de execução (ms)</td></tr>
+              <tr><td><code>statsSuccessRate</code></td><td>varchar(6)</td><td>Taxa de sucesso % (ex: '98.50')</td></tr>
+              <tr><td><code>createdBy</code></td><td>uuid FK</td><td>ID do usuário criador</td></tr>
+              <tr><td><code>createdAt</code></td><td>timestamp</td><td>Data de criação</td></tr>
+              <tr><td><code>updatedAt</code></td><td>timestamp</td><td>Última atualização</td></tr>
+            </tbody>
+          </table>
+
+          <h3 style="margin: 2rem 0 1rem; color: var(--accent-glow);">Tabela: agentRuns</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Tipo</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>id</code></td><td>uuid PK</td><td>ID único da execução</td></tr>
+              <tr><td><code>agentId</code></td><td>uuid FK</td><td>Agente executado (RESTRITIVO)</td></tr>
+              <tr><td><code>projectId</code></td><td>uuid FK nullable</td><td>Projeto associado (contexto opcional)</td></tr>
+              <tr><td><code>userId</code></td><td>uuid FK nullable</td><td>Usuário que disparou a execução</td></tr>
+              <tr><td><code>input</code></td><td>text</td><td>Texto de entrada fornecido ao agente</td></tr>
+              <tr><td><code>output</code></td><td>text</td><td>Resposta gerada pelo agente (null se erro)</td></tr>
+              <tr><td><code>tokensUsed</code></td><td>integer</td><td>Total de tokens consumidos</td></tr>
+              <tr><td><code>durationMs</code></td><td>integer</td><td>Tempo de execução em milissegundos</td></tr>
+              <tr><td><code>status</code></td><td>enum</td><td><code>running</code>, <code>completed</code>, <code>error</code>, <code>timeout</code></td></tr>
+              <tr><td><code>error</code></td><td>text</td><td>Mensagem de erro se status for error/timeout</td></tr>
+              <tr><td><code>startedAt</code></td><td>timestamp</td><td>Timestamp de início (default now)</td></tr>
+              <tr><td><code>completedAt</code></td><td>timestamp</td><td>Timestamp de conclusão (null se running)</td></tr>
+              <tr><td><code>createdAt</code></td><td>timestamp</td><td>Timestamp de criação do registro</td></tr>
+            </tbody>
+          </table>
+
+          <h3 style="margin: 2rem 0 1rem; color: var(--accent-glow);">Integração com Analytics</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Tipo</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>agentId</code></td><td>uuid</td><td>Vínculo com agents.id para rastrear runs</td></tr>
+              <tr><td><code>eventType</code></td><td>varchar(50)</td><td>Tipo: <code>agent.run.completed</code>, <code>agent.run.failed</code></td></tr>
+              <tr><td><code>eventData</code></td><td>jsonb</td><td>Metadados: tokens, duration, status</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="flows-section" id="execucao">
+          <h2>🌊 Fluxo de Execução de Agente</h2>
+
+          <div class="flow-diagram">
+            <h3>POST /api/agents/:id/run</h3>
+            <div class="flow-box">
+              <div class="flow-step">
+                <span class="step-num">1</span>
+                <div class="step-content">
+                  <strong>Recebimento da requisição</strong><br>
+                  Auth middleware valida token + workspace<br>
+                  <code>zValidator(runAgentSchema)</code>
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <span class="step-num">2</span>
+                <div class="step-content">
+                  <strong>Service: agentsService.run()</strong><br>
+                  Valida agente exists + isActive<br>
+                  Extrai workspaceId do usuário
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <span class="step-num">3</span>
+                <div class="step-content">
+                  <strong>Cria AgentRun</strong><br>
+                  Insert em agentRuns com status=<code>running</code><br>
+                  Armazena input, projectId, userId
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <span class="step-num">4</span>
+                <div class="step-content">
+                  <strong>Chamada Anthropic SDK</strong><br>
+                  (Atualmente simulado no código)<br>
+                  Passa: systemPrompt, tools, temperature
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <span class="step-num">5</span>
+                <div class="step-content">
+                  <strong>Atualiza AgentRun</strong><br>
+                  status=<code>completed</code> ou <code>error</code><br>
+                  output, tokensUsed, durationMs, completedAt
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <span class="step-num">6</span>
+                <div class="step-content">
+                  <strong>Atualiza Estatísticas</strong><br>
+                  updateStats(): recalcula average + successRate<br>
+                  totalRuns++, statsAvgDurationMs, statsSuccessRate
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <span class="step-num">7</span>
+                <div class="step-content">
+                  <strong>Retorna resposta</strong><br>
+                  { id, agentId, input, output, tokensUsed, durationMs, status }
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-diagram">
+            <h3>Fluxo de Erro</h3>
+            <div class="flow-box">
+              <div class="flow-step">
+                <span class="step-num">1</span>
+                <div class="step-content">
+                  <strong>Erro na execução</strong><br>
+                  Catch block captura exception
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <span class="step-num">2</span>
+                <div class="step-content">
+                  <strong>Marca AgentRun como erro</strong><br>
+                  status=<code>error</code>, error=message, completedAt
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <span class="step-num">3</span>
+                <div class="step-content">
+                  <strong>Atualiza stats com failure</strong><br>
+                  success=false → reduz successRate
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <span class="step-num">4</span>
+                <div class="step-content">
+                  <strong>Rethrow exception</strong><br>
+                  HTTP 500 / código de erro apropriado
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="table-section" id="endpoints">
+          <h2>📡 Endpoints da API</h2>
+
+          <div class="data-table-wrapper" style="overflow-x: auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Método</th>
+                  <th>Endpoint</th>
+                  <th>Descrição</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>GET</code></td>
+                  <td><code>/api/agents</code></td>
+                  <td>Lista agentes do workspace com filtros (status, category, search, paginação)</td>
+                </tr>
+                <tr>
+                  <td><code>GET</code></td>
+                  <td><code>/api/agents/:id</code></td>
+                  <td>Retorna detalhes de um agente específico</td>
+                </tr>
+                <tr>
+                  <td><code>POST</code></td>
+                  <td><code>/api/agents</code></td>
+                  <td>Cria novo agente (requer name, outros opcionais)</td>
+                </tr>
+                <tr>
+                  <td><code>PATCH</code></td>
+                  <td><code>/api/agents/:id</code></td>
+                  <td>Atualiza agente existente (campos parciais)</td>
+                </tr>
+                <tr>
+                  <td><code>DELETE</code></td>
+                  <td><code>/api/agents/:id</code></td>
+                  <td>Remove agente (cascade nos runs)</td>
+                </tr>
+                <tr>
+                  <td><code>POST</code></td>
+                  <td><code>/api/agents/:id/toggle</code></td>
+                  <td>Inverte estado isActive (ativo/inativo)</td>
+                </tr>
+                <tr>
+                  <td><code>GET</code></td>
+                  <td><code>/api/agents/:id/stats</code></td>
+                  <td>Retorna estatísticas: totalRuns, avgDurationMs, successRate</td>
+                </tr>
+                <tr>
+                  <td><code>POST</code></td>
+                  <td><code>/api/agents/:id/run</code></td>
+                  <td>Executa agente com input específico (run tracking incluso)</td>
+                </tr>
+                <tr>
+                  <td><code>GET</code></td>
+                  <td><code>/api/agents/:id/runs</code></td>
+                  <td>Lista execuções deste agente (com paginação)</td>
+                </tr>
+                <tr>
+                  <td><code>GET</code></td>
+                  <td><code>/api/agents/runs/:runId</code></td>
+                  <td>Detalhes de execução específica</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 style="margin: 2rem 0 1rem;">Respostas de Exemplo</h3>
+
+          <div class="card" style="margin-bottom: 1.5rem;">
+            <h4 style="margin-bottom: 0.5rem;">GET /api/agents</h4>
+            <pre style="background: var(--bg-primary); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.85rem; color: var(--fg-secondary);">{
+  "data": [
+    {
+      "id": "uuid",
+      "workspaceId": "uuid",
+      "name": "Code Reviewer",
+      "description": "Analisa código Python",
+      "type": "assistant",
+      "model": "claude-sonnet-4-20250514",
+      "systemPrompt": "You are an expert Python developer...",
+      "temperature": 0.7,
+      "maxTokens": 4096,
+      "tools": ["static_analysis", "security_scan"],
+      "isActive": true,
+      "status": "active",
+      "category": "review",
+      "statsTotalRuns": 152,
+      "statsAvgDurationMs": 2340,
+      "statsSuccessRate": 98.03,
+      "createdBy": "uuid",
+      "createdAt": "2025-03-14T...",
+      "updatedAt": "2025-03-14T..."
+    }
+  ],
+  "meta": {
+    "total": 45,
+    "page": 1,
+    "perPage": 20
+  }
+}</pre>
+          </div>
+
+          <div class="card" style="margin-bottom: 1.5rem;">
+            <h4 style="margin-bottom: 0.5rem;">POST /api/agents/:id/run</h4>
+            <pre style="background: var(--bg-primary); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.85rem; color: var(--fg-secondary);">Request body:
+{
+  "input": "Analyze this code: def hello(): print('world')",
+  "projectId": "uuid-optional",
+  "userId": "uuid-optional"
+}
+
+Response body:
+{
+  "data": {
+    "id": "run-uuid",
+    "agentId": "agent-uuid",
+    "input": "Analyze this code...",
+    "output": "This function is simple but missing docstring...",
+    "tokensUsed": 256,
+    "durationMs": 1234,
+    "status": "completed"
+  }
+}</pre>
+          </div>
+        </section>
+
+        <section class="table-section" id="validacao">
+          <h2>✅ Esquemas de Validação (Zod)</h2>
+
+          <div class="card" style="margin-bottom: 1.5rem;">
+            <h4 style="color: var(--accent-glow); margin-bottom: 1rem;">createAgentSchema</h4>
+            <pre style="background: var(--bg-primary); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.85rem; color: var(--fg-secondary);">{
+  name: z.string().min(2).max(100),           // obrigatório
+  description: z.string().optional(),        // opcional
+  type: z.enum(['assistant','custom','tool','supervisor']).default('custom'),
+  model: z.string().max(50).optional(),      // default: claude-sonnet-4-20250514
+  systemPrompt: z.string().optional(),       // prompt de sistema
+  config: z.record(z.unknown()).optional(),  // configs extras
+  temperature: z.number().min(0).max(2).optional(),  // 0-2
+  maxTokens: z.number().int().min(1).max(128000).optional(),
+  tools: z.array(z.string()).optional(),     // array de nomes de tools
+  iconColor: z.string().max(7).optional(),   // hex #RRGGBB
+  isActive: z.boolean().default(true),
+  category: z.enum(['dev','review','qa','deploy','custom']).default('custom')
+}</pre>
+          </div>
+
+          <div class="card" style="margin-bottom: 1.5rem;">
+            <h4 style="color: var(--accent-glow); margin-bottom: 1rem;">updateAgentSchema</h4>
+            <pre style="background: var(--bg-primary); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.85rem; color: var(--fg-secondary);">// Partial do createAgentSchema - todos campos opcionais
+// Observação: temperature e isActive são convertidos internamente
+// Temperatura: number → string | boolean → '1'/'0'</pre>
+          </div>
+
+          <div class="card" style="margin-bottom: 1.5rem;">
+            <h4 style="color: var(--accent-glow); margin-bottom: 1rem;">runAgentSchema</h4>
+            <pre style="background: var(--bg-primary); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.85rem; color: var(--fg-secondary);">{
+  input: z.string().min(1),                    // entrada obrigatória
+  projectId: z.string().uuid().optional(),    // contexto de projeto
+  userId: z.string().uuid().optional()        // usuário alternativo
+}</pre>
+          </div>
+
+          <div class="card" style="margin-bottom: 1.5rem;">
+            <h4 style="color: var(--accent-glow); margin-bottom: 1rem;">listAgentsSchema</h4>
+            <pre style="background: var(--bg-primary); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.85rem; color: var(--fg-secondary);">{
+  category: z.enum([...]).optional(),         // filtrar por categoria
+  status: z.enum(['active','inactive','error']).optional(),
+  search: z.string().optional(),              // busca em name + description
+  page: z.coerce.number().min(1).default(1),
+  limit: z.coerce.number().min(1).max(50).default(20)
+}</pre>
+          </div>
+        </section>
+
+        <section class="grid-overview" id="seguranca">
+          <h2>🔒 Segurança</h2>
+
+          <div class="card">
+            <div class="card-icon">🏢</div>
+            <h3>Isolamento por Workspace</h3>
+            <p>Todas as queries filtram por <code>workspaceId</code>. Usuários só acessam agentes do próprio workspace via middleware.</p>
+            <pre style="background: var(--bg-tertiary); padding: 0.75rem; border-radius: 6px; margin-top: 0.5rem; font-size: 0.8rem;">
+// agentsRouter - proteção em todas as rotas
+agentsRouter.use('/*', authMiddleware)
+// authMiddleware garante: user.workspaceId disponível</pre>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">✅</div>
+            <h3>Validação de Estado</h3>
+            <p>Execução verifica se agente está ativo:</p>
+            <pre style="background: var(--bg-tertiary); padding: 0.75rem; border-radius: 6px; margin-top: 0.5rem; font-size: 0.8rem;">
+if (!agent.isActive) {
+  throw new Error('Agent is not active')
+}</pre>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">🔑</div>
+            <h3>Autenticação JWT</h3>
+            <p>Todas as rotas requerem token válido. Tokens contêm userId e workspaceId válidos.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">🚫</div>
+            <h3>Rate Limiting</h3>
+            <p>Aplicado globalmente via middleware (detalhes implementação). Recomenda-se lim por workspace para agents.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">📝</div>
+            <h3>Audit de Criação</h3>
+            <p>Campo <code>createdBy</code> rastreia autor de cada agente. <code>createdAt</code> e <code>updatedAt</code> automáticos.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">🔒</div>
+            <h3>Cascade Delete</h3>
+            <p>Agent removido → agentRuns deletados automaticamente via <code>onDelete: 'cascade'</code> no schema.</p>
+          </div>
+        </section>
+
+        <section class="risks-section" id="riscos">
+          <h2>⚠️ Riscos Identificados</h2>
+          <div class="risks-grid">
+            <div class="risk-card high">
+              <div class="risk-level">ALTO</div>
+              <h4>Prompt Injection</h4>
+              <p>Usuários controlam systemPrompt em agentes custom. Risco: vazar instruções internas ou bypass de segurança.</p>
+              <code>Mitigação: Sandbox de prompts, scan por padrões suspeitos, warning no UI, limitar customização em workspaces com permissão</code>
+            </div>
+
+            <div class="risk-card high">
+              <div class="risk-level">ALTO</div>
+              <h4>Custo API Anthropic</h4>
+              <p>Sem limite de tokens input/output. Ataque DoS com prompts enormes gera custo astronômico.</p>
+              <code>Mitigação: Impor maxTokens no input + output, rate limit por user/projeto, quota diária por workspace, cache de respostas similares</code>
+            </div>
+
+            <div class="risk-card medium">
+              <div class="risk-level">MÉDIO</div>
+              <h4>Anthropic SDK Não Implementado</h4>
+              <p>Código atual simula resposta. Chamada real a Anthropic API ainda não integrada.</p>
+              <code>Mitigação: Implementar Anthropic SDK com erro handling, timeout, retry logic, api key isolation por workspace</code>
+            </div>
+
+            <div class="risk-card medium">
+              <div class="risk-level">MÉDIO</div>
+              <h4>Tools Array sem Validação</h4>
+              <p><code>tools: z.array(z.string())</code> não valida se tool realmente existe/autorizada.</p>
+              <code>Mitigação: Whitelist de tools predefinidas, verificar contra registry antes de execução</code>
+            </div>
+
+            <div class="risk-card medium">
+              <div class="risk-level">MÉDIO</div>
+              <h4>Leak de Dados via Output</h4>
+              <p>Agent output pode conter dados sensíveis do contexto (outros messages, workspace info).</p>
+              <code>Mitigação: Sanitização de output, redaction de padrões sensíveis, log audits</code>
+            </div>
+
+            <div class="risk-card low">
+              <div class="risk-level">BAIXO</div>
+              <h4>SQL Injection Indirecta</h4>
+              <p>Drizzle ORM com prepared Statements protege, mas queries dinâmicas em search precisam de cuidado.</p>
+              <code>Mitigação: LIKE parametrizado já implementado, validar search length</code>
+            </div>
+
+            <div class="risk-card low">
+              <div class="risk-level">BAIXO</div>
+              <h4>Race Condition em Update Stats</h4>
+              <p>Múltiplos runs simultâneos podem recalcular stats com dados desatualizados.</p>
+              <code>Mitigação: Usar UPDATE com cálculos SQL nativos ou locks ou buffer de stats</code>
+            </div>
+          </div>
+        </section>
+
+        <section class="stats-section" id="monitoramento">
+          <h2>📈 Monitoramento & Métricas</h2>
+
+          <div class="card" style="margin-bottom: 1.5rem;">
+            <h3 style="color: var(--accent-glow); margin-bottom: 1rem;">Estatísticas por Agente (acumuladas)</h3>
+            <ul style="list-style: none; padding: 0;">
+              <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">
+                <strong>statsTotalRuns:</strong> Total de execuções concluídas (incrementado em cada run)
+              </li>
+              <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">
+                <strong>statsAvgDurationMs:</strong> Média móvel de duração (recalculada via updateStats)
+              </li>
+              <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">
+                <strong>statsSuccessRate:</strong> Porcentagem de sucesso (0-100, atualizada em cada run)
+              </li>
+            </ul>
+          </div>
+
+          <div class="card" style="margin-bottom: 1.5rem;">
+            <h3 style="color: var(--accent-glow); margin-bottom: 1rem;">Função updateStats (agents.service.ts)</h3>
+            <pre style="background: var(--bg-primary); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.85rem; color: var(--fg-secondary);">async function updateStats(id: string, stats: { duration: number; success: boolean }) {
+  const agent = await getRaw(id)
+
+  const totalRuns = (Number(agent.statsTotalRuns) || 0) + 1
+  const currentAvg = Number(agent.statsAvgDurationMs) || 0
+  const newAvg = Math.round((currentAvg * (totalRuns - 1) + stats.duration) / totalRuns)
+
+  const currentSuccessRate = Number(agent.statsSuccessRate) || 100
+  const successCount = Math.round((currentSuccessRate * (totalRuns - 1)) / 100) + (stats.success ? 1 : 0)
+  const newSuccessRate = (successCount / totalRuns) * 100
+
+  await db.update(agents)
+    .set({
+      statsTotalRuns: totalRuns,
+      statsAvgDurationMs: newAvg,
+      statsSuccessRate: newSuccessRate.toFixed(2),
+      updatedAt: new Date(),
+    })
+    .where(eq(agents.id, id))
+}</pre>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-label">Endpoint Stats</div>
+              <div style="font-size: 1.25rem; margin-top: 0.5rem; color: var(--accent);">
+                GET /agents/:id/stats
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Agregado em</div>
+              <div style="font-size: 1rem; margin-top: 0.5rem; color: var(--fg-secondary);">
+                agents.stats* (row level)
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Alertas Recomendados</div>
+              <div style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--warning);">
+                SuccessRate &lt; 80%<br>
+                AvgDuration subindo
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="integracoes">
+          <h2>🔗 Integrações</h2>
+
+          <div class="grid-overview">
+            <div class="card">
+              <div class="card-icon">🤖</div>
+              <h3>Anthropic API (Claude)</h3>
+              <p>Chamada ao Anthropic SDK para execução de agentes com modelo Claude. Configuração via environment variables.</p>
+              <pre style="background: var(--bg-tertiary); padding: 0.75rem; border-radius: 6px; margin-top: 0.5rem; font-size: 0.8rem;">
+ANTHROPIC_API_KEY=sk-ant-...
+DEFAULT_MODEL=claude-sonnet-4-20250514</pre>
+              <p style="font-size: 0.8rem; color: var(--fg-muted); margin-top: 0.5rem;">
+                Status: Interface preparada, implementação pendente
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-icon">📊</div>
+              <h3>Analytics Service</h3>
+              <p>Eventos de agent runs:</p>
+              <ul style="font-size: 0.85rem; color: var(--fg-secondary); margin-top: 0.5rem; padding-left: 1.25rem;">
+                <li><code>agent.run.completed</code></li>
+                <li><code>agent.run.failed</code></li>
+              </ul>
+              <pre style="background: var(--bg-tertiary); padding: 0.75rem; border-radius: 6px; margin-top: 0.5rem; font-size: 0.8rem;">
+{
+  workspaceId, agentId, userId,
+  eventType: 'agent.run.completed',
+  eventData: { tokensUsed, durationMs, projectId }
+}</pre>
+            </div>
+
+            <div class="card">
+              <div class="card-icon">🔔</div>
+              <h3>Notifications Service</h3>
+              <p>Notificações disparadas ao concluir execuções (principalmente erros ou supervisor concluído). Integração com Inbox.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-icon">📁</div>
+              <h3>Projects Service</h3>
+              <p>Vínculo opcional via <code>projectId</code> para contexto. Projetos podem referenciar agentes em <code>agentIds</code> array.</p>
+            </div>
+          </div>
+        </section>
+
+        <section style="margin-bottom: 3rem;" id="uso">
+          <h2>🚀 Como Usar</h2>
+
+          <div class="grid-overview">
+            <div class="card">
+              <div class="card-icon">1️⃣</div>
+              <h3>Criar um Agente</h3>
+              <pre style="background: var(--bg-tertiary); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; color: var(--fg-secondary);">POST /api/agents
+{
+  "name": "Code Reviewer",
+  "description": "Analisa PRs e sugere melhorias",
+  "type": "assistant",
+  "model": "claude-sonnet-4-20250514",
+  "systemPrompt": "You are a senior code reviewer...",
+  "temperature": 0.3,
+  "category": "review",
+  "tools": ["static_analysis", "security_scan"]
+}</pre>
+            </div>
+
+            <div class="card">
+              <div class="card-icon">2️⃣</div>
+              <h3>Configurar System Prompt</h3>
+              <p>O <code>systemPrompt</code> define comportamento. Exemplo para code review:</p>
+              <pre style="background: var(--bg-tertiary); padding: 0.75rem; border-radius: 6px; font-size: 0.8rem; color: var(--fg-secondary);">You are an expert code reviewer.
+Focus on:
+1. Security vulnerabilities
+2. Performance issues
+3. Code readability
+4. Best practices
+
+Always provide:
+- Summary of issues
+- Severity levels
+- Recommended fixes</pre>
+            </div>
+
+            <div class="card">
+              <div class="card-icon">3️⃣</div>
+              <h3>Testar no Playground</h3>
+              <p>Usar frontend Playground para testar agentes com inputs variados antes de automatizar.</p>
+              <p style="font-size: 0.85rem; color: var(--fg-muted); margin-top: 0.5rem;">
+                Frontend: <code>guia-playground.html</code>
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-icon">4️⃣</div>
+              <h3>Executar via API</h3>
+              <pre style="background: var(--bg-tertiary); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; color: var(--fg-secondary);">POST /api/agents/:id/run
+{
+  "input": "Review this function: def process(data): return data.upper()",
+  "projectId": "proj-uuid-opcional"
+}</pre>
+            </div>
+
+            <div class="card">
+              <div class="card-icon">5️⃣</div>
+              <h3>Monitorar Estatísticas</h3>
+              <pre style="background: var(--bg-tertiary); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; color: var(--fg-secondary);">GET /api/agents/:id/stats
+GET /api/agents/:id/runs?page=1&limit=50
+GET /api/agents/runs/:runId</pre>
+              <p>Filtragem por workspace automática.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-icon">6️⃣</div>
+              <h3>Automatização</h3>
+              <p>Vincular agentes a:</p>
+              <ul style="font-size: 0.85rem; color: var(--fg-secondary); margin-top: 0.5rem; padding-left: 1.25rem;">
+                <li>Automations (webhook/schedule triggers)</li>
+                <li>Chat sessions (agentes de chat)</li>
+                <li>Deploy hooks (pós-deploy checks)</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 1.5rem; border-color: var(--accent);">
+            <h3 style="color: var(--accent-glow); margin-bottom: 0.5rem;">Tipos de Agente</h3>
+            <ul style="list-style: none; padding: 0;">
+              <li style="padding: 0.5rem 0; border-bottom: 1px dashed var(--border);">
+                <strong><code>assistant</code></strong> — Agente geral, útil para tarefas variadas
+              </li>
+              <li style="padding: 0.5rem 0; border-bottom: 1px dashed var(--border);">
+                <strong><code>custom</code></strong> — Prompt personalizado, máxima flexibilidade
+              </li>
+              <li style="padding: 0.5rem 0; border-bottom: 1px dashed var(--border);">
+                <strong><code>tool</code></strong> — Focado em uma ferramenta específica (ex: search)
+              </li>
+              <li style="padding: 0.5rem 0;">
+                <strong><code>supervisor</code></strong> — Coordena múltiplos agentes (orquestrador)
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="table-section">
+          <h2>📁 Arquivos Relevantes</h2>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Arquivo</th>
+                <th>Propósito</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>backend/src/routes/agents.ts</code></td><td>Rotas RESTful do módulo Agents (10 endpoints)</td></tr>
+              <tr><td><code>backend/src/services/agents.service.ts</code></td><td>Lógica de negócio: CRUD, run, stats, listRuns</td></tr>
+              <tr><td><code>backend/src/schemas/agents.schema.ts</code></td><td>Esquemas Zod para validação de inputs</td></tr>
+              <tr><td><code>backend/src/db/schema/agents.ts</code></td><td>Schema Drizzle ORM: tables agents + agentRuns + enums</td></tr>
+              <tr><td><code>backend/src/db/schema/analytics.ts</code></td><td>Schema analytics (para eventos de agent runs)</td></tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>Nommand Vision - Sistema de Gestão de Agentes IA</p>
+      <p>Documentação gerada automaticamente • <span id="generated-date"></span></p>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('generated-date').textContent = new Date().toLocaleDateString('pt-BR');
+    function toggleTheme() {
+      document.documentElement.classList.toggle('light');
+    }
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guia Deploys</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="header"><div class="logo"><h1>Guia Deploys & CI/CD</h1></div></header>
+    <main class="main" style="grid-template-columns:1fr;">
+      <div class="content">
+        <section class="hero">
+          <h2>Deploys & CI/CD</h2>
+          <p>Gestão de pipelines de build/deploy de projetos com logs em tempo real, variáveis de ambiente secretas, cancelamento e retry.</p>
+        </section>
+
+        <section class="flows-section">
+          <h3>O que é</h3>
+          <p>O módulo de Deploys gerencia deploys de código via pipeline simples no backend, com estados, logs e ambiente.</p>
+
+          <h3>Objetivos</h3>
+          <ul>
+            <li>Disparar deploys por projeto.</li>
+            <li>Salvar estado e métricas de cada deploy.</li>
+            <li>Expor logs em lista e streaming SSE.</li>
+            <li>Operar env vars por deploy com secrets.</li>
+            <li>Suportar cancelamento e retry.</li>
+          </ul>
+        </section>
+
+        <section class="table-section">
+          <h3>Esquema de banco de dados</h3>
+          <p>As tabelas principais e enums estão em <code>backend/src/db/schema/deploys.ts</code>.</p>
+          <ul>
+            <li><strong>deploys</strong>: id, projectId, workspaceId, environment (preview/staging/production), status (queued/building/deploying/success/failed/cancelled), branch, commitSha, commitMessage, logs, url, error, durationMs, startedAt, completedAt, triggeredBy, createdAt.</li>
+            <li><strong>deploy_logs</strong>: id, deployId, level (info/warn/error), message, timestamp.</li>
+            <li><strong>deploy_env_vars</strong>: id, deployId, key, valueEncrypted, isSecret, createdAt.</li>
+          </ul>
+        </section>
+
+        <section class="table-section">
+          <h3>Rotas do módulo</h3>
+          <p>As rotas estão definidas em <code>backend/src/routes/deploys.ts</code> e usam middleware de autenticação.</p>
+          <ul>
+            <li>GET <code>/api/deploys</code> - listar deploys (filtros: projectId, status, environment, page, limit).</li>
+            <li>GET <code>/api/deploys/:id</code> - obter deploy específico.</li>
+            <li>POST <code>/api/deploys</code> - criar deploy (body: projectId, environment?, commitSha?, commitMessage?, branch?).</li>
+            <li>POST <code>/api/deploys/:id/cancel</code> - cancelar deploy (status queued/building/deploying).</li>
+            <li>POST <code>/api/deploys/:id/retry</code> - criar um novo deploy com o mesmo commit/branch.</li>
+            <li>GET <code>/api/deploys/:id/logs</code> - obter últimos 100 logs do deploy.</li>
+            <li>GET <code>/api/deploys/:id/logs/stream</code> - SSE de logs (stream de eventos em tempo real).</li>
+            <li>GET <code>/api/deploys/:id/env</code> - listar env vars do deploy.</li>
+            <li>POST <code>/api/deploys/:id/env</code> - criar/atualizar env var (key,value,isSecret?).</li>
+            <li>DELETE <code>/api/deploys/:id/env/:varId</code> - excluir env var.</li>
+          </ul>
+        </section>
+
+        <section class="flows-section">
+          <h3>Fluxo de deploy</h3>
+          <div class="flow-box">
+            <div class="flow-step"><span class="step-num">1</span><div class="step-content"><strong>Trigger</strong><br>POST /api/deploys → status=queued</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><span class="step-num">2</span><div class="step-content"><strong>Serviço</strong><br>Deploys service grava e retorna deploy</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><span class="step-num">3</span><div class="step-content"><strong>Worker</strong><br>Build (npm install/test/build), deploy (Docker/EasyPanel), atualiza logs/estado</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><span class="step-num">4</span><div class="step-content"><strong>Atualização</strong><br>status building/deploying/success/failed/cancelled + duration + url</div></div>
+          </div>
+        </section>
+
+        <section class="table-section">
+          <h3>Implementação backend</h3>
+          <p>Service principal: <code>backend/src/services/deploys.service.ts</code>. Validações de entrada em <code>backend/src/schemas/deploys.schema.ts</code>.</p>
+          <p>Exemplos de lógica:</p>
+          <ul>
+            <li><strong>create</strong>: Valida projectId, insere deploy com status queued e triggeredBy.</li>
+            <li><strong>cancel</strong>: só permite queued/building/deploying e seta status cancelled, completedAt.</li>
+            <li><strong>retry</strong>: clona deploy antigo com status queued e commit/branch originais.</li>
+            <li><strong>getLogs</strong>: lê deploy_logs ordenados por timestamp (limit 100).</li>
+            <li><strong>setEnvVar</strong>: upsert em deploy_env_vars, guarda valueEncrypted e isSecret true por padrão.</li>
+          </ul>
+        </section>
+
+        <section class="table-section">
+          <h3>Logs em tempo real (SSE)</h3>
+          <p>Endpoint <code>GET /api/deploys/:id/logs/stream</code> retorna <code>Content-Type: text/event-stream</code> e envia eventos do tipo <code>data: ...\n\n</code>.</p>
+          <p>No servidor atual, o stream é simulado (conecta, builds steps, finaliza) e pode ser estendido para injetar logs do worker.</p>
+        </section>
+
+        <section class="table-section">
+          <h3>Segurança e restrições</h3>
+          <ul>
+            <li>Middleware <code>authMiddleware</code> exige usuário autenticado e workspace.</li>
+            <li>Listagem filtra por workspaceId para evitar vazamento entre workspaces.</li>
+            <li>Env vars secretas são marcadas com <code>isSecret</code> e retornam <code>***</code> no listing.</li>
+            <li>Dados sensíveis em logs devem ser sanitizados antes de gravar ou stream.</li>
+          </ul>
+        </section>
+
+        <section class="risks-section">
+          <h3>Pontos de risco</h3>
+          <div class="risks-grid">
+            <div class="risk-card high"><div class="risk-level">ALTO</div><h4>Exposição de variáveis de ambiente</h4><p>Env vars devem ser criptografadas e não exibidas em texto puro.</p></div>
+            <div class="risk-card medium"><div class="risk-level">MÉDIO</div><h4>Cancelamento em execução</h4><p>Cancelamento deve interromper worker e atualizar status atômico. Hoje só atualiza status.</p></div>
+            <div class="risk-card medium"><div class="risk-level">MÉDIO</div><h4>Builds caros</h4><p>Sem limites de concorrência pode gerar custos altos. Adicionar fila e throttle.</p></div>
+          </div>
+        </section>
+
+        <section class="flows-section">
+          <h3>Como usar (exemplos cURL)</h3>
+          <ol>
+            <li>Trigger deploy:
+              <pre><code>curl -X POST /api/deploys -H 'Authorization: Bearer TOKEN' -H 'Content-Type: application/json' -d '{"projectId":"UUID","environment":"staging","branch":"main","commitSha":"abc123"}'</code></pre>
+            </li>
+            <li>Obter deploy:
+              <pre><code>curl -X GET /api/deploys/:id -H 'Authorization: Bearer TOKEN'</code></pre>
+            </li>
+            <li>Stream logs:
+              <pre><code>curl -N /api/deploys/:id/logs/stream -H 'Authorization: Bearer TOKEN'</code></pre>
+            </li>
+            <li>Set env var:
+              <pre><code>curl -X POST /api/deploys/:id/env -H 'Authorization: Bearer TOKEN' -H 'Content-Type: application/json' -d '{"key":"API_KEY","value":"secret","isSecret":true}'</code></pre>
+            </li>
+            <li>Retry/cancel:
+              <pre><code>curl -X POST /api/deploys/:id/retry -H 'Authorization: Bearer TOKEN'
+curl -X POST /api/deploys/:id/cancel -H 'Authorization: Bearer TOKEN'</code></pre>
+            </li>
+          </ol>
+        </section>
+
+        <p><a href="index.html">← Voltar para docs</a></p>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guia - Módulo Configurações & Perfil</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="light">
+  <div class="app-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <h1>Nommand Vision Docs</h1>
+      </div>
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Voltar ao índice</a>
+      </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <h3>Conteúdo</h3>
+          <ul class="nav-list">
+            <li><a href="#o-que-e">O que é</a></li>
+            <li><a href="#arquitetura">Arquitetura Frontend</a></li>
+            <li><a href="#secoes">Seções do Módulo</a></li>
+            <li><a href="#fluxo-dados">Fluxo de Dados</a></li>
+            <li><a href="#endpoints">Endpoints da API</a></li>
+            <li><a href="#schemas-db">Schemas & Types</a></li>
+            <li><a href="#seguranca">Segurança & Riscos</a></li>
+            <li><a href="#como-usar">Como Usar</a></li>
+            <li><a href="#integracoes">Integrações</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- Content -->
+      <main class="content">
+        <section class="hero">
+          <h1>Módulo de Configurações & Perfil</h1>
+          <p class="lead">Sistema completo de gerenciamento de configurações de workspace, perfil de usuário, API keys, integrações externas, aparência, notificações e billing. Implementado com React (frontend) e Hono + Drizzle (backend).</p>
+        </section>
+
+        <!-- O que é -->
+        <section id="o-que-e" class="flows-section">
+          <h2>O que é</h2>
+          <div class="grid-overview">
+            <div class="card">
+              <div class="card-icon">⚙️</div>
+              <h3>Propósito</h3>
+              <p>Centralizar todas as configurações da plataforma: dados do workspace, preferências do usuário, chaves de API, integrações com serviços externos, aparência da UI, preferências de notificações e gerenciamento de faturamento.</p>
+            </div>
+            <div class="card">
+              <div class="card-icon">👤</div>
+              <h3>Perfil do Usuário</h3>
+              <p>O usuário pode editar seu nome, bio, avatar, role, stack e preferências de tema. A senha pode ser alterada via endpoint específico. O onboarding e tour podem ser marcados como completos.</p>
+            </div>
+            <div class="card">
+              <div class="card-icon">🏢</div>
+              <h3>Configurações do Workspace</h3>
+              <p>Configurações globais do workspace: nome, região, domínio personalizado, modo desenvolvedor, auto-save, telemetria. Apenas workspace owners podem alterar algumas configurações sensíveis.</p>
+            </div>
+            <div class="card">
+              <div class="card-icon">🔑</div>
+              <h3>API Keys</h3>
+              <p>Gerenciamento de chaves de API para acesso programático à plataforma. Criação de novas chaves, cópia segura (mas nunca exibe chave completa após criação), e revogação de chaves antigas.</p>
+            </div>
+            <div class="card">
+              <div class="card-icon">🔗</div>
+              <h3>Integrações</h3>
+              <p>Conexões com serviços externos: GitHub, GitLab, etc. Cada integração pode ser conectada/desconectada. Inclui webhooks personalizáveis com eventos e segredos.</p>
+            </div>
+            <div class="card">
+              <div class="card-icon">🎨</div>
+              <h3>Aparência</h3>
+              <p>Personalização visual: tema (dark/light), cor de destaque, sidebar compacta, animações, fonte e tamanho da fonte.</p>
+            </div>
+            <div class="card">
+              <div class="card-icon">🔔</div>
+              <h3>Notificações</h3>
+              <p>Preferências de quais eventos geram notificações: deploys (sucesso/falha), menções, sugestões de IA, alertas de performance e email digest.</p>
+            </div>
+            <div class="card">
+              <div class="card-icon">💳</div>
+              <h3>Billing</h3>
+              <p>Gestão de plano, faturamento e uso de recursos: visualização do plano atual, preço, features, uso de storage/bandwidth/membros/tokens, próximo pagamento e método de pagamento.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Arquitetura Frontend -->
+        <section id="arquitetura" class="flows-section">
+          <h2>Arquitetura Frontend</h2>
+
+          <div class="flow-diagram">
+            <h3>Estrutura de Páginas</h3>
+            <div class="flow-box" style="flex-direction: column; gap: 1rem;">
+              <div style="font-family: monospace; color: var(--accent-glow); line-height: 1.8;">
+                <strong>Página Principal:</strong> src/pages/Configuracoes/index.tsx<br>
+                <strong>Seções (Components):</strong><br>
+                &nbsp;&nbsp;├── GeralSection.tsx<br>
+                &nbsp;&nbsp;├── ApiKeysSection.tsx<br>
+                &nbsp;&nbsp;├── IntegracoesSection.tsx<br>
+                &nbsp;&nbsp;├── AparenciaSection.tsx<br>
+                &nbsp;&nbsp;├── NotificacoesSection.tsx<br>
+                &nbsp;&nbsp;└── BillingSection.tsx<br><br>
+                <strong>Estilos:</strong> Configuracoes.module.css<br>
+                <strong>Hooks:</strong> src/hooks/queries/useSettingsQueries.ts<br>
+                <strong>Services:</strong> src/services/settings.service.ts, profile.service.ts
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-diagram">
+            <h3>Estado Local vs Servidor</h3>
+            <div class="flow-box">
+              <div class="flow-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <strong>Componente montado</strong>
+                  Hook useSettings() faz fetch GET /api/settings
+                </div>
+              </div>
+              <span class="flow-arrow">→</span>
+              <div class="flow-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <strong>Estado Local Initializado</strong>
+                  useEffect preenche useState toggles com dados do servidor
+                </div>
+              </div>
+              <span class="flow-arrow">→</span>
+              <div class="flow-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <strong>Usuário interage</strong>
+                  Clica em toggles, inputs mudam estado local
+                </div>
+              </div>
+              <span class="flow-arrow">→</span>
+              <div class="flow-step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                  <strong>Persistência (TODO)</strong>
+                  Chamar PATCH /api/settings/:key para salvar
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Seções do Módulo -->
+        <section id="secoes" class="table-section">
+          <h2>Seções do Módulo</h2>
+
+          <h3 style="margin-bottom: 1rem; color: var(--accent-glow);">1. Geral (GeralSection)</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Tipo</th>
+                <th>Origem</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>workspaceName</code></td><td>string</td><td>settings</td><td>Nome do workspace/organização</td></tr>
+              <tr><td><code>region</code></td><td>enum</td><td>settings</td><td>Região AWS: sa-east-1, us-east-1, eu-west-1, ap-southeast-1</td></tr>
+              <tr><td><code>domain</code></td><td>string</td><td>settings</td><td>Subdomínio para deploy usando padrão {domain}.nommand.dev</td></tr>
+              <tr><td><code>devMode</code></td><td>boolean</td><td>settings</td><td>Modo desenvolvedor (expões logs detalhados, ferramentas avançadas)</td></tr>
+              <tr><td><code>autoSave</code></td><td>boolean</td><td>settings</td><td>Salvamento automático de edits (ex: playground)</td></tr>
+              <tr><td><code>telemetry</code></td><td>boolean</td><td>settings</td><td>Envio de dados anônimos de uso para melhorias</td></tr>
+            </tbody>
+          </table>
+
+          <h3 style="margin: 2rem 0 1rem; color: var(--accent-glow);">2. API Keys (ApiKeysSection)</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Tipo</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>key</code></td><td>string</td><td>Chave API (masked: primeiros 12 + últimos 4 dígitos, exemplo: sk_live_abc123...xyz4)</td></tr>
+              <tr><td><code>status</code></td><td>enum</td><td>active, test, revoked</td></tr>
+              <tr><td><code>date</code></td><td>string</td><td>Data de criação formatada</td></tr>
+              <tr><td><code>name</code></td><td>string</td><td>Nome descritivo da chave (ex: "Production Server")</td></tr>
+              <tr><td><code>permissions</code></td><td>string[]</td><td>Permissões (read, write, admin)</td></tr>
+              <tr><td><code>expiresAt</code></td><td>datetime</td><td>Data de expiração opcional</td></tr>
+            </tbody>
+          </table>
+
+          <h3 style="margin: 2rem 0 1rem; color: var(--accent-glow);">3. Integrações (IntegracoesSection)</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Tipo</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>key</code></td><td>string</td><td>Identificador único (ex: 'github', 'gitlab')</td></tr>
+              <tr><td><code>name</code></td><td>string</td><td>Nome de exibição</td></tr>
+              <tr><td><code>icon</code></td><td>string</td><td>Emoji ou ícone</td></tr>
+              <tr><td><code>desc</code></td><td>string</td><td>Descrição do que a integração faz</td></tr>
+              <tr><td><code>connected</code></td><td>boolean</td><td>Se está ativa ou não</td></tr>
+            </tbody>
+          </table>
+
+          <h3 style="margin: 2rem 0 1rem; color: var(--accent-glow);">4. Aparência (AparenciaSection)</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Tipo</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>theme</code></td><td>dark | light</td><td>Tema global da interface</td></tr>
+              <tr><td><code>accentColor</code></td><td>hex</td><td>Cor de destaque: #6366f1, #3b82f6, #22c55e, #c026d3, #eab308, #ef4444</td></tr>
+              <tr><td><code>compactSidebar</code></td><td>boolean</td><td>Sidebar com menos padding</td></tr>
+              <tr><td><code>animations</code></td><td>boolean</td><td>Animações de transição</td></tr>
+              <tr><td><code>font</code></td><td>string</td><td>Fonte: Inter, SF Pro, Geist</td></tr>
+              <tr><td><code>fontSize</code></td><td>small | medium | large</td><td>Tamanho da fonte base</td></tr>
+            </tbody>
+          </table>
+
+          <h3 style="margin: 2rem 0 1rem; color: var(--accent-glow);">5. Notificações (NotificacoesSection)</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Tipo</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>notifDeploy</code></td><td>boolean</td><td>Notificar quando deploy completar</td></tr>
+              <tr><td><code>notifDeployFail</code></td><td>boolean</td><td>Notificar quando deploy falhar</td></tr>
+              <tr><td><code>notifMention</code></td><td>boolean</td><td>Notificar menções em comments</td></tr>
+              <tr><td><code>notifAi</code></td><td>boolean</td><td>Notificar sugestões de IA</td></tr>
+              <tr><td><code>notifPerf</code></td><td>boolean</td><td>Alertas de performance</td></tr>
+              <tr><td><code>notifEmail</code></td><td>boolean</td><td>Receber email digest semanal</td></tr>
+            </tbody>
+          </table>
+
+          <h3 style="margin: 2rem 0 1rem; color: var(--accent-glow);">6. Billing (BillingSection)</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Tipo</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>plan</code></td><td>string</td><td>Plano atual: Pro Plan, Enterprise, etc.</td></tr>
+              <tr><td><code>price</code></td><td>number</td><td>Preço mensal em USD</td></tr>
+              <tr><td><code>features</code></td><td>string[]</td><td>Lista de features incluídas</td></tr>
+              <tr><td><code>usage</code></td><td>{label, used, total, unit}[]</td><td>Uso de recursos: Storage, Bandwidth, Members, AI Tokens</td></tr>
+              <tr><td><code>nextPayment</code></td><td>string</td><td>Data do próximo pagamento</td></tr>
+              <tr><td><code>paymentMethod</code></td><td>string</td><td>Método: "Visa ****4242"</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Fluxo de Dados -->
+        <section id="fluxo-dados" class="flows-section">
+          <h2>Fluxo de Dados</h2>
+
+          <div class="flow-diagram">
+            <h3>1. Atualizar Configuração Individual</h3>
+            <div class="flow-box">
+              <div class="flow-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <strong>Frontend</strong>
+                  Usuário altera toggle (ex: devMode)
+                </div>
+              </div>
+              <span class="flow-arrow">→</span>
+              <div class="flow-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <strong>Service</strong>
+                  updateSetting('devMode', false)
+                </div>
+              </div>
+              <span class="flow-arrow">→</span>
+              <div class="flow-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <strong>API</strong>
+                  PATCH /api/settings/devMode
+                </div>
+              </div>
+              <span class="flow-arrow">→</span>
+              <div class="flow-step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                  <strong>Settings Service</strong>
+                  settingsService.updateSetting(workspaceId, key, value)
+                </div>
+              </div>
+              <span class="flow-arrow">→</span>
+              <div class="flow-step">
+                <div class="step-num">5</div>
+                <div class="step-content">
+                  <strong>DB</strong>
+                  UPDATE settings SET value = ?, updatedAt = NOW()
+                  WHERE workspaceId = ? AND key = ?
+                </div>
+              </div>
+              <span class="flow-arrow">→</span>
+              <div class="flow-step">
+                <div class="step-num">6</div>
+                <div class="step-content">
+                  <strong>Resposta</strong>
+                  { key, value } atualizado
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-diagram">
+            <h3>2. Criar API Key</h3>
+            <div class="flow-box">
+              <div class="flow-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <strong>Frontend</strong>
+                  Clica "New API Key", insere nome
+                </div>
+              </div>
+              <span class="flow-arrow">→</span>
+              <div class="flow-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <strong>Service</strong>
+                  createApiKey({ name, permissions, expiresAt })
+                </div>
+              </div>
+              <span class="flow-arrow">→</span>
+              <div class="flow-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <strong>API</strong>
+                  POST /api/settings/api-keys
+                </div>
+              </div>
+              <span class="flow-arrow">→</span>
+              <div class="flow-step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                  <strong>Service</strong>
+                  Gera chave criptográfica (crypto.randomBytes)
+                  Hash para storage
+                </div>
+              </div>
+              <span class="flow-arrow">→</span>
+              <div class="flow-step">
+                <div class="step-num">5</div>
+                <div class="step-content">
+                  <strong>DB</strong>
+                  INSERT INTO api_keys (id, workspaceId, name, keyHash, permissions, status, createdAt)
+                </div>
+              </div>
+              <span class="flow-arrow">→</span>
+              <div class="flow-step">
+                <div class="step-num">6</div>
+                <div class="step-content">
+                  <strong>Resposta</strong>
+                  Retorna chave COMPLETA pela única vez!
+                  { id, name, key, status: 'active', createdAt }
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-diagram">
+            <h3>3. Atualizar Perfil</h3>
+            <div class="flow-box">
+              <div class="flow-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <strong>Frontend</strong>
+                  Usuário altera nome, bio, stack
+                </div>
+              </div>
+              <span class="flow-arrow">→</span>
+              <div class="flow-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <strong>Service</strong>
+                  updateProfile({ name, bio, stack, cpuLevel })
+                </div>
+              </div>
+              <span class="flow-arrow">→</span>
+              <div class="flow-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <strong>API</strong>
+                  PATCH /api/profile
+                </div>
+              </div>
+              <span class="flow-arrow">→</span>
+              <div class="flow-step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                  <strong>Profile Service</strong>
+                  UPDATE users SET name=?, bio=?, stack=?, cpuLevel=?
+                  WHERE id = ?
+                </div>
+              </div>
+              <span class="flow-arrow">→</span>
+              <div class="flow-step">
+                <div class="step-num">5</div>
+                <div class="step-content">
+                  <strong>Resposta</strong>
+                  Usuário atualizado + getProfile() para dados formatados
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-diagram">
+            <h3>4. Alterar Senha</h3>
+            <div class="flow-box">
+              <div class="flow-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <strong>Frontend</strong>
+                  Form com oldPassword + newPassword
+                </div>
+              </div>
+              <span class="flow-arrow">→</span>
+              <div class="flow-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <strong>Service</strong>
+                  changePassword(oldPassword, newPassword)
+                </div>
+              </div>
+              <span class="flow-arrow">→</span>
+              <div class="flow-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <strong>API</strong>
+                  POST /api/profile/password
+                </div>
+              </div>
+              <span class="flow-arrow">→</span>
+              <div class="flow-step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                  <strong>Profile Service</strong>
+                  Busca usuário → verifica oldPassword com bcrypt
+                </div>
+              </div>
+              <span class="flow-arrow">→</span>
+              <div class="flow-step">
+                <div class="step-num">5</div>
+                <div class="step-content">
+                  <strong>Hash + Update</strong>
+                  hashPassword(newPassword) → UPDATE passwordHash
+                </div>
+              </div>
+              <span class="flow-arrow">→</span>
+              <div class="flow-step">
+                <div class="step-num">6</div>
+                <div class="step-content">
+                  <strong>Resposta</strong>
+                  { success: true } ou erro se senha inválida
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Endpoints -->
+        <section id="endpoints" class="table-section">
+          <h2>Endpoints da API</h2>
+
+          <h3 style="margin-bottom: 1rem; color: var(--accent-glow);">Rotas de Settings</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Método</th>
+                <th>Rota</th>
+                <th>Descrição</th>
+                <th>Request</th>
+                <th>Response</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>GET</code></td>
+                <td><code>/api/settings</code></td>
+                <td>Busca todas as configurações do workspace</td>
+                <td><em>sem body</em></td>
+                <td><code>{"data":{workspaceName,region,...}}</code></td>
+              </tr>
+              <tr>
+                <td><code>PATCH</code></td>
+                <td><code>/api/settings/:key</code></td>
+                <td>Atualiza uma configuração específica</td>
+                <td><code>{value: any}</code></td>
+                <td><code>{"data":{key, value}}</code></td>
+              </tr>
+              <tr>
+                <td><code>GET</code></td>
+                <td><code>/api/settings/api-keys</code></td>
+                <td>Lista API keys (key parcialmente mascarada)</td>
+                <td><em>sem body</em></td>
+                <td><code>{"data":[{id,name,key,status,createdAt}]}</code></td>
+              </tr>
+              <tr>
+                <td><code>POST</code></td>
+                <td><code>/api/settings/api-keys</code></td>
+                <td>Cria nova API key (retorna chave completa UMA VEZ)</td>
+                <td><code>{name, permissions[], expiresAt?}</code></td>
+                <td><code>{"data":{id,name,key,status:'active',createdAt}}</code></td>
+              </tr>
+              <tr>
+                <td><code>DELETE</code></td>
+                <td><code>/api/settings/api-keys/:id</code></td>
+                <td>Revoga API key (altera status para revoked)</td>
+                <td><em>sem body</em></td>
+                <td><code>{"data":{success:true}}</code></td>
+              </tr>
+              <tr>
+                <td><code>GET</code></td>
+                <td><code>/api/settings/webhooks</code></td>
+                <td>Lista webhooks cadastrados</td>
+                <td><em>sem body</em></td>
+                <td><code>{"data":[{id,name,url,events,active}]}</code></td>
+              </tr>
+              <tr>
+                <td><code>POST</code></td>
+                <td><code>/api/settings/webhooks</code></td>
+                <td>Cria novo webhook</td>
+                <td><code>{name,url,events[],secret?}</code></td>
+                <td><code>{"data":{id,name,url,events,active:true}}</code></td>
+              </tr>
+              <tr>
+                <td><code>PATCH</code></td>
+                <td><code>/api/settings/webhooks/:id</code></td>
+                <td>Atualiza webhook</td>
+                <td><code>{name?,url?,events?,secret?,active?}</code></td>
+                <td><code>{"data":{...updated}}</code></td>
+              </tr>
+              <tr>
+                <td><code>DELETE</code></td>
+                <td><code>/api/settings/webhooks/:id</code></td>
+                <td>Remove webhook</td>
+                <td><em>sem body</em></td>
+                <td><code>{"data":{success:true}}</code></td>
+              </tr>
+              <tr>
+                <td><code>POST</code></td>
+                <td><code>/api/settings/webhooks/:id/test</code></td>
+                <td>Testa envio de webhook</td>
+                <td><em>sem body</em></td>
+                <td><code>{"data":{success:true,message:"..."}}</code></td>
+              </tr>
+              <tr>
+                <td><code>GET</code></td>
+                <td><code>/api/settings/integrations</code></td>
+                <td>Lista integrações disponíveis e status</td>
+                <td><em>sem body</em></td>
+                <td><code>{"data":[{key,name,icon,desc,connected}]}</code></td>
+              </tr>
+              <tr>
+                <td><code>POST</code></td>
+                <td><code>/api/settings/integrations/:key/toggle</code></td>
+                <td>Conecta/desconecta integração</td>
+                <td><em>sem body</em></td>
+                <td><code>{"data":[...updatedList]}</code></td>
+              </tr>
+              <tr>
+                <td><code>GET</code></td>
+                <td><code>/api/settings/billing</code></td>
+                <td>Retorna dados de faturamento e uso</td>
+                <td><em>sem body</em></td>
+                <td><code>{"data":{plan,price,features,usage[],nextPayment,paymentMethod}}</code></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3 style="margin: 2rem 0 1rem; color: var(--accent-glow);">Rotas de Profile</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Método</th>
+                <th>Rota</th>
+                <th>Descrição</th>
+                <th>Request</th>
+                <th>Response</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>GET</code></td>
+                <td><code>/api/profile</code></td>
+                <td>Busca dados do perfil do usuário</td>
+                <td><em>sem body</em></td>
+                <td><code>{"data":{id,email,name,bio?,avatarUrl,role,stack,plan,...}}</code></td>
+              </tr>
+              <tr>
+                <td><code>PATCH</code></td>
+                <td><code>/api/profile</code></td>
+                <td>Atualiza perfil (nome, bio, stack, cpuLevel)</td>
+                <td><code>{name?,bio?,stack?,cpuLevel?}</code></td>
+                <td><code>{"data":{...updated}}</code></td>
+              </tr>
+              <tr>
+                <td><code>POST</code></td>
+                <td><code>/api/profile/password</code></td>
+                <td>Altera senha</td>
+                <td><code>{oldPassword:string,newPassword:string}</code></td>
+                <td><code>{"data":{success:true}}</code></td>
+              </tr>
+              <tr>
+                <td><code>POST</code></td>
+                <td><code>/api/profile/onboarding</code></td>
+                <td>Marca onboarding como completo</td>
+                <td><em>sem body</em></td>
+                <td><code>{"data":{success:true}}</code></td>
+              </tr>
+              <tr>
+                <td><code>POST</code></td>
+                <td><code>/api/profile/tour</code></td>
+                <td>Marca tour guiado como completo</td>
+                <td><em>sem body</em></td>
+                <td><code>{"data":{success:true}}</code></td>
+              </tr>
+              <tr>
+                <td><code>PATCH</code></td>
+                <td><code>/api/profile/theme</code></td>
+                <td>Atualiza preferência de tema</td>
+                <td><code>{theme:'dark'|'light'}</code></td>
+                <td><code>{"data":{theme:'dark'}}</code></td>
+              </tr>
+              <tr>
+                <td><code>DELETE</code></td>
+                <td><code>/api/profile</code></td>
+                <td>Deleta conta do usuário</td>
+                <td><em>sem body</em></td>
+                <td><code>{"data":{success:true}}</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Schemas DB -->
+        <section id="schemas-db" class="table-section">
+          <h2>Schemas & Types</h2>
+
+          <h3 style="margin-bottom 1rem; color: var(--accent-glow);">TypeScript Interfaces (Frontend)</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Interface</th>
+                <th>Arquivo</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Settings</code></td>
+                <td>settings.service.ts</td>
+                <td>Todas configurações do workspace + notificações + appearance</td>
+              </tr>
+              <tr>
+                <td><code>Integration</code></td>
+                <td>settings.service.ts</td>
+                <td>Integração externa: key, name, icon, desc, connected</td>
+              </tr>
+              <tr>
+                <td><code>ApiKey</code></td>
+                <td>settings.service.ts</td>
+                <td>Chave API: id, name, key (masked), status, createdAt</td>
+              </tr>
+              <tr>
+                <td><code>Webhook</code></td>
+                <td>settings.service.ts</td>
+                <td>Webhook: id, name, url, events[], active</td>
+              </tr>
+              <tr>
+                <td><code>BillingData</code></td>
+                <td>settings.service.ts</td>
+                <td>Billing: plan, price, features, usage, nextPayment, paymentMethod</td>
+              </tr>
+              <tr>
+                <td><code>ProfileResponse</code></td>
+                <td>profile.service.ts</td>
+                <td>Dados completos do usuário do backend</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3 style="margin: 2rem 0 1rem; color: var(--accent-glow);">Schemas Zod (Backend)</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Schema</th>
+                <th>Arquivo</th>
+                <th>Campos</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>updateSettingSchema</code></td>
+                <td>settings.schema.ts</td>
+                <td><code>key: string</code>, <code>value: any</code></td>
+              </tr>
+              <tr>
+                <td><code>createApiKeySchema</code></td>
+                <td>settings.schema.ts</td>
+                <td><code>name: min(2).max(100)</code>, <code>permissions: string[]</code>, <code>expiresAt: datetime?</code></td>
+              </tr>
+              <tr>
+                <td><code>createWebhookSchema</code></td>
+                <td>settings.schema.ts</td>
+                <td><code>name</code>, <code>url: url</code>, <code>events: min(1)</code>, <code>secret: min(8)?</code></td>
+              </tr>
+              <tr>
+                <td><code>updateWebhookSchema</code></td>
+                <td>settings.schema.ts</td>
+                <td><code>name?</code>, <code>url?</code>, <code>events?</code>, <code>secret?</code>, <code>active?: boolean</code></td>
+              </tr>
+              <tr>
+                <td><code>updateProfileSchema</code></td>
+                <td>profile.schema.ts</td>
+                <td><code>name?</code>, <code>avatarUrl? max(500)</code>, <code>stack?</code>, <code>cpuLevel? min(1).max(3)</code></td>
+              </tr>
+              <tr>
+                <td><code>changePasswordSchema</code></td>
+                <td>profile.schema.ts</td>
+                <td><code>oldPassword: min(8)</code>, <code>newPassword: min(8)</code></td>
+              </tr>
+              <tr>
+                <td><code>updateThemeSchema</code></td>
+                <td>profile.schema.ts</td>
+                <td><code>theme: enum('dark'|'light')</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Segurança & Riscos -->
+        <section id="seguranca" class="risks-section">
+          <h2>Segurança & Riscos</h2>
+
+          <div class="risks-grid">
+            <div class="risk-card high">
+              <span class="risk-level">ALTO</span>
+              <h4>Vazamento de API Keys</h4>
+              <p>Chaves de API são geradas e retornadas apenas uma vez. Se o usuário fechar a janela sem copiar, precisa gerar nova. Se vazar em logs ou exposição acidental, pode dar acesso total à API.</p>
+              <code>
+Mitigação:
+- Chave completa retornada APENAS na criação
+- Frontend masca chaves após cópia (12 chars + ... + 4)
+- Nunca armazenar chaves em localStorage
+- Revogação manual disponível
+- Considerar expiry date opcional
+              </code>
+            </div>
+
+            <div class="risk-card medium">
+              <span class="risk-level">MÉDIO</span>
+              <h4>Race Condition em Settings</h4>
+              <p>Múltiplos PATCH simultâneos em diferentes chaves podem sobrescrever configurações. Como cada atualização é独立, a ordem pode ser imprevisível.</p>
+              <code>
+Mitigação:
+- Atualizações são por chave individual (atomicidade)
+- Considerar versão/timestamp para geral settings
+- Ou enviar objeto completo com PATCH /settings
+              </code>
+            </div>
+
+            <div class="risk-card high">
+              <span class="risk-level">ALTO</span>
+              <h4>Billing Data Exposure</h4>
+              <p>Informações sensíveis de pagamento (método parcial) são retornadas. Se não houver rate limit, atacante pode enumerar workspaces.</p>
+              <code>
+Mitigação:
+- Auth middleware protege todas rotas
+- Retornar apenas dados da billing do próprio workspace
+- Rate limit por usuário
+- Não expor dados sensíveis de outros usuários
+              </code>
+            </div>
+
+            <div class="risk-card medium">
+              <span class="risk-level">MÉDIO</span>
+              <h4>Webhook URL Injection</h4>
+              <p>URL de webhook é validada com z.string().url() mas pode apontar para servidores internos (SSRF) se allowed.</p>
+              <code>
+Mitigação:
+- Zod valida formato URL
+- Considerar blacklist de IPs privados
+- Test endpoint só envia payload mock
+- Log failures para auditoria
+              </code>
+            </div>
+
+            <div class="risk-card low">
+              <span class="risk-level">BAIXO</span>
+              <h4>Theme Enum Bypass</h4>
+              <p>Tema aceita apenas dark|light via schema, mas frontend pode usar valores arbitrários se burlar validação.</p>
+              <code>
+Mitigação:
+- Schema valida estritamente
+- Frontend limita options em select dropdowns
+              </code>
+            </div>
+
+            <div class="risk-card medium">
+              <span class="risk-level">MÉDIO</span>
+              <h4>Password Reset Sem Confirmação</h4>
+              <p>changePassword não exige confirmação da senha atual se o token estiver válido? (Verificar implementação).</p>
+              <code>
+Mitigação:
+- Exige oldPassword sempre
+- bcrypt verificação async
+- Log de mudança de senha para auditoria
+- Forçar logout dos outros dispositivos após mudança
+              </code>
+            </div>
+          </div>
+
+          <div style="margin-top: 2rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem;">
+            <h3 style="color: var(--accent-glow); margin-bottom: 1rem;">Medidas de Segurança Implementadas</h3>
+            <ul style="list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; color: var(--fg-secondary);">
+              <li>Auth middleware em todas rotas</li>
+              <li>Validação Zod em todos inputs</li>
+              <li>Chaves API never exposed após criação</li>
+              <li>Hash bcrypt para senhas</li>
+              <li>Workspace isolation (multi-tenancy)</li>
+              <li>Rate limiting por workspace</li>
+              <li>Logs de ações sensíveis (excluir conta, mudar senha)</li>
+              <li>Webhook URL validation</li>
+              <li>Accent colors apenas predefined set</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Como Usar -->
+        <section id="como-usar" class="table-section">
+          <h2>Como Usar (cURL Examples)</h2>
+
+          <h3 style="margin-bottom: 1rem; color: var(--accent-glow);">1. Buscar Configurações do Workspace</h3>
+          <div class="card">
+            <code style="display: block; background: var(--bg-primary); padding: 1rem; border-radius: 8px; color: var(--fg-secondary); font-size: 0.85rem; white-space: pre-wrap;">
+curl http://localhost:3000/api/settings \
+  -H "Authorization: Bearer SEU_ACCESS_TOKEN"
+            </code>
+          </div>
+
+          <h3 style="margin: 1.5rem 0 1rem; color: var(--accent-glow);">2. Atualizar Configuração Específica</h3>
+          <div class="card">
+            <code style="display: block; background: var(--bg-primary); padding: 1rem; border-radius: 8px; color: var(--fg-secondary); font-size: 0.85rem; white-space: pre-wrap;">
+curl -X PATCH http://localhost:3000/api/settings/devMode \
+  -H "Authorization: Bearer SEU_ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"value":true}'
+            </code>
+          </div>
+
+          <h3 style="margin: 1.5rem 0 1rem; color: var(--accent-glow);">3. Criar API Key</h3>
+          <div class="card">
+            <code style="display: block; background: var(--bg-primary); padding: 1rem; border-radius: 8px; color: var(--fg-secondary); font-size: 0.85rem; white-space: pre-wrap;">
+curl -X POST http://localhost:3000/api/settings/api-keys \
+  -H "Authorization: Bearer SEU_ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Production Server","permissions":["read","write"]}'
+            </code>
+            <p style="font-size: 0.8rem; color: var(--fg-muted); margin-top: 0.5rem;">
+              <strong>IMPORTANTE:</strong> A chave completa é retornada apenas nesta resposta. Armazene imediatamente em local seguro (ex: variáveis de ambiente do servidor).
+            </p>
+          </div>
+
+          <h3 style="margin: 1.5rem 0 1rem; color: var(--accent-glow);">4. Revogar API Key</h3>
+          <div class="card">
+            <code style="display: block; background: var(--bg-primary); padding: 1rem; border-radius: 8px; color: var(--fg-secondary); font-size: 0.85rem; white-space: pre-wrap;">
+curl -X DELETE http://localhost:3000/api/settings/api-keys/abc123-def456 \
+  -H "Authorization: Bearer SEU_ACCESS_TOKEN"
+            </code>
+          </div>
+
+          <h3 style="margin: 1.5rem 0 1rem; color: var(--accent-glow);">5. Gerenciar Webhooks</h3>
+          <div class="flow-box" style="flex-direction: column; gap: 1rem; margin-bottom: 1.5rem;">
+            <div style="font-family: monospace; color: var(--accent-glow);">
+              <strong>Listar:</strong> GET /api/settings/webhooks
+            </div>
+            <div style="font-family: monospace; color: var(--accent-glow);">
+              <strong>Criar:</strong> POST /api/settings/webhooks<br>
+              <em>{"name":"Deploy Hook","url":"https://meu.server/hook","events":["deploy.success","deploy.fail"]}</em>
+            </div>
+            <div style="font-family: monospace; color: var(--accent-glow);">
+              <strong>Testar:</strong> POST /api/settings/webhooks/:id/test
+            </div>
+            <div style="font-family: monospace; color: var(--accent-glow);">
+              <strong>Deletar:</strong> DELETE /api/settings/webhooks/:id
+            </div>
+          </div>
+
+          <h3 style="margin: 1.5rem 0 1rem; color: var(--accent-glow);">6. Atualizar Perfil</h3>
+          <div class="card">
+            <code style="display: block; background: var(--bg-primary); padding: 1rem; border-radius: 8px; color: var(--fg-secondary); font-size: 0.85rem; white-space: pre-wrap;">
+curl -X PATCH http://localhost:3000/api/profile \
+  -H "Authorization: Bearer SEU_ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"João Developer","stack":["React","TypeScript","Node.js"],"cpuLevel":2}'
+            </code>
+          </div>
+
+          <h3 style="margin: 1.5rem 0 1rem; color: var(--accent-glow);">7. Alterar Senha</h3>
+          <div class="card">
+            <code style="display: block; background: var(--bg-primary); padding: 1rem; border-radius: 8px; color: var(--fg-secondary); font-size: 0.85rem; white-space: pre-wrap;">
+curl -X POST http://localhost:3000/api/profile/password \
+  -H "Authorization: Bearer SEU_ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"oldPassword":"senhaAntiga123","newPassword":"senhaNovaSegura456"}'
+            </code>
+          </div>
+
+          <h3 style="margin: 1.5rem 0 1rem; color: var(--accent-glow);">8. Alterar Tema</h3>
+          <div class="card">
+            <code style="display: block; background: var(--bg-primary); padding: 1rem; border-radius: 8px; color: var(--fg-secondary); font-size: 0.85rem; white-space: pre-wrap;">
+curl -X PATCH http://localhost:3000/api/profile/theme \
+  -H "Authorization: Bearer SEU_ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"theme":"light"}'
+            </code>
+          </div>
+
+          <h3 style="margin: 1.5rem 0 1rem; color: var(--accent-glow);">9. Deletar Conta</h3>
+          <div class="card">
+            <code style="display: block; background: var(--bg-primary); padding: 1rem; border-radius: 8px; color: var(--fg-secondary); font-size: 0.85rem; white-space: pre-wrap;">
+curl -X DELETE http://localhost:3000/api/profile \
+  -H "Authorization: Bearer SEU_ACCESS_TOKEN"
+            </code>
+            <p style="font-size: 0.8rem; color: var(--fg-muted); margin-top: 0.5rem;">
+              <strong>CUIDADO:</strong> Esta ação é irreversível. Todos os dados do usuário serão excluídos (soft delete). O workspace permanece se houver outros membros.
+            </p>
+          </div>
+        </section>
+
+        <!-- Integrações -->
+        <section id="integracoes" class="table-section">
+          <h2>Integrações</h2>
+
+          <div class="grid-overview">
+            <div class="card">
+              <div class="card-icon">🔐</div>
+              <h3>Middleware Auth</h3>
+              <p>Definido em <code>/backend/src/middleware/auth.ts</code>. Todas as rotas de settings e profile usam <code>settingsRouter.use('/*', authMiddleware)</code>. O middleware popula <code>c.set('user', { id, email, workspaceId })</code>.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-icon">🗄️</div>
+              <h3>Drizzle ORM + DB</h3>
+              <p>Conexão via <code>db</code> singleton. Schemas em <code>/backend/src/db/schema/</code>: users.ts, workspaces.ts, api_keys.ts, webhooks.ts. Queries com <code>eq, and, insert, update, del</code>.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-icon">🔑</div>
+              <h3>Crypto (Gerar API Keys)</h3>
+              <p>Função <code>crypto.randomBytes(32).toString('hex')</code> em <code>settings.service.ts</code>. A chave é <strong>retornada inteira</strong> apenas na criação. O hash é salvo via <code>hashToken()</code> (SHA-256).</p>
+            </div>
+
+            <div class="card">
+              <div class="card-icon">📦</div>
+              <h3>Zod Validation</h3>
+              <p>Schemas em <code>/backend/src/schemas/settings.schema.ts</code> e <code>profile.schema.ts</code>. Validação via <code>zValidator('json', schema)</code> do <code>@hono/zod-validator</code>.</p>
+            </div>
+          </div>
+
+          <div style="margin-top: 2rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem;">
+            <h3 style="color: var(--accent-glow); margin-bottom: 1rem;">Arquivos do Backend</h3>
+            <table class="data-table" style="font-size: 0.85rem;">
+              <thead>
+                <tr>
+                  <th>Arquivo</th>
+                  <th>Função</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>backend/src/routes/settings.ts</code></td>
+                  <td>Router Hono com todas rotas de settings (12 endpoints)</td>
+                </tr>
+                <tr>
+                  <td><code>backend/src/routes/profile.ts</code></td>
+                  <td>Router Hono com rotas de perfil (8 endpoints)</td>
+                </tr>
+                <tr>
+                  <td><code>backend/src/services/settings.service.ts</code></td>
+                  <td>Business logic: getSettings, updateSetting, createApiKey, revokeApiKey, listWebhooks, testWebhook, etc.</td>
+                </tr>
+                <tr>
+                  <td><code>backend/src/services/profile.service.ts</code></td>
+                  <td>Business logic: getProfile, updateProfile, changePassword, completeOnboarding, updateTheme, deleteAccount</td>
+                </tr>
+                <tr>
+                  <td><code>backend/src/schemas/settings.schema.ts</code></td>
+                  <td>Schemas Zod para validação de inputs</td>
+                </tr>
+                <tr>
+                  <td><code>backend/src/schemas/profile.schema.ts</code></td>
+                  <td>Schemas Zod para validação de inputs</td>
+                </tr>
+                <tr>
+                  <td><code>backend/src/db/schema/*.ts</code></td>
+                  <td>Schemas Drizzle: users, workspaces, api_keys, webhooks</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style="margin-top: 2rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem;">
+            <h3 style="color: var(--accent-glow); margin-bottom: 1rem;">Arquivos do Frontend</h3>
+            <table class="data-table" style="font-size: 0.85rem;">
+              <thead>
+                <tr>
+                  <th>Arquivo</th>
+                  <th>Função</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>src/pages/Configuracoes/index.tsx</code></td>
+                  <td>Página principal com layout de sidebar + navegação entre seções</td>
+                </tr>
+                <tr>
+                  <td><code>src/pages/Configuracoes/GeralSection.tsx</code></td>
+                  <td>Config nome workspace, região, domínio, devMode, autoSave, telemetry</td>
+                </tr>
+                <tr>
+                  <td><code>src/pages/Configuracoes/ApiKeysSection.tsx</code></td>
+                  <td>CRUD de API keys com masking, copy-to-clipboard, revogação</td>
+                </tr>
+                <tr>
+                  <td><code>src/pages/Configuracoes/IntegracoesSection.tsx</code></td>
+                  <td>Lista e toggle de integrações (GitHub, GitLab, etc)</td>
+                </tr>
+                <tr>
+                  <td><code>src/pages/Configuracoes/AparenciaSection.tsx</code></td>
+                  <td>Tema, cor de destaque, sidebar compacta, animações, fonte</td>
+                </tr>
+                <tr>
+                  <td><code>src/pages/Configuracoes/NotificacoesSection.tsx</code></td>
+                  <td>Toggles de notificações por categoria (Deploys, Communication, Alerts)</td>
+                </tr>
+                <tr>
+                  <td><code>src/pages/Configuracoes/BillingSection.tsx</code></td>
+                  <td>Plano, preço, features, usage bars, payment info</td>
+                </tr>
+                <tr>
+                  <td><code>src/hooks/queries/useSettingsQueries.ts</code></td>
+                  <td>Hooks React Query para fetch e mutations</td>
+                </tr>
+                <tr>
+                  <td><code>src/services/settings.service.ts</code></td>
+                  <td>Service layer (talking to API) - todas funções de settings</td>
+                </tr>
+                <tr>
+                  <td><code>src/services/profile.service.ts</code></td>
+                  <td>Service layer - funções de profile</td>
+                </tr>
+                <tr>
+                  <td><code>src/services/api.ts</code></td>
+                  <td>Cliente HTTP axios/fetch wrapper com interceptors</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Nommand Vision - Documentação Técnica | Módulo Configurações & Perfil</p>
+    </footer>
+  </div>
+</body>
+</html>

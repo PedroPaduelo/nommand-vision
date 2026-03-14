@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guia Projeto Detalhe</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="header"><div class="logo"><h1>Guia Projeto Detalhe</h1></div></header>
+    <main class="main" style="grid-template-columns:1fr;">
+      <div class="content">
+        <section class="hero">
+          <h2>Projeto Detalhe</h2>
+          <p>Página de visualização detalhada de um projeto com abas para Overview, Agentes, Deploys, Código, Configuração, Segurança e Logs. Gerencia todas as informações e ações de um projeto específico.</p>
+        </section>
+
+        <section class="flows-section">
+          <h3>O que é</h3>
+          <p>O módulo Projeto Detalhe exibe informações completas de um projeto específico, incluindo métricas de performance, agentes associados, histórico de deploys, código fonte, configurações e análise de segurança. Permite gerenciamento completo do projeto através de abas interativas.</p>
+
+          <h3>Objetivos</h3>
+          <ul>
+            <li>Exibir visão geral do projeto com métricas e atividade recente.</li>
+            <li>Listar e gerenciar agentes associados ao projeto.</li>
+            <li>Mostrar histórico de deploys com status e detalhes.</li>
+            <li>Permitir visualização de código fonte em tree view e editor.</li>
+            <li>Configurar parâmetros do projeto (framework, auto-deploy, etc).</li>
+            <li>Exibir análise de segurança e qualidade de código.</li>
+            <li>Acessar logs de execução do projeto.</li>
+          </ul>
+        </section>
+
+        <section class="table-section">
+          <h3>Arquivos do módulo</h3>
+          <p>O módulo está localizado em <code>sistema-react/src/pages/ProjetoDetalhe/</code>.</p>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Arquivo</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>index.tsx</code></td>
+                <td>Componente principal que gerencia tabs, carrega dados do projeto via slug e renderiza o header do projeto.</td>
+              </tr>
+              <tr>
+                <td><code>OverviewTab.tsx</code></td>
+                <td>Tab de visão geral: timeline de atividades, métricas de performance (LCP, FID, CLS, TTFB), stack tecnológico e scores (Lighthouse, Coverage, Security).</td>
+              </tr>
+              <tr>
+                <td><code>AgentesTab.tsx</code></td>
+                <td>Tab de agentes: lista cards de agentes com status (running/idle), última ação, tasks realizadas e timeline de atividades.</td>
+              </tr>
+              <tr>
+                <td><code>DeploysTab.tsx</code></td>
+                <td>Tab de deploys: cards de estatísticas (total, último, uptime) e lista de deploys com status (success/failed/building).</td>
+              </tr>
+              <tr>
+                <td><code>CodigoTab.tsx</code></td>
+                <td>Tab de código: file tree clicável e preview de código com numeração de linhas.</td>
+              </tr>
+              <tr>
+                <td><code>ConfigTab.tsx</code></td>
+                <td>Tab de configurações: formulário para nome, framework, Node.js e toggles (auto-deploy, preview, auto-review, scan, docs).</td>
+              </tr>
+              <tr>
+                <td><code>SegurancaTab.tsx</code></td>
+                <td>Tab de segurança: score de segurança, vulnerabilidades, dependências, checklists de segurança e qualidade.</td>
+              </tr>
+              <tr>
+                <td><code>LogsTab.tsx</code></td>
+                <td>Tab de logs: visualização de logs de execução do projeto.</td>
+              </tr>
+              <tr>
+                <td><code>ProjetoDetalhe.module.css</code></td>
+                <td>Estilos CSS modules do módulo.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="table-section">
+          <h3>Rota</h3>
+          <p>A rota está definida em <code>sistema-react/src/router.tsx</code>.</p>
+          <ul>
+            <li><code>GET /projetos/:slug</code> - Página de detalhe do projeto onde <code>:slug</code> é o identificador único do projeto.</li>
+          </ul>
+          <p>Exemplo de navegação:</p>
+          <pre><code>&lt;Link to="/projetos/meu-projeto-slug"&gt;Meu Projeto&lt;/Link&gt;</code></pre>
+          <p>Ou via useNavigate:</p>
+          <pre><code>const navigate = useNavigate()
+navigate(\`/projetos/\${projectSlug}\`)</code></pre>
+        </section>
+
+        <section class="table-section">
+          <h3>Tipos de Dados (TypeScript)</h3>
+          <p>Definidos em <code>sistema-react/src/pages/ProjetoDetalhe/index.tsx</code>.</p>
+
+          <h4>Interface Agent</h4>
+          <pre><code>interface Agent {
+  name: string        // Nome do agente (ex: "Codex", "QA Bot")
+  emoji: string       // Emoji representando o agente
+  status: 'running' | 'idle'  // Estado atual do agente
+  tasks: number       // Número de tarefas realizadas
+  lastAction: string  // Descrição da última ação
+  time: string        // Tempo desde última ação
+}</code></pre>
+
+          <h4>Interface Project</h4>
+          <pre><code>interface Project {
+  name: string           // Nome do projeto
+  icon: string           // Cor do ícone em hex
+  emoji: string          // Emoji do projeto
+  desc: string           // Descrição
+  framework: string      // Framework (ex: "Next.js 14")
+  branch: string         // Branch principal
+  status: string         // Status (ex: "active")
+  commits: number        // Total de commits
+  branches: number       // Total de branches
+  deploys: number        // Total de deploys
+  uptime: string         // Porcentagem de uptime
+  stack: string[]        // Stack tecnológico
+  agents: Agent[]         // Agentes associados
+  lcp: string            // Largest Contentful Paint
+  fid: string           // First Input Delay
+  cls: string            // Cumulative Layout Shift
+  ttfb: string           // Time to First Byte
+  lighthouse: number     // Score Lighthouse (0-100)
+  coverage: number       // Cobertura de testes (%)
+  securityScore: number  // Score de segurança (0-100)
+  accessibilityScore: number  // Score de acessibilidade
+  vulnerabilities: number // Número de vulnerabilidades
+  dependencies: number   // Total de dependências
+  outdated: number       // Dependências desatualizadas
+}</code></pre>
+        </section>
+
+        <section class="table-section">
+          <h3>Hooks React Query</h3>
+          <p>O módulo utiliza <code>useProjectBySlug</code> de <code>sistema-react/src/hooks/queries/useProjectQueries.ts</code> para buscar dados do projeto.</p>
+          <pre><code>import { useProjectBySlug } from '@/hooks/queries/useProjectQueries.ts'
+
+const { data: project, isLoading } = useProjectBySlug(slug || '')</code></pre>
+          <p>O hook retorna:</p>
+          <ul>
+            <li><code>data</code> - Dados do projeto vindos da API</li>
+            <li><code>isLoading</code> - Estado de carregamento</li>
+            <li><code>error</code> - Erro se falhar</li>
+          </ul>
+        </section>
+
+        <section class="table-section">
+          <h3>Descrição das Abas</h3>
+
+          <h4>Overview (Visão Geral)</h4>
+          <p>Exibe:</p>
+          <ul>
+            <li><strong>Agent Activity</strong>: Timeline com atividades recentes dos agentes (commits, reviews, deploys, etc)</li>
+            <li><strong>Performance</strong>: Métricas Core Web Vitals (LCP, FID, CLS, TTFB) ou métricas de API</li>
+            <li><strong>Stack</strong>: Tags com tecnologias do projeto</li>
+            <li><strong>Scores</strong>: Barras de progresso para Lighthouse, Test Coverage, Security e Accessibility</li>
+          </ul>
+
+          <h4>Agentes</h4>
+          <p>Exibe:</p>
+          <ul>
+            <li><strong>Agent Cards</strong>: Grid com cards de cada agente mostrando nome, emoji, status (running/idle), última ação, tasks e tempo</li>
+            <li><strong>Agent History</strong>: Timeline com histórico de ações dos agentes (commits, reviews, testes, deploys, security scans, docs)</li>
+          </ul>
+
+          <h4>Deploys</h4>
+          <p>Exibe:</p>
+          <ul>
+            <li><strong>Cards de stats</strong>: Total de deploys, último deploy (status), uptime</li>
+            <li><strong>Lista de deploys</strong>: Tabela com ID, título, descrição, tempo e status (success/failed/building)</li>
+          </ul>
+
+          <h4>Código</h4>
+          <p>Exibe:</p>
+          <ul>
+            <li><strong>File Tree</strong>: Árvore de arquivos clicável com ícones de pasta e tipo de arquivo</li>
+            <li><strong>Code Preview</strong>: Visualizador de código com numeração de linhas e syntax highlighting</li>
+          </ul>
+          <p>Arquivos mockados incluem: page.tsx, Hero.tsx, Header.tsx, Footer.tsx, api.ts, utils.ts, globals.css, package.json</p>
+
+          <h4>Config (Configuração)</h4>
+          <p>Exibe:</p>
+          <ul>
+            <li><strong>Formulário</strong>: Nome do projeto, Framework (dropdown), Node.js version</li>
+            <li><strong>Toggles</strong>:
+              <ul>
+                <li>Auto-deploy (deploy automático ao fazer push)</li>
+                <li>Preview Deploys (deploys de preview para PRs)</li>
+                <li>Auto Code Review (revisão automática)</li>
+                <li>Continuous Scan (scan contínuo de segurança)</li>
+                <li>Auto Documentation (geração automática de docs)</li>
+              </ul>
+            </li>
+            <li><strong>Ações</strong>: Salvar alterações, Deletar projeto</li>
+          </ul>
+
+          <h4>Segurança</h4>
+          <p>Exibe:</p>
+          <ul>
+            <li><strong>Cards de stats</strong>: Security score, vulnerabilidades, dependências</li>
+            <li><strong>Security Analysis</strong>: Checklist de segurança (secrets, headers, HTTPS, rate limiting, CVEs, sanitização)</li>
+            <li><strong>Code Quality</strong>: Checklist de qualidade (test coverage, code smells, strict mode, ESLint/Prettier, deps atualizadas, bundle otimizado)</li>
+          </ul>
+
+          <h4>Logs</h4>
+          <p>Exibe logs de execução do projeto em formato de timeline.</p>
+        </section>
+
+        <section class="flows-section">
+          <h3>Fluxo de Dados</h3>
+          <div class="flow-box">
+            <div class="flow-step"><span class="step-num">1</span><div class="step-content"><strong>Navegação</strong><br>Usuário acessa /projetos/:slug</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><span class="step-num">2</span><div class="step-content"><strong>Carregamento</strong><br>useProjectBySlug busca dados via React Query</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><span class="step-num">3</span><div class="step-content"><strong>Renderização</strong><br>Mapeia dados da API para interface Project local</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><span class="step-num">4</span><div class="step-content"><strong>Interação</br>Usuário alterna entre abas e interage</div></div>
+          </div>
+        </section>
+
+        <section class="table-section">
+          <h3>Segurança e Acesso</h3>
+          <ul>
+            <li>O <code>slug</code> é usado para buscar o projeto no banco de dados filtrado por <code>workspaceId</code>.</li>
+            <li>O usuário deve ter acesso ao workspace que contém o projeto.</li>
+            <li>Caso o projeto não pertença ao workspace do usuário, retorna 404.</li>
+            <li>Variáveis de ambiente sensíveis devem ser expostas apenas quando necessário.</li>
+          </ul>
+        </section>
+
+        <section class="risks-section">
+          <h3>Pontos de Risco</h3>
+          <div class="risks-grid">
+            <div class="risk-card high"><div class="risk-level">ALTO</div><h4>Alteração de configuração pode quebrar deploys</h4><p>Modificar framework, branch ou variáveis de ambiente incorretamente pode causar falhas nos próximos deploys.</p></div>
+            <div class="risk-card medium"><div class="risk-level">MÉDIO</div><h4>Edição de código sem review</h4><p>A visualização de código é apenas leitura, mas futuras implementações de edição direta podem introduzir erros sem revisão.</p></div>
+            <div class="risk-card medium"><div class="risk-level">MÉDIO</div><h4>Exposição de dependências desatualizadas</h4><p>Dependências com vulnerabilidades conhecidas devem ser atualizadas rapidamente.</p></div>
+            <div class="risk-card low"><div class="risk-level">BAIXO</div><h4>Delete acidental de projeto</h4><p>O botão de delete deve ter confirmação para evitar exclusão acidental.</p></div>
+          </div>
+        </section>
+
+        <section class="flows-section">
+          <h3>Como Usar</h3>
+          <ol>
+            <li>Navegue até a lista de projetos em <code>/projetos</code>.</li>
+            <li>Clique em um projeto para acessar <code>/projetos/:slug</code>.</li>
+            <li>Na página de detalhe, explore as abas:
+              <ul>
+                <li><strong>Overview</strong>: Veja métricas e atividades recentes.</li>
+                <li><strong>Agentes</strong>: Monitore agentes e suas atividades.</li>
+                <li><strong>Deploys</strong>: Acompanhe o histórico de deploys.</li>
+                <li><strong>Código</strong>: Navegue pela estrutura de arquivos.</li>
+                <li><strong>Config</strong>: Ajuste configurações do projeto.</li>
+                <li><strong>Segurança</strong>: Verifique scores e vulnerabilidades.</li>
+                <li><strong>Logs</strong>: Acesse logs de execução.</li>
+              </ul>
+            </li>
+            <li>Na aba Config, você pode:
+              <ul>
+                <li>Editar nome e framework do projeto</li>
+                <li>Ligar/desligar auto-deploy</li>
+                <li>Ativar preview deploys</li>
+                <li>Configurar scan contínuo de segurança</li>
+                <li>Salvar ou deletar o projeto</li>
+              </ul>
+            </li>
+          </ol>
+        </section>
+
+        <section class="table-section">
+          <h3>Traduções (i18n)</h3>
+          <p>O módulo usa o hook <code>useTranslation()</code> para textos internationalizados. Chaves utilizadas:</p>
+          <ul>
+            <li><code>project.overview</code> - "Overview"</li>
+            <li><code>project.agents</code> - "Agentes"</li>
+            <li><code>project.code</code> - "Código"</li>
+            <li><code>project.deploys</code> - "Deploys"</li>
+            <li><code>project.security</code> - "Segurança"</li>
+            <li><code>project.config</code> - "Config"</li>
+            <li><code>project.logs</code> - "Logs"</li>
+            <li><code>project.statusRunning</code> - "Executando"</li>
+            <li><code>project.statusIdle</code> - "Inativo"</li>
+            <li><code>project.autoDeploy</code> - "Deploy Automático"</li>
+            <li><code>project.deleteProject</code> - "Deletar Projeto"</li>
+            <li><code>projects.commitsLabel</code> - "commits"</li>
+            <li><code>projects.branchesLabel</code> - "branches"</li>
+            <li><code>projects.deploysLabel</code> - "deploys"</li>
+            <li><code>projects.uptimeLabel</code> - "uptime"</li>
+          </ul>
+        </section>
+
+        <section class="table-section">
+          <h3>Styles CSS</h3>
+          <p>O módulo utiliza CSS Modules em <code>ProjetoDetalhe.module.css</code> com classes como:</p>
+          <ul>
+            <li><code>breadcrumb</code> - Navegação breadcrumb</li>
+            <li><code>projectHeaderCard</code> - Card de cabeçalho do projeto</li>
+            <li><code>projectTabs</code> - Container das abas</li>
+            <li><code>projectTab</code> - Botão de aba</li>
+            <li><code>projAgentsGrid</code> - Grid de agentes</li>
+            <li><code>fileTree</code> - Árvore de arquivos</li>
+            <li><code>codePreview</code> - Visualizador de código</li>
+            <li><code>dCard</code> - Card genérico de dados</li>
+            <li><code>timeline</code> - Timeline de atividades</li>
+            <li><code>toggle</code> - Botão toggle</li>
+          </ul>
+        </section>
+
+        <p><a href="index.html">← Voltar para docs</a></p>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

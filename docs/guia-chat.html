@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat & Conversations - Guia</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <div class="logo">
+        <a href="index.html"><h1>NOMMAND VISION</h1></a>
+        <span class="subtitle">Documentação de Arquitetura & Sistema</span>
+      </div>
+      <nav class="nav">
+        <a href="index.html" class="nav-link">Visão Geral</a>
+        <a href="#" class="nav-link">Módulos</a>
+        <a href="#" class="nav-link">Fluxos</a>
+        <a href="#" class="nav-link">Integrações</a>
+      </nav>
+      <div class="theme-toggle" onclick="toggleTheme()">
+        <span class="icon">🌓</span>
+      </div>
+    </header>
+
+    <main class="main">
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <h3>Módulos Backend</h3>
+          <ul class="nav-list">
+            <li><a href="guia-auth.html">🔐 Auth & Users</a></li>
+            <li><a href="guia-workspaces.html">🏢 Workspaces</a></li>
+            <li><a href="guia-projects.html">📁 Projects</a></li>
+            <li><a href="guia-agents.html">🤖 Agents</a></li>
+            <li><a href="guia-chat.html" class="active">💬 Chat</a></li>
+            <li><a href="guia-deploys.html">🚀 Deploys</a></li>
+            <li><a href="guia-inbox.html">📥 Inbox</a></li>
+            <li><a href="guia-analytics.html">📊 Analytics</a></li>
+            <li><a href="guia-automations.html">🔄 Automations</a></li>
+          </ul>
+        </div>
+
+        <div class="sidebar-section">
+          <h3>Módulos Frontend</h3>
+          <ul class="nav-list">
+            <li><a href="guia-dashboard.html">🎨 Dashboard</a></li>
+            <li><a href="guia-playground.html">💻 Playground</a></li>
+            <li><a href="guia-projeto-detalhe.html">📱 Projeto Detalhe</a></li>
+            <li><a href="guia-marketplace.html">🛒 Marketplace</a></li>
+            <li><a href="guia-configuracoes.html">⚙️ Configurações</a></li>
+            <li><a href="guia-status.html">📈 Status</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="content">
+        <section class="hero">
+          <div class="breadcrumb">
+            <a href="index.html">Docs</a> <span>/</span> Chat & Conversations
+          </div>
+          <h1>Chat & Conversations</h1>
+          <p class="lead">
+            Sistema de conversas com agentes via sessões, streaming de respostas (SSE),
+            armazenamento de histórico e integração com agent runs.
+          </p>
+        </section>
+
+        <section class="module-section">
+          <h2>📋 Visão Geral</h2>
+          <div class="info-grid">
+            <div class="info-card">
+              <h4>Propósito</h4>
+              <p>Permitir que usuários interajam com agentes de IA através de sessões de chat persistidas, com streaming em tempo real das respostas.</p>
+            </div>
+            <div class="info-card">
+              <h4>Arquitetura</h4>
+              <p>Hono + Drizzle ORM + PostgreSQL. Streaming SSE via Response body com ReadableStream.</p>
+            </div>
+            <div class="info-card">
+              <h4>Estado</h4>
+              <p><span class="status-badge prototype">Prototype</span> Implementação mockada - integração com Anthropic API pendente.</p>
+            </div>
+            <div class="info-card">
+              <h4>Tech Stack</h4>
+              <p>TypeScript, Zod validation, SSE streaming, Hono framework</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="schema-section">
+          <h2>🗃️ Banco de Dados</h2>
+
+          <h3>Schema Chat (db/schema/chat.ts)</h3>
+          <p>Schemas atualmente utilizados pelo chat.service.ts:</p>
+
+          <div class="schema-box">
+            <h4>chatSessions</h4>
+            <pre><code>export const chatSessions = pgTable('chat_sessions', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  workspaceId: uuid('workspace_id').notNull().references(() => workspaces.id),
+  projectId: uuid('project_id').references(() => projects.id),
+  userId: uuid('user_id').notNull().references(() => users.id),
+  title: varchar('title', { length: 200 }).notNull(),
+  model: varchar('model', { length: 50 }).notNull().default('gpt-4-turbo'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+})</code></pre>
+          </div>
+
+          <div class="schema-box">
+            <h4>chatMessages</h4>
+            <pre><code>export const chatMessages = pgTable('chat_messages', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  sessionId: uuid('session_id').notNull().references(() => chatSessions.id),
+  role: chatMessageRoleEnum('role').notNull(), // 'user' | 'assistant' | 'system'
+  content: text('content').notNull(),
+  tokensIn: integer('tokens_in'),
+  tokensOut: integer('tokens_out'),
+  durationMs: integer('duration_ms'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+})</code></pre>
+          </div>
+
+          <div class="alert warning">
+            <strong>⚠️ Schema Alternativo Existe</strong>
+            <p>O arquivo <code>db/schema/conversations.ts</code> define schemas diferentes (<code>conversations</code> e <code>messages</code>) que não são usados pelo chat.service.ts atual. Isso indica uma possível refatoração em andamento ou código legado.</p>
+          </div>
+
+          <div class="schema-comparison">
+            <h4>Comparação de Schemas</h4>
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Campo</th>
+                  <th>chatSessions</th>
+                  <th>conversations</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Model default</td>
+                  <td><code>gpt-4-turbo</code></td>
+                  <td><code>claude-sonnet-4-20250514</code></td>
+                </tr>
+                <tr>
+                  <td>agentId</td>
+                  <td>❌ Não existe</td>
+                  <td><code>uuid</code> (nullable)</td>
+                </tr>
+                <tr>
+                  <td>pinned</td>
+                  <td>❌ Não existe</td>
+                  <td><code>boolean</code></td>
+                </tr>
+                <tr>
+                  <td>projectId</td>
+                  <td><code>uuid</code></td>
+                  <td>❌ Não existe</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="routes-section">
+          <h2>🔗 Rotas API</h2>
+          <p>Todas as rotas requerem autenticação via <code>authMiddleware</code>.</p>
+
+          <div class="endpoints-list">
+            <div class="endpoint">
+              <span class="method get">GET</span>
+              <div class="endpoint-info">
+                <code>/api/chat/sessions</code>
+                <p>Lista sessões do usuário no workspace, com paginação e filtro opcional por projectId.</p>
+              </div>
+            </div>
+
+            <div class="endpoint">
+              <span class="method get">GET</span>
+              <div class="endpoint-info">
+                <code>/api/chat/sessions/:id</code>
+                <p>Obtém sessão específica com todas as suas mensagens.</p>
+              </div>
+            </div>
+
+            <div class="endpoint">
+              <span class="method post">POST</span>
+              <div class="endpoint-info">
+                <code>/api/chat/sessions</code>
+                <p>Cria nova sessão de chat. Parâmetros opcionais: <code>title</code>, <code>model</code>, <code>projectId</code>.</p>
+              </div>
+            </div>
+
+            <div class="endpoint">
+              <span class="method delete">DELETE</span>
+              <div class="endpoint-info">
+                <code>/api/chat/sessions/:id</code>
+                <p>Deleta sessão (cascade nas mensagens).</p>
+              </div>
+            </div>
+
+            <div class="endpoint">
+              <span class="method post">POST</span>
+              <div class="endpoint-info">
+                <code>/api/chat/sessions/:id/messages</code>
+                <p>Envia mensagem e recebe resposta completa (non-streaming). Salva user msg + assistant msg no DB.</p>
+              </div>
+            </div>
+
+            <div class="endpoint">
+              <span class="method post">POST</span>
+              <div class="endpoint-info">
+                <code>/api/chat/sessions/:id/messages/stream</code>
+                <p>Envia mensagem e recebe resposta via streaming SSE. Content-Type: <code>text/event-stream</code>.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="service-section">
+          <h2>⚙️ Chat Service</h2>
+          <p>Arquivo: <code>backend/src/services/chat.service.ts</code></p>
+
+          <div class="function-list">
+            <div class="function">
+              <h4><code>listSessions(workspaceId, input)</code></h4>
+              <p>Lista sessões com query params opcionais: <code>projectId</code>, <code>page</code>, <code>perPage</code>. Retorna <code>{ data, meta }</code>.</p>
+            </div>
+
+            <div class="function">
+              <h4><code>getSession(workspaceId, id)</code></h4>
+              <p>Busca sessão por ID + suas mensagens ordenadas por <code>createdAt DESC</code>. Throws se não encontrada.</p>
+            </div>
+
+            <div class="function">
+              <h4><code>createSession(workspaceId, userId, input)</code></h4>
+              <p>Cria nova sessão. Default title: "Nova conversa", model: <code>claude-sonnet-4-20250514</code>.</p>
+            </div>
+
+            <div class="function">
+              <h4><code>deleteSession(workspaceId, id)</code></h4>
+              <p>Deleta sessão. Cascade das mensagens via FK. Retorna <code>{ success: true }</code>.</p>
+            </div>
+
+            <div class="function">
+              <h4><code>sendMessage(workspaceId, userId, sessionId, input)</code></h4>
+              <p>Salva mensagem do usuário, gera resposta mockada, salva resposta do assistente. Calcula tokens (length/4) e duração. Atualiza <code>updatedAt</code> da sessão.</p>
+            </div>
+
+            <div class="function">
+              <h4><code>streamMessage(workspaceId, userId, sessionId, input)</code></h4>
+              <p>Chama <code>sendMessage</code> e retorna <code>ReadableStream</code> com SSE. Divide resposta em palavras, delay 30ms entre chunks.</p>
+            </div>
+          </div>
+
+          <div class="alert warning">
+            <strong>⚠️ Implementação Mockada</strong>
+            <p>O <code>generateMockResponse</code> simula respostas baseadas em palavras-chave. <strong>NÃO há integração real com Claude API ou agents.service.run()</strong>.</p>
+          </div>
+        </section>
+
+        <section class="flow-section">
+          <h2>🌊 Fluxo de Dados</h2>
+
+          <div class="flow-diagram">
+            <h3>Fluxo: Streaming de Mensagem</h3>
+            <div class="flow-box">
+              <div class="flow-step">
+                <span class="step-num">1</span>
+                <div class="step-content">
+                  <strong>Cliente envia mensagem</strong>
+                  <code>POST /sessions/:id/messages/stream</code>
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <span class="step-num">2</span>
+                <div class="step-content">
+                  <strong>Chat Service valida</strong>
+                  Verifica sessão via workspaceId filter
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <span class="step-num">3</span>
+                <div class="step-content">
+                  <strong>Salva user message</strong>
+                  INSERT INTO chat_messages (role='user')
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <span class="step-num">4</span>
+                <div class="step-content">
+                  <strong>Gera resposta</strong>
+                  Mock response (sem agent integration)
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <span class="step-num">5</span>
+                <div class="step-content">
+                  <strong>Salva assistant message</strong>
+                  INSERT com tokensIn, tokensOut, durationMs
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <span class="step-num">6</span>
+                <div class="step-content">
+                  <strong>Streaming SSE</strong>
+                  Retorna ReadableStream via Response body
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-diagram">
+            <h3>Fluxo Planejado: Com Agente</h3>
+            <div class="flow-box">
+              <div class="flow-step">
+                <span class="step-num">1</span>
+                <div class="step-content">
+                  <strong>Sessão com agentId</strong>
+                  Chat vincula agente específico
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <span class="step-num">2</span>
+                <div class="step-content">
+                  <strong>Chama agentsService.run()</strong>
+                  Executa agente com input da mensagem
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <span class="step-num">3</span>
+                <div class="step-content">
+                  <strong>Agente processa</strong>
+                  Anthropic API + streaming response
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <span class="step-num">4</span>
+                <div class="step-content">
+                  <strong>Cria AgentRun</strong>
+                  Salva em table agent_runs
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <span class="step-num">5</span>
+                <div class="step-content">
+                  <strong>Stream atualizado</strong>
+                  Stream recebe chunks da resposta
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="validation-section">
+          <h2>✅ Validação (Zod)</h2>
+          <p>Arquivo: <code>backend/src/schemas/chat.schema.ts</code></p>
+
+          <div class="schema-box">
+            <h4>createSessionSchema</h4>
+            <pre><code>{
+  title?: string.min(1).max(200).default('Nova conversa'),
+  model?: string.max(50),
+  projectId?: string.uuid()
+}</code></pre>
+          </div>
+
+          <div class="schema-box">
+            <h4>listSessionsSchema</h4>
+            <pre><code>{
+  projectId?: string.uuid(),
+  page?: number.min(1).default(1),
+  perPage?: number.min(1).max(50).default(20)
+}</code></pre>
+          </div>
+
+          <div class="schema-box">
+            <h4>sendMessageSchema</h4>
+            <pre><code>{
+  content: string.min(1),
+  model?: string.max(50)
+}</code></pre>
+          </div>
+        </section>
+
+        <section class="integration-section">
+          <h2>🔗 Integrações</h2>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Origem</th>
+                <th>Destino</th>
+                <th>Tipo</th>
+                <th>Dados</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Frontend Chat</td>
+                <td><code>POST /api/chat/sessions/:id/messages</code></td>
+                <td>HTTP POST</td>
+                <td><code>{content}</code></td>
+                <td>✅ Implementado</td>
+              </tr>
+              <tr>
+                <td>Frontend Chat</td>
+                <td><code>POST /api/chat/sessions/:id/messages/stream</code></td>
+                <td>HTTP POST + SSE</td>
+                <td><code>{content}</code></td>
+                <td>✅ Implementado</td>
+              </tr>
+              <tr>
+                <td>Chat Service</td>
+                <td>Agents Service</td>
+                <td>Internal call</td>
+                <td><code>agentId, input, userId, projectId</code></td>
+                <td>⏳ Pendente</td>
+              </tr>
+              <tr>
+                <td>Agents Service</td>
+                <td>Anthropic API</td>
+                <td>SDK</td>
+                <td>messages, tools, streaming</td>
+                <td>⏳ Pendente</td>
+              </tr>
+              <tr>
+                <td>Chat Service</td>
+                <td>Analytics Service</td>
+                <td>track()</td>
+                <td>message events, tokens, duration</td>
+                <td>⏳ Pendente</td>
+              </tr>
+              <tr>
+                <td>Chat Service</td>
+                <td>Notifications</td>
+                <td>Inbox create</td>
+                <td>agent response ready</td>
+                <td>⏳ Pendente</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="security-section">
+          <h2>🔒 Segurança</h2>
+
+          <h3>Controle de Acesso</h3>
+          <ul class="checklist">
+            <li><strong>workspaceId filter</strong>: Middleware <code>authMiddleware</code> injeta <code>user.workspaceId</code> em todas as queries.</li>
+            <li><strong>userId filter</strong>: Sessões filtradas por <code>userId</code> implicitamente via query implícita (NOTA: <code>chatSessions</code> NÃO tem filtro por userId no serviço!).</li>
+            <li><strong>Row isolation</strong>: Deleção em cascade preserva integridade referencial (ON DELETE CASCADE).</li>
+          </ul>
+
+          <h3>Riscos Identificados</h3>
+
+          <div class="alert error">
+            <strong>🔴 RIDÍCULO: Vazamento de Mensagens</strong>
+            <p><code>listSessions</code> e <code>getSession</code> usam apenas <code>eq(chatSessions.workspaceId)</code>. <strong>NÃO filtram por userId!</strong> Usuários podem ver sessões de outros no mesmo workspace.</p>
+            <code>Mitigação URGENTE: Adicionar eq(chatSessions.userId, userId) em todas as queries.</code>
+          </div>
+
+          <div class="alert warning">
+            <strong>🟡 Streaming Token Leak</strong>
+            <p>Streaming SSE não tem timeout configurado. Conexões órfãs podem consumir recursos.</p>
+            <code>Mitigação: Implementar timeout no controller + cleanup de streams.</code>
+          </div>
+
+          <div class="alert warning">
+            <strong>🟡 Model Injection</strong>
+            <p>Parâmetro <code>model</code> é opcional e não validado contra lista permitida. Usuário poderia solicitar modelo inexistente ou caro.</p>
+            <code>Mitigação: Whitelist de modelos válidos por workspace/project.</code>
+          </div>
+
+          <div class="alert low">
+            <strong>🟢 Storage de Dados Sensíveis</strong>
+            <p>Mensagens armazenadas em texto plano. Se houver dados sensíveis, não há criptografia em repouso.</p>
+            <code>Mitigação: Considerar encrypt-at-rest para dados regulados.</code>
+          </div>
+        </section>
+
+        <section class="usage-section">
+          <h2>📖 Como Usar</h2>
+
+          <h3>Para Desenvolvedores Frontend</h3>
+          <ol class="checklist">
+            <li>Criar sessão: <code>POST /api/chat/sessions</code> com <code>{"title": "Meu Chat", "model": "claude-sonnet-4-20250514"}</code></li>
+            <li>Enviar mensagem via stream:
+              <pre><code>const response = await fetch('/api/chat/sessions/:id/messages/stream', {
+  method: 'POST',
+  headers: {'Content-Type': 'application/json'},
+  body: JSON.stringify({content: message})
+});
+
+const reader = response.body.getReader();
+const decoder = new TextDecoder();
+
+while (true) {
+  const {done, value} = await reader.read();
+  if (done) break;
+  const text = decoder.decode(value);
+  // Parse SSE: "data: {...}\n\n"
+  const lines = text.split('\n\n');
+  for (const line of lines) {
+    if (line.startsWith('data: ')) {
+      const data = line.slice(6);
+      if (data === '[DONE]') return;
+      console.log(JSON.parse(data).content);
+    }
+  }
+}</code></pre>
+            </li>
+            <li>Listar sessões: <code>GET /api/chat/sessions?projectId=:id&page=1&perPage=20</code></li>
+            <li>Deletar: <code>DELETE /api/chat/sessions/:id</code></li>
+          </ol>
+
+          <h3>Para Administradores</h3>
+          <ul class="checklist">
+            <li>Monitorar uso de tokens via analytics</li>
+            <li>Auditar logs de chat para detectar abusos</li>
+            <li>Configurar rate limits por usuário/sessão</li>
+            <li>Implementar integração real com agentes</li>
+          </ul>
+        </section>
+
+        <section class="todo-section">
+          <h2>📋 TODO / Melhorias</h2>
+          <ul class="todo-list">
+            <li>Integrar com <code>agentsService.run()</code> quando <code>agentId</code> estiver definido na sessão</li>
+            <li>Streaming real (SSE via Anthropic API) ao invés de mock</li>
+            <li>Adicionar filtro <code>userId</code> em todas as queries de lista</li>
+            <li>Adicionar campo <code>agentId</code> em <code>chatSessions</code> schema</li>
+            <li>Implementar analytics track calls</li>
+            <li>Criar notificações quando respostas estiverem prontas</li>
+            <li>Support para system messages / contexto persistente</li>
+            <li>Search dentro das mensagens</li>
+            <li>Export de conversa (PDF/JSON)</li>
+            <li>Rate limiting por sessão</li>
+          </ul>
+        </section>
+
+        <section class="reference-section">
+          <h2>📁 Arquivos de Referência</h2>
+          <ul class="file-list">
+            <li><code>backend/src/routes/chat.ts</code> - Definição das rotas Hono</li>
+            <li><code>backend/src/services/chat.service.ts</code> - Lógica de negócio</li>
+            <li><code>backend/src/schemas/chat.schema.ts</code> - Validação Zod</li>
+            <li><code>backend/src/db/schema/chat.ts</code> - Schema Drizzle (ativos)</li>
+            <li><code>backend/src/db/schema/conversations.ts</code> - Schema alternativo (não usado)</li>
+            <li><code>backend/src/db/schema/messages.ts</code> - Schema messages (não usado)</li>
+            <li><code>backend/src/services/agents.service.ts</code> - Para integração futura</li>
+          </ul>
+        </section>
+
+        <p class="back-link"><a href="index.html">← Voltar para Documentação Principal</a></p>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>Nommand Vision - Sistema de Gestão de Agentes IA</p>
+      <p>Documentação gerada • <span id="generated-date"></span></p>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('generated-date').textContent = new Date().toLocaleDateString('pt-BR');
+    function toggleTheme() {
+      document.documentElement.classList.toggle('light');
+    }
+  </script>
+</body>
+</html>
