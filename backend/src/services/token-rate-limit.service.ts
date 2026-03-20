@@ -1,6 +1,6 @@
 import { db } from '../db/index.js'
 import { analyticsEvents, dailyMetrics } from '../db/schema/analytics.js'
-import { eq, sql } from 'drizzle-orm'
+import { eq, and, sql } from 'drizzle-orm'
 import type { AppEnv } from '../types/context.js'
 
 /**
