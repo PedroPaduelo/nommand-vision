@@ -1,0 +1,216 @@
+<div class="max-w-5xl mx-auto">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-white mb-2">Modelos de Dados</h1>
+    <p class="text-gray-400">Tabelas, relacionamentos e entidades do banco</p>
+  </div>
+
+  <!-- Database Overview -->
+  <div class="card gradient-border">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="database" class="text-cyan-400"></i>
+      Visão Geral do Banco
+    </h3>
+    <p class="text-gray-300 mb-4">
+      PostgreSQL com 20+ tabelas usando Drizzle ORM. Sistema multi-tenant com workspaces.
+    </p>
+    <div class="grid grid-cols-3 gap-4">
+      <div class="p-3 bg-gray-900 rounded-lg text-center">
+        <div class="text-2xl font-bold text-cyan-400">20+</div>
+        <div class="text-sm text-gray-400">Tabelas</div>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg text-center">
+        <div class="text-2xl font-bold text-purple-400">15+</div>
+        <div class="text-sm text-gray-400">Relacionamentos</div>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg text-center">
+        <div class="text-2xl font-bold text-green-400">Multi-tenant</div>
+        <div class="text-sm text-gray-400">Workspaces</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Entity Relationships -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="git-merge" class="text-purple-400"></i>
+      Principais Entidades
+    </h3>
+    <div class="flow-diagram">
+      <div class="flex flex-wrap items-center justify-center gap-3">
+        <div class="flow-step bg-blue-500/20 border-blue-400">
+          <i data-lucide="building-2" class="text-blue-400"></i>
+          <span>Workspace</span>
+        </div>
+        <span class="text-cyan-400">→</span>
+        <div class="flow-step bg-green-500/20 border-green-400">
+          <i data-lucide="users" class="text-green-400"></i>
+          <span>Users</span>
+        </div>
+        <span class="text-cyan-400">→</span>
+        <div class="flow-step bg-orange-500/20 border-orange-400">
+          <i data-lucide="folder" class="text-orange-400"></i>
+          <span>Projects</span>
+        </div>
+        <span class="text-cyan-400">→</span>
+        <div class="flow-step bg-purple-500/20 border-purple-400">
+          <i data-lucide="bot" class="text-purple-400"></i>
+          <span>Agents</span>
+        </div>
+      </div>
+      <div class="flex justify-center mt-3 gap-3">
+        <div class="flow-step">
+          <i data-lucide="rocket" class="text-orange-400"></i>
+          <span>Deploys</span>
+        </div>
+        <span class="text-gray-500">|</span>
+        <div class="flow-step">
+          <i data-lucide="message-square" class="text-pink-400"></i>
+          <span>Chat</span>
+        </div>
+        <span class="text-gray-500">|</span>
+        <div class="flow-step">
+          <i data-lucide="zap" class="text-yellow-400"></i>
+          <span>Automations</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tables Detail -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="table" class="text-green-400"></i>
+      Tabelas do Banco
+    </h3>
+    <div class="overflow-x-auto">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Tabela</th>
+            <th>Campos Principais</th>
+            <th>Foreign Keys</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="font-mono text-cyan-400">workspaces</td>
+            <td>id, name, slug, plan, ownerId</td>
+            <td>users, projects, agents</td>
+          </tr>
+          <tr>
+            <td class="font-mono text-green-400">users</td>
+            <td>id, email, passwordHash, name, role, plan</td>
+            <td>workspaceId</td>
+          </tr>
+          <tr>
+            <td class="font-mono text-orange-400">projects</td>
+            <td>id, name, slug, status, stack, framework</td>
+            <td>workspaceId, createdBy</td>
+          </tr>
+          <tr>
+            <td class="font-mono text-purple-400">agents</td>
+            <td>id, name, type, model, systemPrompt, tools</td>
+            <td>workspaceId</td>
+          </tr>
+          <tr>
+            <td class="font-mono text-pink-400">agent_runs</td>
+            <td>id, input, output, tokensUsed, status</td>
+            <td>agentId, projectId, userId</td>
+          </tr>
+          <tr>
+            <td class="font-mono text-yellow-400">deploys</td>
+            <td>id, environment, status, branch, url</td>
+            <td>projectId, workspaceId, triggeredBy</td>
+          </tr>
+          <tr>
+            <td class="font-mono text-blue-400">chat_sessions</td>
+            <td>id, title, model, projectId</td>
+            <td>workspaceId, userId, projectId</td>
+          </tr>
+          <tr>
+            <td class="font-mono text-red-400">chat_messages</td>
+            <td>id, role, content, tokensIn, tokensOut</td>
+            <td>sessionId</td>
+          </tr>
+          <tr>
+            <td class="font-mono text-indigo-400">automations</td>
+            <td>id, name, triggerType, actions, enabled</td>
+            <td>workspaceId</td>
+          </tr>
+          <tr>
+            <td class="font-mono text-teal-400">sessions</td>
+            <td>id, refreshTokenHash, device, ip, expiresAt</td>
+            <td>userId</td>
+          </tr>
+          <tr>
+            <td class="font-mono text-gray-400">token_blacklist</td>
+            <td>id, tokenHash, userId, expiresAt</td>
+            <td>-</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Enums -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="list-ordered" class="text-yellow-400"></i>
+      Enumerações
+    </h3>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <div class="text-sm font-semibold text-cyan-400 mb-2">project_status</div>
+        <code class="text-xs text-gray-300">active, draft</code>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <div class="text-sm font-semibold text-purple-400 mb-2">role</div>
+        <code class="text-xs text-gray-300">Frontend, Backend, Design, Data, Admin</code>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <div class="text-sm font-semibold text-green-400 mb-2">deploy_status</div>
+        <code class="text-xs text-gray-300">queued, building, deploying, success, failed, cancelled</code>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <div class="text-sm font-semibold text-orange-400 mb-2">deploy_environment</div>
+        <code class="text-xs text-gray-300">preview, staging, production</code>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <div class="text-sm font-semibold text-pink-400 mb-2">agent_type</div>
+        <code class="text-xs text-gray-300">assistant, custom, tool, supervisor</code>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <div class="text-sm font-semibold text-yellow-400 mb-2">agent_category</div>
+        <code class="text-xs text-gray-300">dev, review, qa, deploy, custom</code>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <div class="text-sm font-semibold text-blue-400 mb-2">trigger_type</div>
+        <code class="text-xs text-gray-300">schedule, webhook, event, manual</code>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <div class="text-sm font-semibold text-red-400 mb-2">user_plan</div>
+        <code class="text-xs text-gray-300">free, pro, enterprise</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seed Data -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="seedling" class="text-green-400"></i>
+      Dados Iniciais (Seed)
+    </h3>
+    <div class="code-block">
+<pre class="text-sm">
+// seed.ts cria:
+// 1. Workspace: "Demo Workspace" (slug: demo-workspace)
+// 2. User: admin@nommand.dev / admin123 (senha hasheada)
+// 3. Project: "Nommand Vision" com stack: [TypeScript, Hono, Drizzle, React]
+
+// Credenciais de teste:
+// Email: admin@nommand.dev
+// Senha: admin123
+</pre>
+    </div>
+  </div>
+</div>

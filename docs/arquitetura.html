@@ -1,0 +1,224 @@
+<div class="max-w-5xl mx-auto">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-white mb-2">Arquitetura Técnica</h1>
+    <p class="text-gray-400">Estrutura de pastas, padrões e fluxo de requisições</p>
+  </div>
+
+  <!-- Backend Structure -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="folder-tree" class="text-cyan-400"></i>
+      Estrutura do Backend
+    </h3>
+    <div class="code-block">
+<pre class="text-sm">
+backend/src/
+├── app.ts                    # Aplicação principal Hono
+├── index.ts                  # Entry point do servidor
+├── config/
+│   └── env.ts               # Variáveis de ambiente
+├── db/
+│   ├── index.ts             # Conexão DB (Drizzle)
+│   ├── seed.ts              # Dados iniciais
+│   └── schema/              # schemas das tabelas
+│       ├── users.ts
+│       ├── workspaces.ts
+│       ├── projects.ts
+│       ├── agents.ts
+│       ├── deploys.ts
+│       └── ... (15+ schemas)
+├── routes/                  # Rotas da API (REST)
+│   ├── auth.ts
+│   ├── projects.ts
+│   ├── agents.ts
+│   ├── deploys.ts
+│   └── ... (14 rotas)
+├── services/                # Lógica de negócio
+│   ├── auth.service.ts
+│   ├── projects.service.ts
+│   ├── agents.service.ts
+│   └── ... (20+ serviços)
+├── schemas/                 # Validação Zod
+├── middleware/              # Middlewares
+│   ├── auth.ts
+│   ├── rate-limit.ts
+│   └── error-handler.ts
+├── lib/                    # Utilitários
+│   ├── jwt.ts
+│   ├── hash.ts
+│   └── ws-manager.ts
+└── types/
+    └── context.ts           # Tipos do contexto Hono
+</pre>
+    </div>
+  </div>
+
+  <!-- Frontend Structure -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="folder-tree" class="text-purple-400"></i>
+      Estrutura do Frontend
+    </h3>
+    <div class="code-block">
+<pre class="text-sm">
+sistema-react/src/
+├── App.tsx                  # Componente raiz
+├── main.tsx                 # Entry point
+├── router.tsx               # Rotas React Router
+├── providers/               # Context Providers
+├── hooks/                   # Custom hooks
+│   ├── useAuth.ts
+│   └── ... (vários)
+├── pages/                   # Páginas (lazy loaded)
+│   ├── Login/
+│   ├── Panorama/
+│   ├── Projetos/
+│   ├── Agentes/
+│   └── ... (15+ páginas)
+├── components/
+│   ├── atoms/              # Button, Input, Badge...
+│   ├── molecules/          # SearchInput, EmptyState...
+│   ├── organisms/          # DataTable, Charts...
+│   └── templates/          # AppShell, Sidebar...
+└── styles/                 # CSS global
+</pre>
+    </div>
+  </div>
+
+  <!-- API Routes -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="routes" class="text-green-400"></i>
+      Rotas da API
+    </h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Rota</th>
+          <th>Método</th>
+          <th>Descrição</th>
+          <th>Auth</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="font-mono">/api/auth/*</td>
+          <td>POST</td>
+          <td>Registro, Login, Logout, Refresh</td>
+          <td><span class="badge badge-warning">Público</span></td>
+        </tr>
+        <tr>
+          <td class="font-mono">/api/auth/me</td>
+          <td>GET/PATCH</td>
+          <td>Perfil do usuário</td>
+          <td><span class="badge badge-success">JWT</span></td>
+        </tr>
+        <tr>
+          <td class="font-mono">/api/projects/*</td>
+          <td>CRUD</td>
+          <td>Gestão de projetos</td>
+          <td><span class="badge badge-success">JWT</span></td>
+        </tr>
+        <tr>
+          <td class="font-mono">/api/agents/*</td>
+          <td>CRUD+Run</td>
+          <td>Agentes de IA</td>
+          <td><span class="badge badge-success">JWT</span></td>
+        </tr>
+        <tr>
+          <td class="font-mono">/api/deploys/*</td>
+          <td>CRUD</td>
+          <td>Deploys e builds</td>
+          <td><span class="badge badge-success">JWT</span></td>
+        </tr>
+        <tr>
+          <td class="font-mono">/api/chat/*</td>
+          <td>CRUD+Stream</td>
+          <td>Sessões de chat</td>
+          <td><span class="badge badge-success">JWT</span></td>
+        </tr>
+        <tr>
+          <td class="font-mono">/api/automations/*</td>
+          <td>CRUD</td>
+          <td>Automações</td>
+          <td><span class="badge badge-success">JWT</span></td>
+        </tr>
+        <tr>
+          <td class="font-mono">/api/marketplace/*</td>
+          <td>CRUD</td>
+          <td>Marketplace de plugins</td>
+          <td><span class="badge badge-success">JWT</span></td>
+        </tr>
+        <tr>
+          <td class="font-mono">/api/settings/*</td>
+          <td>CRUD</td>
+          <td>Configurações workspace</td>
+          <td><span class="badge badge-success">JWT</span></td>
+        </tr>
+        <tr>
+          <td class="font-mono">/api/inbox/*</td>
+          <td>CRUD</td>
+          <td>Caixa de entrada</td>
+          <td><span class="badge badge-success">JWT</span></td>
+        </tr>
+        <tr>
+          <td class="font-mono">/api/analytics/*</td>
+          <td>GET</td>
+          <td>Métricas e eventos</td>
+          <td><span class="badge badge-success">JWT</span></td>
+        </tr>
+        <tr>
+          <td class="font-mono">/api/status/*</td>
+          <td>CRUD</td>
+          <td>Monitoramento uptime</td>
+          <td><span class="badge badge-success">JWT</span></td>
+        </tr>
+        <tr>
+          <td class="font-mono">/api/notifications/*</td>
+          <td>CRUD</td>
+          <td>Notificações</td>
+          <td><span class="badge badge-success">JWT</span></td>
+        </tr>
+        <tr>
+          <td class="font-mono">/api/health</td>
+          <td>GET</td>
+          <td>Health check</td>
+          <td><span class="badge badge-warning">Público</span></td>
+        </tr>
+        <tr>
+          <td class="font-mono">/ws</td>
+          <td>WS</td>
+          <td>WebSocket</td>
+          <td><span class="badge badge-success">Token</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Request Flow -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="arrow-right-circle" class="text-orange-400"></i>
+      Fluxo de Requisição
+    </h3>
+    <div class="flow-diagram">
+      <div class="flex flex-col items-center gap-2">
+        <div class="flow-step">Browser → API Request</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step">CORS Middleware (valida origem)</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step">Request ID Middleware (tracking)</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step">Auth Middleware (verifica JWT)</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step">Route Handler (valida Zod)</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step">Service Layer (lógica)</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step">Database (Drizzle ORM)</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step">Response JSON</div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,225 @@
+<div class="max-w-5xl mx-auto">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-white mb-2">Riscos e Segurança</h1>
+    <p class="text-gray-400">Análise de vulnerabilidades e proteções implementadas</p>
+  </div>
+
+  <!-- Risk Levels -->
+  <div class="grid grid-cols-4 gap-4 mb-8">
+    <div class="card text-center border-red-800 bg-red-900/10">
+      <div class="text-2xl font-bold text-red-500">Crítico</div>
+      <p class="text-xs text-gray-400">Pode causar falha total ou vazamento de dados</p>
+    </div>
+    <div class="card text-center border-orange-800 bg-orange-900/10">
+      <div class="text-2xl font-bold text-orange-500">Alto</div>
+      <p class="text-xs text-gray-400">Pode comprometer integridade ou disponibilidade</p>
+    </div>
+    <div class="card text-center border-yellow-800 bg-yellow-900/10">
+      <div class="text-2xl font-bold text-yellow-500">Médio</div>
+      <p class="text-xs text-gray-400">Risco limitado, precisa de atenção</p>
+    </div>
+    <div class="card text-center border-green-800 bg-green-900/10">
+      <div class="text-2xl font-bold text-green-500">Baixo</div>
+      <p class="text-xs text-gray-400">Impacto mínimo</p>
+    </div>
+  </div>
+
+  <!-- Security Risks -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="alert-shield" class="text-red-400"></i>
+      Riscos de Segurança
+    </h3>
+    <div class="space-y-4">
+      <div class="p-4 bg-red-900/20 border border-red-800 rounded-lg">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="badge badge-error">Crítico</span>
+          <h4 class="font-semibold">SQL Injection</h4>
+        </div>
+        <p class="text-sm text-gray-300 mb-2">
+          Uso de Drizzle ORM com parameterized queries previne SQL injection. <strong>Mitigado via ORM</strong>.
+        </p>
+        <div class="code-block text-xs">
+<pre>
+// Seguro:
+db.select().from(users).where(eq(users.id, userId));
+// Parâmetros são escapados automaticamente
+</pre>
+        </div>
+      </div>
+
+      <div class="p-4 bg-orange-900/20 border border-orange-800 rounded-lg">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="badge badge-warning">Alto</span>
+          <h4 class="font-semibold">Rate Limit Bypass</h4>
+        </div>
+        <p class="text-sm text-gray-300 mb-2">
+          Implementado rate limit multi-camada (IP + Workspace + User). Stores em memória podem ser perdidos em restart.
+          <strong>Mitigado com stores persistentes planejados.</strong>
+        </p>
+      </div>
+
+      <div class="p-4 bg-yellow-900/20 border border-yellow-800 rounded-lg">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="badge badge-warning">Médio</span>
+          <h4 class="font-semibold">JWT Token Theft</h4>
+        </div>
+        <p class="text-sm text-gray-300 mb-2">
+          Tokens são armazenados em memória apenas (não localStorage). Implementada blacklist para revogação imediata.
+          <strong>Recomendado:</strong> Implementar refresh rotation.
+        </p>
+      </div>
+
+      <div class="p-4 bg-blue-900/20 border border-blue-800 rounded-lg">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="badge badge-info">Baixo</span>
+          <h4 class="font-semibold">XSS via User Input</h4>
+        </div>
+        <p class="text-sm text-gray-300 mb-2">
+          Sanitize-html usado em serviços relevantes. Frontend usa React (auto-escaping).
+          <strong>Verificar sanitização em todos os pontos de entrada.</strong>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Availability Risks -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="alert-triangle" class="text-orange-400"></i>
+      Riscos de Disponibilidade
+    </h3>
+    <div class="space-y-4">
+      <div class="p-4 bg-orange-900/20 border border-orange-800 rounded-lg">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="badge badge-warning">Alto</span>
+          <h4 class="font-semibold">Single Point of Failure - Banco</h4>
+        </div>
+        <p class="text-sm text-gray-300">
+          Se o PostgreSQL cair, todo o sistema para. <strong>Recomendado:</strong> Implementar replicação e connection pooling robusto. Já há pool configurado no drizzle.
+        </p>
+      </div>
+
+      <div class="p-4 bg-yellow-900/20 border border-yellow-800 rounded-lg">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="badge badge-warning">Médio</span>
+          <h4 class="font-semibold">Memory Leak - Logs em Memória</h4>
+        </div>
+        <p class="text-sm text-gray-300">
+          Deploy logs armazenados em memória podem crescer indefinidamente. Implementar limpeza automática após X horas.
+          <strong>Mitigado:</strong> Rotinas de cleanup planejadas.
+        </p>
+      </div>
+
+      <div class="p-4 bg-green-900/20 border border-green-800 rounded-lg">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="badge badge-success">Baixo</span>
+          <h4 class="font-semibold">WebSocket Server Scalling</h4>
+        </div>
+        <p class="text-sm text-gray-300">
+          Atualmente, conexões WS são mantidas em memória (Map). Para múltiplas instâncias, é necessário adapter Redis.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rate Limits -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="gauge" class="text-green-400"></i>
+      Rate Limits Implementados
+    </h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Middleware</th>
+          <th>Limite</th>
+          <th>Janela</th>
+          <th>Escopo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>authRateLimit</td>
+          <td>10 req</td>
+          <td>1 min</td>
+          <td>Por IP</td>
+        </tr>
+        <tr>
+          <td>apiRateLimit</td>
+          <td>120 req</td>
+          <td>1 min</td>
+          <td>IP + Workspace + User</td>
+        </tr>
+        <tr>
+          <td>workspaceRateLimit</td>
+          <td>300 req</td>
+          <td>1 min</td>
+          <td>Por Workspace</td>
+        </tr>
+        <tr>
+          <td>agentRateLimit</td>
+          <td>30 req</td>
+          <td>1 min</td>
+          <td>Workspace + User</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Error Handling -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="alert-circle" class="text-blue-400"></i>
+      Tratamento de Erros
+    </h3>
+    <div class="code-block">
+<pre class="text-sm">
+// middleware/error-handler.ts
+app.use('*', async (c, next) => {
+  try {
+    await next();
+  } catch (err) {
+    console.error('Request error:', err);
+
+    // Erros de validação (Zod)
+    if (err instanceof ZodError) {
+      return c.json({ error: { code: 'VALIDATION', details: err.errors } }, 400);
+    }
+
+    // Erros de negócio (com error.code)
+    if (err.message && err.code) {
+      return c.json({ error: { code: err.code, message: err.message } }, getStatusForCode(err.code));
+    }
+
+    // Erro genérico (não expor stack trace em prod)
+    if (env.NODE_ENV === 'production') {
+      return c.json({ error: { code: 'INTERNAL_ERROR', message: 'Something went wrong' } }, 500);
+    }
+
+    // Dev: mostra stack trace
+    return c.json({ error: { code: 'INTERNAL_ERROR', message: err.message, stack: err.stack } }, 500);
+  }
+});
+</pre>
+    </div>
+  </div>
+
+  <!-- Recommendations -->
+  <div class="card gradient-border">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="lightbulb" class="text-yellow-400"></i>
+      Recomendações
+    </h3>
+    <ul class="space-y-2 text-gray-300">
+      <li>• Implementar distributed rate limit com Redis (evitar store em memória)</li>
+      <li>• Adicionar circuit breaker para chamadas externas (Anthropic API)</li>
+      <li>• Configurar replicação do PostgreSQL</li>
+      <li>• Adicionar logging estruturado (Winston/Pino) com centralização</li>
+      <li>• Implementar WebSocket Redis adapter para múltiplas instâncias</li>
+      <li>• Configurar health checks avançados (dashboard status)</li>
+      <li>• Adicionar backup automático do banco</li>
+      <li>• Implementar feature flags (configuração via API)</li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+{
+  "projectName": "nommand-vision",
+  "createdAt": "2025-03-20T00:00:00.000Z",
+  "updatedAt": "2026-03-20T06:05:00.000Z",
+  "services": [
+    {
+      "name": "backend",
+      "port": 3000,
+      "pm2Name": "nommand-vision-backend",
+      "domain": "nommand-vision-api.ddw1sl.easypanel.host",
+      "url": "https://nommand-vision-api.ddw1sl.easypanel.host",
+      "type": "api",
+      "startCommand": "pm2 start npm --name nommand-vision-backend -- run start"
+    },
+    {
+      "name": "frontend",
+      "port": 5174,
+      "pm2Name": "nommand-vision-frontend",
+      "domain": "nommand-vision.ddw1sl.easypanel.host",
+      "url": "https://nommand-vision.ddw1sl.easypanel.host",
+      "type": "frontend",
+      "startCommand": "pm2 start npm --name nommand-vision-frontend -- run start"
+    },
+    {
+      "name": "docs",
+      "port": 8901,
+      "pm2Name": "docs-nommand-vision",
+      "domain": "docs-nommand-vision.ddw1sl.easypanel.host",
+      "url": "https://docs-nommand-vision.ddw1sl.easypanel.host",
+      "type": "docs",
+      "startCommand": "nohup npx serve docs/ -l 8901 --no-clipboard > /tmp/docs-nommand-vision.log 2>&1 &"
+    }
+  ]
+}

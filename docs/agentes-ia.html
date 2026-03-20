@@ -1,0 +1,278 @@
+<div class="max-w-5xl mx-auto">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-white mb-2">Sistema de Agentes IA</h1>
+    <p class="text-gray-400">Criação, execução e orquestração de agentes</p>
+  </div>
+
+  <!-- Overview -->
+  <div class="card gradient-border">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="bot" class="text-purple-400"></i>
+      O que são Agentes
+    </h3>
+    <p class="text-gray-300">
+      Agentes são entidades de IA configuráveis que podem ser ativados perante comandos ou em automações.
+      Cada agente tem seu próprio prompt, modelo, temperature, tools e categoria.
+    </p>
+  </div>
+
+  <!-- Agent Entity -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="box" class="text-cyan-400"></i>
+      Tabela `agents`
+    </h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Campo</th>
+          <th>Tipo</th>
+          <th>Descrição</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="font-mono">id</td>
+          <td>uuid</td>
+          <td>PK</td>
+        </tr>
+        <tr>
+          <td class="font-mono">workspaceId</td>
+          <td>uuid</td>
+          <td>Isolamento por workspace</td>
+        </tr>
+        <tr>
+          <td class="font-mono">name</td>
+          <td>varchar(100)</td>
+          <td>Nome do agente</td>
+        </tr>
+        <tr>
+          <td class="font-mono">type</td>
+          <td>enum</td>
+          <td>assistant, custom, tool, supervisor</td>
+        </tr>
+        <tr>
+          <td class="font-mono">model</td>
+          <td>varchar(50)</td>
+          <td>claude-sonnet-4-20250514</td>
+        </tr>
+        <tr>
+          <td class="font-mono">systemPrompt</td>
+          <td>text</td>
+          <td>Instruções personalizadas</td>
+        </tr>
+        <tr>
+          <td class="font-mono">config</td>
+          <td>jsonb</td>
+          <td>Configurações específicas</td>
+        </tr>
+        <tr>
+          <td class="font-mono">temperature</td>
+          <td>varchar(5)</td>
+          <td>0.0 a 2.0</td>
+        </tr>
+        <tr>
+          <td class="font-mono">maxTokens</td>
+          <td>integer</td>
+          <td>Máx. tokens de resposta</td>
+        </tr>
+        <tr>
+          <td class="font-mono">tools</td>
+          <td>jsonb (string[])</td>
+          <td>Lista de tools disponíveis</td>
+        </tr>
+        <tr>
+          <td class="font-mono">status</td>
+          <td>enum</td>
+          <td>active, inactive, error</td>
+        </tr>
+        <tr>
+          <td class="font-mono">category</td>
+          <td>enum</td>
+          <td>dev, review, qa, deploy, custom</td>
+        </tr>
+        <tr>
+          <td class="font-mono">statsTotalRuns</td>
+          <td>integer</td>
+          <td>Total de execuções</td>
+        </tr>
+        <tr>
+          <td class="font-mono">statsSuccessRate</td>
+          <td>varchar(6)</td>
+          <td>Porcentagem de sucesso</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Agent Runs -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="play" class="text-green-400"></i>
+      Tabela `agent_runs`
+    </h3>
+    <p class="text-gray-400 mb-4">
+      Cada execução de agente é registrada com input/output, duração, status e métricas.
+    </p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Campo</th>
+          <th>Tipo</th>
+          <th>Descrição</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="font-mono">id</td>
+          <td>uuid</td>
+          <td>PK</td>
+        </tr>
+        <tr>
+          <td class="font-mono">agentId</td>
+          <td>uuid</td>
+          <td>FK para agents</td>
+        </tr>
+        <tr>
+          <td class="font-mono">userId</td>
+          <td>uuid</td>
+          <td>Quem executou</td>
+        </tr>
+        <tr>
+          <td class="font-mono">input</td>
+          <td>text</td>
+          <td>Prompt/entrada</td>
+        </tr>
+        <tr>
+          <td class="font-mono">output</td>
+          <td>text</td>
+          <td>Resposta gerada</td>
+        </tr>
+        <tr>
+          <td class="font-mono">tokensUsed</td>
+          <td>integer</td>
+          <td>Total de tokens consumidos</td>
+        </tr>
+        <tr>
+          <td class="font-mono">durationMs</td>
+          <td>integer</td>
+          <td>Tempo de execução</td>
+        </tr>
+        <tr>
+          <td class="font-mono">status</td>
+          <td>enum</td>
+          <td>running, completed, error, timeout</td>
+        </tr>
+        <tr>
+          <td class="font-mono">error</td>
+          <td>text</td>
+          <td>Erro se houver falha</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Agent Types -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="git-branch" class="text-orange-400"></i>
+      Tipos de Agentes
+    </h3>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="p-4 bg-blue-900/20 border border-blue-800 rounded-lg">
+        <div class="text-lg font-bold text-blue-400 mb-2">assistant</div>
+        <p class="text-sm text-gray-300">
+          Agente genérico de chat. Usa modelo LLM para responder consultas. Ideal para Q&A, brainstorming.
+        </p>
+      </div>
+      <div class="p-4 bg-green-900/20 border border-green-800 rounded-lg">
+        <div class="text-lg font-bold text-green-400 mb-2">custom</div>
+        <p class="text-sm text-gray-300">
+          Agente com prompt customizado. Pode ter persona especializada (ex: code reviewer, architect).
+        </p>
+      </div>
+      <div class="p-4 bg-purple-900/20 border border-purple-800 rounded-lg">
+        <div class="text-lg font-bold text-purple-400 mb-2">tool</div>
+        <p class="text-sm text-gray-300">
+          Agente que usa ferramentas externas (file editing, shell commands, web search). Ação orientada.
+        </p>
+      </div>
+      <div class="p-4 bg-orange-900/20 border border-orange-800 rounded-lg">
+        <div class="text-lg font-bold text-orange-400 mb-2">supervisor</div>
+        <p class="text-sm text-gray-300">
+          Coordena múltiplos agentes. Delega tarefas e agrega resultados (swarm pattern).
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Execute Agent API -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="terminal" class="text-green-400"></i>
+      Executar um Agente
+    </h3>
+    <div class="code-block">
+<pre class="text-sm">
+POST /api/agents/:id/run
+Authorization: Bearer &lt;jwt&gt;
+Content-Type: application/json
+
+{
+  "input": "Revisar este código...",
+  "projectId": "uuid-do-projeto"  // opcional
+}
+
+// Resposta:
+{
+  "id": "agent-run-uuid",
+  "agentId": "agent-uuid",
+  "status": "completed",
+  "input": "...",
+  "output": "Código revisado...",
+  "tokensUsed": 1234,
+  "durationMs": 2456,
+  "startedAt": "...",
+  "completedAt": "..."
+}
+
+// Se streaming (nova rota):
+POST /api/agents/:id/run/stream
+Retorna: text/event-stream com chunks
+</pre>
+    </div>
+  </div>
+
+  <!-- Validation -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="user-check" class="text-cyan-400"></i>
+      Validação de Prompt
+    </h3>
+    <p class="text-gray-300 mb-4">
+      Antes de executar, o input passa por um sandbox de validação para prevenir injection attacks.
+    </p>
+    <div class="code-block">
+<pre class="text-sm">
+// prompt-sandbox.service.ts
+function validateAndSanitize(input: string, agentType: string) {
+  // Regras:
+  // - Remove tags HTML perigosas
+  // - Detecta prompts de jailbreak
+  // - Limita comprimento máximo
+  // - Bloqueia comandos do sistema
+
+  if (input.includes('ignore previous instructions')) {
+    return { isValid: false, errors: ['Possível jailbreak detectado'] };
+  }
+
+  return { isValid: true, sanitized: sanitizeHtml(input) };
+}
+
+// Rate limit de tokens:
+const estimatedTokens = safeInput.length / 4 + 1000;
+const canUse = await tokenRateLimitService.canUseTokens(workspaceId, estimatedTokens);
+</pre>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,308 @@
+<div class="max-w-5xl mx-auto">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-white mb-2">Pipeline de Deploy</h1>
+    <p class="text-gray-400">Fluxo completo de build, deploy e streaming de logs</p>
+  </div>
+
+  <!-- Overview -->
+  <div class="card gradient-border">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="rocket" class="text-orange-400"></i>
+      Sistema de Deploy
+    </h3>
+    <p class="text-gray-300 mb-4">
+      O sistema suporta ambientes: Preview, Staging e Production. Cada deploy gera logs em tempo real
+      via WebSocket e pode ser acompanhado via UI.
+    </p>
+    <div class="flex gap-4">
+      <span class="badge badge-info">Preview</span>
+      <span class="badge badge-warning">Staging</span>
+      <span class="badge badge-success">Production</span>
+    </div>
+  </div>
+
+  <!-- Deploy Lifecycle -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="git-commit" class="text-green-400"></i>
+      Ciclo de Vida do Deploy
+    </h3>
+    <div class="flow-diagram">
+      <div class="flex flex-col items-center">
+        <div class="flow-step">Trigger (Manual/Branch Push)</div>
+        <span class="flow-arrow">↓</span>
+        <div class="flow-step">Status: queued</div>
+        <span class="flow-arrow">↓</span>
+        <div class="flow-step">Build (builder)</div>
+        <span class="flow-arrow">↓</span>
+        <div class="flow-step">Status: building</div>
+        <span class="flow-arrow">↓</span>
+        <div class="flow-step">Deploy para ambiente</div>
+        <span class="flow-arrow">↓</span>
+        <div class="flow-step">Status: deploying</div>
+        <span class="flow-arrow">↓</span>
+        <div class="flow-step">Health check</div>
+        <span class="flow-arrow">↓</span>
+        <div class="flow-step">Status: success ou failed</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Deploy Table -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="list" class="text-cyan-400"></i>
+      Tabela `deploys`
+    </h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Campo</th>
+          <th>Tipo</th>
+          <th>Descrição</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="font-mono">id</td>
+          <td>uuid</td>
+          <td>PK única</td>
+        </tr>
+        <tr>
+          <td class="font-mono">projectId</td>
+          <td>uuid</td>
+          <td>FK para projetos (cascade)</td>
+        </tr>
+        <tr>
+          <td class="font-mono">workspaceId</td>
+          <td>uuid</td>
+          <td>FK para workspaces</td>
+        </tr>
+        <tr>
+          <td class="font-mono">environment</td>
+          <td>enum</td>
+          <td>preview, staging, production</td>
+        </tr>
+        <tr>
+          <td class="font-mono">status</td>
+          <td>enum</td>
+          <td>queued, building, deploying, success, failed, cancelled</td>
+        </tr>
+        <tr>
+          <td class="font-mono">branch</td>
+          <td>varchar(100)</td>
+          <td>Branch do git</td>
+        </tr>
+        <tr>
+          <td class="font-mono">commitSha</td>
+          <td>varchar(40)</td>
+          <td>Hash do commit</td>
+        </tr>
+        <tr>
+          <td class="font-mono">commitMessage</td>
+          <td>text</td>
+          <td>Mensagem do commit</td>
+        </tr>
+        <tr>
+          <td class="font-mono">logs</td>
+          <td>text</td>
+          <td>Logs completos (pode ser grandes)</td>
+        </tr>
+        <tr>
+          <td class="font-mono">url</td>
+          <td>varchar(500)</td>
+          <td>URL do deploy (ex: https://project--branch.ddw1sl.easypanel.host)</td>
+        </tr>
+        <tr>
+          <td class="font-mono">error</td>
+          <td>text</td>
+          <td>Erro em caso de falha</td>
+        </tr>
+        <tr>
+          <td class="font-mono">durationMs</td>
+          <td>integer</td>
+          <td>Duração em ms</td>
+        </tr>
+        <tr>
+          <td class="font-mono">startedAt</td>
+          <td>timestamp</td>
+          <td>Início do deploy</td>
+        </tr>
+        <tr>
+          <td class="font-mono">completedAt</td>
+          <td>timestamp</td>
+          <td>Fim do deploy</td>
+        </tr>
+        <tr>
+          <td class="font-mono">triggeredBy</td>
+          <td>uuid → users</td>
+          <td>Quem iniciou</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Deploy Logs -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="file-text" class="text-yellow-400"></i>
+      Tabela `deploy_logs`
+    </h3>
+    <p class="text-gray-400 mb-4">
+      Logs associados a cada deploy, com nível e timestamp.
+    </p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Campo</th>
+          <th>Tipo</th>
+          <th>Descrição</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="font-mono">id</td>
+          <td>uuid</td>
+          <td>PK</td>
+        </tr>
+        <tr>
+          <td class="font-mono">deployId</td>
+          <td>uuid</td>
+          <td>FK para deploys (cascade)</td>
+        </tr>
+        <tr>
+          <td class="font-mono">level</td>
+          <td>enum</td>
+          <td>info, warn, error</td>
+        </tr>
+        <tr>
+          <td class="font-mono">message</td>
+          <td>text</td>
+          <td>Mensagem do log</td>
+        </tr>
+        <tr>
+          <td class="font-mono">timestamp</td>
+          <td>timestamp</td>
+          <td>Quando o log foi gerado</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Deploy Env Vars -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="key-round" class="text-purple-400"></i>
+      Tabela `deploy_env_vars` (Secrets)
+    </h3>
+    <p class="text-gray-400 mb-4">
+      Variáveis de ambiente específicas por deploy. Valores são criptografados (crypto-js ou similar).
+    </p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Campo</th>
+          <th>Tipo</th>
+          <th>Descrição</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="font-mono">id</td>
+          <td>uuid</td>
+          <td>PK</td>
+        </tr>
+        <tr>
+          <td class="font-mono">deployId</td>
+          <td>uuid</td>
+          <td>FK para deploys</td>
+        </tr>
+        <tr>
+          <td class="font-mono">key</td>
+          <td>varchar(100)</td>
+          <td>Nome da variável (ex: DATABASE_URL)</td>
+        </tr>
+        <tr>
+          <td class="font-mono">valueEncrypted</td>
+          <td>text</td>
+          <td>Valor criptografado</td>
+        </tr>
+        <tr>
+          <td class="font-mono">isSecret</td>
+          <td>boolean</td>
+          <td>Se deve ser tratada como secret</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Streaming Logs -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="radio" class="text-green-400"></i>
+      Streaming de Logs via WebSocket
+    </h3>
+    <p class="text-gray-300 mb-4">
+      Durante o build/deploy, logs são enviados em tempo real via WebSocket para o frontend.
+    </p>
+    <div class="code-block">
+<pre class="text-sm">
+// Canais WebSocket usados:
+- deploy:${deployId}   → Logs daquele deploy
+- deploy:progress      → Progresso geral
+- deploy:status        → Atualizações de status
+
+// Mensagem exemplo:
+{
+  "event": "deploy:log",
+  "data": {
+    "deployId": "uuid",
+    "level": "info",
+    "message": "Building Docker image...",
+    "timestamp": "2025-03-20T..."
+  }
+}
+
+// Frontend se inscreve em:
+const ws = new WebSocket(`/ws?token=${jwt}`);
+ws.on('message', (msg) => {
+  const { event, data } = JSON.parse(msg);
+  if (event === 'deploy:log') {
+    appendLog(data.message);
+  }
+});
+</pre>
+    </div>
+  </div>
+
+  <!-- Trigger Deploy API -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="code" class="text-orange-400"></i>
+      Iniciar Deploy via API
+    </h3>
+    <div class="code-block">
+<pre class="text-sm">
+POST /api/deploys
+Authorization: Bearer &lt;jwt&gt;
+Content-Type: application/json
+
+{
+  "projectId": "uuid-do-projeto",
+  "environment": "staging" | "production",
+  "branch": "main",
+  "commitSha": "abc123...",
+  "commitMessage": "Fix bug in login"
+}
+
+// Resposta:
+{
+  "id": "uuid-do-deploy",
+  "status": "queued",
+  "environment": "staging",
+  "createdAt": "..."
+}
+</pre>
+    </div>
+  </div>
+</div>

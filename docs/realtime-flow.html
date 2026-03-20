@@ -1,0 +1,258 @@
+<div class="max-w-5xl mx-auto">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-white mb-2">Tempo Real & WebSocket</h1>
+    <p class="text-gray-400">Comunicação bidirecional, notificações e streaming</p>
+  </div>
+
+  <!-- WebSocket Overview -->
+  <div class="card gradient-border">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="radio" class="text-green-400"></i>
+      WebSocket Server
+    </h3>
+    <p class="text-gray-300 mb-4">
+      O sistema usa WebSocket (lib <code>ws</code>) para comunicação em tempo real.
+      Conexão é autenticada via JWT token na query string.
+    </p>
+    <div class="bg-gray-900 p-3 rounded-lg font-mono text-sm">
+      ws://dominio/ws?token=&lt;access_token&gt;
+    </div>
+  </div>
+
+  <!-- Connection Flow -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="arrow-right-circle" class="text-cyan-400"></i>
+      Fluxo de Conexão
+    </h3>
+    <div class="flow-diagram">
+      <div class="flex flex-col items-center">
+        <div class="flow-step">Cliente conecta WS</div>
+        <span class="flow-arrow">↓</span>
+        <div class="flow-step">Server recebe upgrade</div>
+        <span class="flow-arrow">↓</span>
+        <div class="flow-step">Extrai token da query</div>
+        <span class="flow-arrow">↓</span>
+        <div class="flow-step">verifyAccessToken()</div>
+        <span class="flow-arrow">↓</span>
+        <div class="flow-step">Se válido: aceita conexão</div>
+        <span class="flow-arrow">↓</span>
+        <div class="flow-step">ws.on('connection')</div>
+        <span class="flow-arrow">↓</span>
+        <div class="flow-step">Adiciona ao wsManager</div>
+        <span class="flow-arrow">↓</span>
+        <div class="flow-step bg-green-500/20 border-green-400/50">Envía 'connected'</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Channels -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="git-branch" class="text-purple-400"></i>
+      Canais de Mensagem
+    </h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Canal</th>
+          <th>Quem Publica</th>
+          <th>Quem Consome</th>
+          <th>Eventos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="bg-blue-900/20">
+          <td class="font-mono">deploy:${deployId}</td>
+          <td>DeployService</td>
+          <td>Frontend DeployPage</td>
+          <td>deploy:log, deploy:progress, deploy:complete</td>
+        </tr>
+        <tr class="bg-green-900/20">
+          <td class="font-mono">notifications:${userId}</td>
+          <td>NotificationService</td>
+          <td>Frontend Notifications</td>
+          <td>notification:new</td>
+        </tr>
+        <tr class="bg-purple-900/20">
+          <td class="font-mono">agent:${agentId}</td>
+          <td>AgentService</td>
+          <td>Frontend AgentPage</td>
+          <td>agent:run_update, agent:run_complete</td>
+        </tr>
+        <tr class="bg-orange-900/20">
+          <td class="font-mono">project:${projectId}</td>
+          <td>ProjectService</td>
+          <td>Frontend ProjectDashboard</td>
+          <td>project:updated, project:deleted</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Message Format -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="file-json" class="text-yellow-400"></i>
+      Formato da Mensagem
+    </h3>
+    <div class="code-block">
+<pre class="text-sm">
+// Mensagem padrão WebSocket
+{
+  "event": "nome.do.evento",
+  "data": { ... },
+  "timestamp": "2025-03-20T12:34:56.789Z"
+}
+
+// Exemplo deploy log:
+{
+  "event": "deploy:log",
+  "data": {
+    "deployId": "550e8400-e29b...",
+    "level": "info",
+    "message": "Installing dependencies (npm ci)...",
+    "timestamp": "2025-03-20T12:34:56.000Z"
+  }
+}
+
+// Exemplo notificação:
+{
+  "event": "notification:new",
+  "data": {
+    "id": "notif-uuid",
+    "type": "deploy_complete",
+    "title": "Deploy concluído",
+    "message": "Projeto X foi deployado em production",
+    "projectId": "proj-uuid",
+    "createdAt": "..."
+  }
+}
+</pre>
+    </div>
+  </div>
+
+  <!-- WS Manager -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="database" class="text-cyan-400"></i>
+      WS Connection Manager
+    </h3>
+    <div class="code-block">
+<pre class="text-sm">
+// ws-manager.ts
+class WSManager {
+  connections: Map&lt;userId, WebSocket[]&gt;
+
+  addConnection(userId: string, ws: WebSocket) {
+    const list = this.connections.get(userId) || [];
+    list.push(ws);
+    this.connections.set(userId, list);
+  }
+
+  removeConnection(userId: string, ws: WebSocket) {
+    const list = this.connections.get(userId);
+    if (list) {
+      const filtered = list.filter(connection => connection !== ws);
+      if (filtered.length === 0) {
+        this.connections.delete(userId);
+      } else {
+        this.connections.set(userId, filtered);
+      }
+    }
+  }
+
+  sendToUser(userId: string, event: string, data: any) {
+    const connections = this.connections.get(userId);
+    if (connections) {
+      connections.forEach(ws => {
+        ws.send(JSON.stringify({ event, data }));
+      });
+    }
+  }
+}
+
+// Uso:
+wsManager.sendToUser(userId, 'notification:new', notification);
+</pre>
+    </div>
+  </div>
+
+  <!-- Heartbeat -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="heart" class="text-red-400"></i>
+      Heartbeat & Reconexão
+    </h3>
+    <p class="text-gray-300 mb-4">
+      O servidor envia <code>ping</code> a cada 30 segundos. Clientes devem responder com <code>pong</code>.
+      Conexões inativas são removidas automaticamente.
+    </p>
+    <div class="code-block">
+<pre class="text-sm">
+// Servidor (ws.ts):
+const HEARTBEAT_INTERVAL = 30_000;
+
+setInterval(() => {
+  wss.clients.forEach(ws => {
+    if (!ws.isAlive) {
+      ws.terminate(); // conexão morta
+      return;
+    }
+    ws.isAlive = false;
+    ws.ping();
+  });
+}, HEARTBEAT_INTERVAL);
+
+ws.on('pong', () => {
+  ws.isAlive = true;
+});
+
+// Cliente (React):
+const ws = new WebSocket(url);
+ws.on('pong', () => {
+  // conexão viva
+});
+ws.on('close', () => {
+  // tentar reconnectar após delay
+});
+</pre>
+    </div>
+  </div>
+
+  <!-- Frontend Hook -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="hook" class="text-orange-400"></i>
+      Hook useWebSocket
+    </h3>
+    <div class="code-block">
+<pre class="text-sm">
+// Hook customizado (exemplo):
+function useWebSocket(token: string) {
+  const [isConnected, setIsConnected] = useState(false);
+  const [messages, setMessages] = useState&lt;WSMessage[]&gt;([]);
+
+  useEffect(() => {
+    const ws = new WebSocket(`${WS_URL}?token=${token}`);
+
+    ws.onopen = () => setIsConnected(true);
+    ws.onclose = () => setIsConnected(false);
+    ws.onmessage = (event) => {
+      const msg = JSON.parse(event.data);
+      setMessages(prev => [...prev, msg]);
+    };
+
+    return () => ws.close();
+  }, [token]);
+
+  const send = (event: string, data: any) => {
+    ws.send(JSON.stringify({ event, data }));
+  };
+
+  return { isConnected, messages, send };
+}
+</pre>
+    </div>
+  </div>
+</div>

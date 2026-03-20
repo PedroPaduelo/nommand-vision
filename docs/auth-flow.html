@@ -1,0 +1,196 @@
+<div class="max-w-5xl mx-auto">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-white mb-2">Fluxo de Autenticação</h1>
+    <p class="text-gray-400">JWT, Sessions, Rate Limiting e Segurança</p>
+  </div>
+
+  <!-- Auth Overview -->
+  <div class="card gradient-border">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="shield" class="text-green-400"></i>
+      Sistema de Autenticação
+    </h3>
+    <p class="text-gray-300 mb-4">
+      O sistema usa JWT (JSON Web Tokens) para autenticação stateless com suporte a refresh tokens.
+      Tokens de acesso duram 15 minutos, refresh tokens duram 7 dias.
+    </p>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <div class="text-sm text-gray-400">Access Token</div>
+        <div class="text-lg font-mono text-cyan-400">15 min</div>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <div class="text-sm text-gray-400">Refresh Token</div>
+        <div class="text-lg font-mono text-purple-400">7 dias</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Flow -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="log-in" class="text-cyan-400"></i>
+      Fluxo de Login
+    </h3>
+    <div class="flow-diagram">
+      <div class="flex flex-wrap items-center justify-center gap-3">
+        <div class="flow-step">
+          <i data-lucide="user" class="text-gray-400"></i>
+          <span>Login Form</span>
+        </div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">
+          <i data-lucide="shield-check" class="text-green-400"></i>
+          <span>Valida Email+Senha</span>
+        </div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">
+          <i data-lucide="key" class="text-yellow-400"></i>
+          <span>bcrypt.compare()</span>
+        </div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">
+          <i data-lucide="badge-check" class="text-green-400"></i>
+          <span>Gera JWTs</span>
+        </div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">
+          <i data-lucide="database" class="text-orange-400"></i>
+          <span>Salva Session</span>
+        </div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step bg-gradient-to-br from-green-500/20 to-cyan-500/20 border-green-400/50">
+          <i data-lucide="check-circle" class="text-green-400"></i>
+          <span>Retorna tokens</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Token Structure -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="file-json" class="text-purple-400"></i>
+      Estrutura do JWT
+    </h3>
+    <div class="code-block">
+<pre class="text-sm">
+// Access Token Payload
+{
+  "userId": "uuid-do-usuario",
+  "workspaceId": "uuid-do-workspace",
+  "email": "user@email.com",
+  "role": "Frontend",
+  "iat": 1700000000,
+  "exp": 1700000900  // +15 min
+}
+
+// Refresh Token Payload
+{
+  "userId": "uuid-do-usuario",
+  "type": "refresh",
+  "sessionId": "uuid-da-sessao",
+  "iat": 1700000000,
+  "exp": 1700600000  // +7 dias
+}</pre>
+    </div>
+  </div>
+
+  <!-- Rate Limiting -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="gauge" class="text-orange-400"></i>
+      Rate Limiting
+    </h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Endpoint</th>
+          <th>Limite</th>
+          <th>Janela</th>
+          <th>Tipo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="font-mono">POST /api/auth/login</td>
+          <td>10</td>
+          <td>1 min</td>
+          <td><span class="badge badge-warning">Por IP</span></td>
+        </tr>
+        <tr>
+          <td class="font-mono">POST /api/auth/register</td>
+          <td>10</td>
+          <td>1 min</td>
+          <td><span class="badge badge-warning">Por IP</span></td>
+        </tr>
+        <tr>
+          <td class="font-mono">POST /api/auth/refresh</td>
+          <td>10</td>
+          <td>1 min</td>
+          <td><span class="badge badge-warning">Por IP</span></td>
+        </tr>
+        <tr>
+          <td class="font-mono">API Geral</td>
+          <td>120</td>
+          <td>1 min</td>
+          <td><span class="badge badge-success">Por IP+User+Workspace</span></td>
+        </tr>
+        <tr>
+          <td class="font-mono">POST /api/agents/*/run</td>
+          <td>30</td>
+          <td>1 min</td>
+          <td><span class="badge badge-info">Por Workspace</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Middleware de Auth -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="lock" class="text-cyan-400"></i>
+      Middleware de Autenticação
+    </h3>
+    <div class="code-block">
+<pre class="text-sm">
+// Fluxo do Auth Middleware
+1. Extrai token do header "Authorization: Bearer &lt;token&gt;"
+2. Verifica se token existe → 401 se não existir
+3. Valida JWT com verifyAccessToken()
+4. Se inválido/expirado → 401
+5. Verifica blacklist de tokens (logout)
+6. Se válido → adiciona user ao contexto
+7. Permite requisição prosseguir
+
+// Proteção por Workspace
+- Todas rotas usam authMiddleware
+- Queries são filtradas por workspaceId do usuário
+- Isolamento de dados entre workspaces
+</pre>
+    </div>
+  </div>
+
+  <!-- Logout Flow -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="log-out" class="text-red-400"></i>
+      Fluxo de Logout
+    </h3>
+    <div class="flow-diagram">
+      <div class="flex flex-wrap items-center justify-center gap-3">
+        <div class="flow-step">Logout Request</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">Valida JWT</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">Hash do token</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">Salva na blacklist</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">Deleta Session DB</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step bg-red-500/20 border-red-400/50">Tokens invalidados</div>
+      </div>
+    </div>
+  </div>
+</div>

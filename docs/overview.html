@@ -1,0 +1,231 @@
+<div class="max-w-5xl mx-auto">
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-white mb-2">Visão Geral do Sistema</h1>
+    <p class="text-gray-400">Mapeamento completo da plataforma Nommand Vision</p>
+  </div>
+
+  <!-- System Summary -->
+  <div class="card gradient-border">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-400 to-purple-600 flex items-center justify-center">
+        <i data-lucide="cpu" class="text-white"></i>
+      </div>
+      <div>
+        <h2 class="text-xl font-bold">Nommand Vision</h2>
+        <p class="text-sm text-gray-400">Plataforma de Gestão de Projetos com IA</p>
+      </div>
+      <span class="badge badge-info ml-auto">v1.0.0</span>
+    </div>
+    <p class="text-gray-300 leading-relaxed">
+      Sistema completo de gestão de projetos de desenvolvimento de software com integração de agentes de IA,
+      deploy automatizado, automações e monitoramento em tempo real.
+    </p>
+  </div>
+
+  <!-- Tech Stack -->
+  <div class="grid grid-cols-2 gap-6 mb-8">
+    <div class="card">
+      <h3 class="card-title flex items-center gap-2 mb-4">
+        <i data-lucide="server" class="text-cyan-400"></i>
+        Backend
+      </h3>
+      <div class="space-y-3">
+        <div class="flex items-center justify-between p-3 bg-gray-900 rounded-lg">
+          <span class="text-gray-300">Runtime</span>
+          <span class="badge badge-info">Node.js 22</span>
+        </div>
+        <div class="flex items-center justify-between p-3 bg-gray-900 rounded-lg">
+          <span class="text-gray-300">Framework</span>
+          <span class="badge badge-info">Hono</span>
+        </div>
+        <div class="flex items-center justify-between p-3 bg-gray-900 rounded-lg">
+          <span class="text-gray-300">ORM</span>
+          <span class="badge badge-info">Drizzle</span>
+        </div>
+        <div class="flex items-center justify-between p-3 bg-gray-900 rounded-lg">
+          <span class="text-gray-300">Database</span>
+          <span class="badge badge-info">PostgreSQL</span>
+        </div>
+        <div class="flex items-center justify-between p-3 bg-gray-900 rounded-lg">
+          <span class="text-gray-300">WebSocket</span>
+          <span class="badge badge-info">ws</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title flex items-center gap-2 mb-4">
+        <i data-lucide="monitor" class="text-purple-400"></i>
+        Frontend
+      </h3>
+      <div class="space-y-3">
+        <div class="flex items-center justify-between p-3 bg-gray-900 rounded-lg">
+          <span class="text-gray-300">Framework</span>
+          <span class="badge badge-info">React 19</span>
+        </div>
+        <div class="flex items-center justify-between p-3 bg-gray-900 rounded-lg">
+          <span class="text-gray-300">Build</span>
+          <span class="badge badge-info">Vite 7</span>
+        </div>
+        <div class="flex items-center justify-between p-3 bg-gray-900 rounded-lg">
+          <span class="text-gray-300">Router</span>
+          <span class="badge badge-info">React Router 7</span>
+        </div>
+        <div class="flex items-center justify-between p-3 bg-gray-900 rounded-lg">
+          <span class="text-gray-300">State</span>
+          <span class="badge badge-info">TanStack Query</span>
+        </div>
+        <div class="flex items-center justify-between p-3 bg-gray-900 rounded-lg">
+          <span class="text-gray-300">Language</span>
+          <span class="badge badge-info">TypeScript</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Domain Modules -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="layers" class="text-green-400"></i>
+      Módulos do Sistema
+    </h3>
+    <div class="grid grid-cols-4 gap-4">
+      <div class="p-4 bg-gray-900 rounded-lg border border-gray-800 hover:border-cyan-400 transition-colors">
+        <i data-lucide="lock" class="text-cyan-400 mb-2"></i>
+        <h4 class="font-semibold text-white">Auth</h4>
+        <p class="text-xs text-gray-400 mt-1">JWT + Sessions</p>
+      </div>
+      <div class="p-4 bg-gray-900 rounded-lg border border-gray-800 hover:border-cyan-400 transition-colors">
+        <i data-lucide="folder" class="text-blue-400 mb-2"></i>
+        <h4 class="font-semibold text-white">Projects</h4>
+        <p class="text-xs text-gray-400 mt-1">CRUD + Stats</p>
+      </div>
+      <div class="p-4 bg-gray-900 rounded-lg border border-gray-800 hover:border-cyan-400 transition-colors">
+        <i data-lucide="bot" class="text-purple-400 mb-2"></i>
+        <h4 class="font-semibold text-white">Agents</h4>
+        <p class="text-xs text-gray-400 mt-1">IA + Execução</p>
+      </div>
+      <div class="p-4 bg-gray-900 rounded-lg border border-gray-800 hover:border-cyan-400 transition-colors">
+        <i data-lucide="rocket" class="text-orange-400 mb-2"></i>
+        <h4 class="font-semibold text-white">Deploys</h4>
+        <p class="text-xs text-gray-400 mt-1">Pipeline CI/CD</p>
+      </div>
+      <div class="p-4 bg-gray-900 rounded-lg border border-gray-800 hover:border-cyan-400 transition-colors">
+        <i data-lucide="message-square" class="text-pink-400 mb-2"></i>
+        <h4 class="font-semibold text-white">Chat</h4>
+        <p class="text-xs text-gray-400 mt-1">Sessões + Mensagens</p>
+      </div>
+      <div class="p-4 bg-gray-900 rounded-lg border border-gray-800 hover:border-cyan-400 transition-colors">
+        <i data-lucide="zap" class="text-yellow-400 mb-2"></i>
+        <h4 class="font-semibold text-white">Automations</h4>
+        <p class="text-xs text-gray-400 mt-1">Triggers + Ações</p>
+      </div>
+      <div class="p-4 bg-gray-900 rounded-lg border border-gray-800 hover:border-cyan-400 transition-colors">
+        <i data-lucide="inbox" class="text-green-400 mb-2"></i>
+        <h4 class="font-semibold text-white">Inbox</h4>
+        <p class="text-xs text-gray-400 mt-1">Mensagens</p>
+      </div>
+      <div class="p-4 bg-gray-900 rounded-lg border border-gray-800 hover:border-cyan-400 transition-colors">
+        <i data-lucide="bar-chart" class="text-teal-400 mb-2"></i>
+        <h4 class="font-semibold text-white">Analytics</h4>
+        <p class="text-xs text-gray-400 mt-1">Eventos + Métricas</p>
+      </div>
+      <div class="p-4 bg-gray-900 rounded-lg border border-gray-800 hover:border-cyan-400 transition-colors">
+        <i data-lucide="bell" class="text-red-400 mb-2"></i>
+        <h4 class="font-semibold text-white">Notifications</h4>
+        <p class="text-xs text-gray-400 mt-1">Tempo Real</p>
+      </div>
+      <div class="p-4 bg-gray-900 rounded-lg border border-gray-800 hover:border-cyan-400 transition-colors">
+        <i data-lucide="server" class="text-indigo-400 mb-2"></i>
+        <h4 class="font-semibold text-white">Status</h4>
+        <p class="text-xs text-gray-400 mt-1">Uptime + Incidentes</p>
+      </div>
+      <div class="p-4 bg-gray-900 rounded-lg border border-gray-800 hover:border-cyan-400 transition-colors">
+        <i data-lucide="package" class="text-amber-400 mb-2"></i>
+        <h4 class="font-semibold text-white">Marketplace</h4>
+        <p class="text-xs text-gray-400 mt-1">Plugins</p>
+      </div>
+      <div class="p-4 bg-gray-900 rounded-lg border border-gray-800 hover:border-cyan-400 transition-colors">
+        <i data-lucide="settings" class="text-gray-400 mb-2"></i>
+        <h4 class="font-semibold text-white">Settings</h4>
+        <p class="text-xs text-gray-400 mt-1">Configurações</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- System Diagram -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="workflow" class="text-cyan-400"></i>
+      Arquitetura de Alto Nível
+    </h3>
+    <div class="flow-diagram">
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <div class="flow-step bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border-cyan-400/50">
+          <i data-lucide="globe" class="text-cyan-400"></i>
+          <span>Browser / Cliente</span>
+        </div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">
+          <i data-lucide="shield-check" class="text-green-400"></i>
+          <span>CORS + Rate Limit</span>
+        </div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step bg-gradient-to-br from-blue-500/20 to-purple-500/20 border-blue-400/50">
+          <i data-lucide="server" class="text-blue-400"></i>
+          <span>Hono API</span>
+        </div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">
+          <i data-lucide="key" class="text-yellow-400"></i>
+          <span>Auth Middleware</span>
+        </div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step bg-gradient-to-br from-green-500/20 to-cyan-500/20 border-green-400/50">
+          <i data-lucide="cubes" class="text-green-400"></i>
+          <span>Services Layer</span>
+        </div>
+      </div>
+      <div class="flex justify-center mt-4">
+        <span class="flow-arrow">↓</span>
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-4 mt-4">
+        <div class="flow-step">
+          <i data-lucide="database" class="text-orange-400"></i>
+          <span>PostgreSQL</span>
+        </div>
+        <span class="text-gray-500">|</span>
+        <div class="flow-step">
+          <i data-lucide="cloud" class="text-blue-400"></i>
+          <span>Anthropic API</span>
+        </div>
+        <span class="text-gray-500">|</span>
+        <div class="flow-step">
+          <i data-lucide="radio" class="text-purple-400"></i>
+          <span>WebSocket</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Stats -->
+  <div class="grid grid-cols-4 gap-4">
+    <div class="card text-center">
+      <div class="text-3xl font-bold text-cyan-400">15+</div>
+      <div class="text-sm text-gray-400">Tabelas DB</div>
+    </div>
+    <div class="card text-center">
+      <div class="text-3xl font-bold text-purple-400">14</div>
+      <div class="text-sm text-gray-400">Rotas API</div>
+    </div>
+    <div class="card text-center">
+      <div class="text-3xl font-bold text-green-400">20+</div>
+      <div class="text-sm text-gray-400">Services</div>
+    </div>
+    <div class="card text-center">
+      <div class="text-3xl font-bold text-orange-400">12</div>
+      <div class="text-sm text-gray-400">Módulos</div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,300 @@
+<div class="max-w-5xl mx-auto">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-white mb-2">Frontend Architecture</h1>
+    <p class="text-gray-400">Rotas, componentes, gerenciamento de estado e temas</p>
+  </div>
+
+  <!-- Tech Stack -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="layers" class="text-purple-400"></i>
+      Stack Frontend
+    </h3>
+    <div class="grid grid-cols-3 gap-4">
+      <div class="p-3 bg-gray-900 rounded-lg text-center">
+        <i data-lucide="box" class="text-cyan-400 mb-2"></i>
+        <div class="font-semibold">React 19</div>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg text-center">
+        <i data-lucide="zap" class="text-yellow-400 mb-2"></i>
+        <div class="font-semibold">Vite 7</div>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg text-center">
+        <i data-lucide="route" class="text-green-400 mb-2"></i>
+        <div class="font-semibold">React Router 7</div>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg text-center">
+        <i data-lucide="database" class="text-blue-400 mb-2"></i>
+        <div class="font-semibold">TanStack Query</div>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg text-center">
+        <i data-lucide="palette" class="text-pink-400 mb-2"></i>
+        <div class="font-semibold">Tailwind CSS</div>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg text-center">
+        <i data-lucide="type" class="text-purple-400 mb-2"></i>
+        <div class="font-semibold">TypeScript</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Routes -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="map" class="text-cyan-400"></i>
+      Rotas (React Router)
+    </h3>
+    <div class="overflow-x-auto">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Path</th>
+            <th>Componente</th>
+            <th>Proteção</th>
+            <th>Propósito</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="font-mono">/login</td>
+            <td>Login</td>
+            <td><span class="badge badge-warning">Público</span></td>
+            <td>Autenticação</td>
+          </tr>
+          <tr>
+            <td class="font-mono">/onboarding</td>
+            <td>Onboarding</td>
+            <td><span class="badge badge-warning">Público</span></td>
+            <td>Primeiro acesso</td>
+          </tr>
+          <tr>
+            <td class="font-mono">/panorama</td>
+            <td>Panorama</td>
+            <td><span class="badge badge-success">Auth</span></td>
+            <td>Dashboard principal</td>
+          </tr>
+          <tr>
+            <td class="font-mono">/projetos</td>
+            <td>Projetos</td>
+            <td><span class="badge badge-success">Auth</span></td>
+            <td>Lista de projetos</td>
+          </tr>
+          <tr>
+            <td class="font-mono">/projetos/:slug</td>
+            <td>ProjetoDetalhe</td>
+            <td><span class="badge badge-success">Auth</span></td>
+            <td>Detalhes + Deploys</td>
+          </tr>
+          <tr>
+            <td class="font-mono">/agentes</td>
+            <td>Agentes</td>
+            <td><span class="badge badge-success">Auth</span></td>
+            <td>Gestão de agentes IA</td>
+          </tr>
+          <tr>
+            <td class="font-mono">/deploys</td>
+            <td>Deploys</td>
+            <td><span class="badge badge-success">Auth</span></td>
+            <td>Lista de deploys global</td>
+          </tr>
+          <tr>
+            <td class="font-mono">/inbox</td>
+            <td>Inbox</td>
+            <td><span class="badge badge-success">Auth</span></td>
+            <td>Mensagens</td>
+          </tr>
+          <tr>
+            <td class="font-mono">/analytics</td>
+            <td>Analytics</td>
+            <td><span class="badge badge-success">Auth</span></td>
+            <td>Métricas</td>
+          </tr>
+          <tr>
+            <td class="font-mono">/nommand-ai</td>
+            <td>NommandAI</td>
+            <td><span class="badge badge-success">Auth</span></td>
+            <td>Chat com IA</td>
+          </tr>
+          <tr>
+            <td class="font-mono">/logs</td>
+            <td>Logs</td>
+            <td><span class="badge badge-success">Auth</span></td>
+            <td>Logs do sistema</td>
+          </tr>
+          <tr>
+            <td class="font-mono">/automacoes</td>
+            <td>Automacoes</td>
+            <td><span class="badge badge-success">Auth</span></td>
+            <td>Workflows automatizados</td>
+          </tr>
+          <tr>
+            <td class="font-mono">/marketplace</td>
+            <td>Marketplace</td>
+            <td><span class="badge badge-success">Auth</span></td>
+            <td>Plugins e extensões</td>
+          </tr>
+          <tr>
+            <td class="font-mono">/playground</td>
+            <td>Playground</td>
+            <td><span class="badge badge-success">Auth</span></td>
+            <td>Testar agentes</td>
+          </tr>
+          <tr>
+            <td class="font-mono">/status</td>
+            <td>Status</td>
+            <td><span class="badge badge-success">Auth</span></td>
+            <td>Uptime e health</td>
+          </tr>
+          <tr>
+            <td class="font-mono">/perfil</td>
+            <td>Perfil</td>
+            <td><span class="badge badge-success">Auth</span></td>
+            <td>Configuração pessoal</td>
+          </tr>
+          <tr>
+            <td class="font-mono">/configuracoes</td>
+            <td>Configuracoes</td>
+            <td><span class="badge badge-success">Auth</span></td>
+            <td>Workspace settings</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Component Hierarchy -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="git-branch" class="text-green-400"></i>
+      Hierarquia de Componentes
+    </h3>
+    <div class="code-block">
+<pre class="text-sm">
+App
+├── ErrorBoundary
+├── AppProviders
+│   ├── AuthProvider
+│   ├── QueryProvider
+│   └── ThemeProvider
+└── RouterProvider (router)
+    └── Routes
+        ├── /login → Login
+        ├── /onboarding → Onboarding
+        └── (autenticado)
+            └── AppShell
+                ├── Header
+                ├── Sidebar
+                ├── PageContent
+                └── ToastProvider
+                    └── Pages
+                        ├── Panorama
+                        ├── Projetos
+                        ├── ProjetoDetalhe
+                        ├── Agentes
+                        ├── Deploys
+                        ├── Inbox
+                        ├── Analytics
+                        ├── NommandAI
+                        ├── Logs
+                        ├── Automacoes
+                        ├── Marketplace
+                        ├── Playground
+                        ├── Status
+                        ├── Perfil
+                        └── Configuracoes
+</pre>
+    </div>
+  </div>
+
+  <!-- State Management -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="activity" class="text-orange-400"></i>
+      Gerenciamento de Estado
+    </h3>
+    <ul class="space-y-2 text-gray-300">
+      <li>• <strong>React Query</strong>: Servidor state (cache de API calls)</li>
+      <li>• <strong>Context API</strong>: Auth, Theme, UI preferences</li>
+      <li>• <strong>Local State</strong>: useState/useReducer para UI local</li>
+      <li>• <strong>URL State</strong>: Rota e query params</li>
+    </ul>
+  </div>
+
+  <!-- Components Pattern -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="layout" class="text-yellow-400"></i>
+      Padrão de Componentes
+    </h3>
+    <p class="text-gray-300 mb-4">
+      Sistema usa atomic design:
+    </p>
+    <div class="grid grid-cols-3 gap-4 text-sm">
+      <div class="p-4 bg-blue-900/20 rounded-lg">
+        <strong class="text-cyan-400">Atoms</strong><br>
+        Button, Input, Badge, etc.<br>
+        <em>1 componente por arquivo</em>
+      </div>
+      <div class="p-4 bg-green-900/20 rounded-lg">
+        <strong class="text-green-400">Molecules</strong><br>
+        SearchInput, EmptyState<br>
+        <em>Composição de atoms</em>
+      </div>
+      <div class="p-4 bg-purple-900/20 rounded-lg">
+        <strong class="text-purple-400">Organisms</strong><br>
+        DataTable, Charts<br>
+        <em>Features complexas</em>
+      </div>
+      <div class="p-4 bg-orange-900/20 rounded-lg">
+        <strong class="text-orange-400">Templates</strong><br>
+        AppShell, Header, Sidebar<br>
+        <em>Layouts de página</em>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dark Mode -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="moon" class="text-indigo-400"></i>
+      Sistema de Tema
+    </h3>
+    <p class="text-gray-300 mb-4">
+      Dark mode é padrão. Usa classes Tailwind `dark:`.
+      Preferência salva no localStorage.
+    </p>
+    <div class="code-block">
+<pre class="text-sm">
+// providers/ThemeProvider.tsx
+export function ThemeProvider({ children }) {
+  const [theme, setTheme] = useState('dark');
+
+  useEffect(() => {
+    const saved = localStorage.getItem('theme');
+    if (saved) setTheme(saved);
+    else {
+      document.documentElement.classList.add('dark');
+    }
+  }, []);
+
+  const toggle = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    if (newTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  };
+
+  return (
+    &lt;ThemeContext.Provider value={{ theme, toggle }}&gt;
+      {children}
+    &lt;/ThemeProvider.Provider&gt;
+  );
+}
+</pre>
+    </div>
+  </div>
+</div>

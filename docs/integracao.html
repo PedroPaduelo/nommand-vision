@@ -1,0 +1,179 @@
+<div class="max-w-5xl mx-auto">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-white mb-2">Integrações</h1>
+    <p class="text-gray-400">APIs externas, bibliotecas e serviços conectados</p>
+  </div>
+
+  <!-- Dependencies -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="package" class="text-cyan-400"></i>
+      Dependências do Backend
+    </h3>
+    <div class="overflow-x-auto">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Pacote</th>
+            <th>Versão</th>
+            <th>Propósito</th>
+            <th>Crítico</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="font-mono">@hono/node-server</td>
+            <td>^1.13.0</td>
+            <td>Servidor HTTP para Hono</td>
+            <td><span class="badge badge-success">Sim</span></td>
+          </tr>
+          <tr>
+            <td class="font-mono">hono</td>
+            <td>^4.12.0</td>
+            <td>Framework web</td>
+            <td><span class="badge badge-success">Sim</span></td>
+          </tr>
+          <tr>
+            <td class="font-mono">drizzle-orm</td>
+            <td>^0.45.0</td>
+            <td>ORM para PostgreSQL</td>
+            <td><span class="badge badge-success">Sim</span></td>
+          </tr>
+          <tr>
+            <td class="font-mono">pg</td>
+            <td>^8.20.0</td>
+            <td>Cliente PostgreSQL</td>
+            <td><span class="badge badge-success">Sim</span></td>
+          </tr>
+          <tr>
+            <td class="font-mono">jose</td>
+            <td>^6.1.0</td>
+            <td>JWT signing/verification</td>
+            <td><span class="badge badge-success">Sim</span></td>
+          </tr>
+          <tr>
+            <td class="font-mono">bcryptjs</td>
+            <td>^2.4.3</td>
+            <td>Hash de senhas</td>
+            <td><span class="badge badge-success">Sim</span></td>
+          </tr>
+          <tr>
+            <td class="font-mono">ws</td>
+            <td>^8.19.0</td>
+            <td>Servidor WebSocket</td>
+            <td><span class="badge badge-success">Sim</span></td>
+          </tr>
+          <tr>
+            <td class="font-mono">@tensorflow/tfjs-node</td>
+            <td>^4.21.0</td>
+            <td>IA / Visão computacional</td>
+            <td><span class="badge badge-warning">Opcional</span></td>
+          </tr>
+          <tr>
+            <td class="font-mono">zod</td>
+            <td>^3.24.0</td>
+            <td>Validação de schemas</td>
+            <td><span class="badge badge-success">Sim</span></td>
+          </tr>
+          <tr>
+            <td class="font-mono">dotenv</td>
+            <td>^16.4.0</td>
+            <td>Variáveis de ambiente</td>
+            <td><span class="badge badge-success">Sim</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Environment Variables -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="settings-2" class="text-warning"></i>
+      Variáveis de Ambiente
+    </h3>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="p-4 bg-gray-900 rounded-lg border border-gray-800">
+        <div class="text-sm font-semibold text-cyan-400 mb-2">DATABASE_URL</div>
+        <code class="text-xs text-gray-300 break-all">
+          postgresql://postgres:password@host:5432/dbname
+        </code>
+        <p class="text-xs text-gray-400 mt-2">Obrigatória - Conexão PostgreSQL</p>
+      </div>
+      <div class="p-4 bg-gray-900 rounded-lg border border-gray-800">
+        <div class="text-sm font-semibold text-green-400 mb-2">JWT_SECRET</div>
+        <code class="text-xs text-gray-300">string aleatória 64+ chars</code>
+        <p class="text-xs text-gray-400 mt-2">Obrigatória - Assinatura JWT</p>
+      </div>
+      <div class="p-4 bg-gray-900 rounded-lg border border-gray-800">
+        <div class="text-sm font-semibold text-purple-400 mb-2">PORT</div>
+        <code class="text-xs text-gray-300">3000 (padrão)</code>
+        <p class="text-xs text-gray-400 mt-2">Opcional - Porta do servidor</p>
+      </div>
+      <div class="p-4 bg-gray-900 rounded-lg border border-gray-800">
+        <div class="text-sm font-semibold text-orange-400 mb-2">NODE_ENV</div>
+        <code class="text-xs text-gray-300">production</code>
+        <p class="text-xs text-gray-400 mt-2">Recomendado - Ambiente</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- External APIs -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="cloud" class="text-blue-400"></i>
+      APIs Externas Utilizadas
+    </h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Serviço</th>
+          <th>Uso</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><i data-lucide="database" class="text-orange-400 inline mr-2"></i>PostgreSQL</td>
+          <td>Banco de dados principal</td>
+          <td><span class="badge badge-success">Ativo</span></td>
+        </tr>
+        <tr>
+          <td><i data-lucide="brain" class="text-purple-400 inline mr-2"></i>Anthropic API</td>
+          <td>LLM para agentes (claude-sonnet-4)</td>
+          <td><span class="badge badge-info">Integrado via SDK</span></td>
+        </tr>
+        <tr>
+          <td><i data-lucide="hard-drive" class="text-blue-400 inline mr-2"></i>EasyPanel API</td>
+          <td>Gerenciamento de domínios</td>
+          <td><span class="badge badge-info">MCP Server</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CORS Configuration -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="shield-check" class="text-green-400"></i>
+      Configuração CORS
+    </h3>
+    <div class="code-block">
+<pre class="text-sm">
+// app.ts
+app.use('*', cors({
+  origin: [
+    env.FRONTEND_URL,              // frontend em produção
+    'http://localhost:5174'        // dev local
+  ],
+  credentials: true,
+  allowHeaders: ['Content-Type', 'Authorization'],
+  exposeHeaders: ['X-Workspace-RateLimit-Remaining']
+}));
+
+// Middleware protege todas as rotas
+// Apenas origins configuradas acessam
+</pre>
+    </div>
+  </div>
+</div>

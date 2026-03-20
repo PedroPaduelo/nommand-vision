@@ -1,0 +1,195 @@
+<div class="max-w-5xl mx-auto">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-white mb-2">Regras de Negócio</h1>
+    <p class="text-gray-400">Domínios, validações e workflows do sistema</p>
+  </div>
+
+  <!-- Auth Rules -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="lock" class="text-cyan-400"></i>
+      Domínio: Autenticação
+    </h3>
+    <div class="space-y-3">
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <h4 class="font-semibold text-white mb-1">Registro de Usuário</h4>
+        <ul class="text-sm text-gray-400 space-y-1">
+          <li>• Email deve ser único no sistema</li>
+          <li>• Senha mínimo 8 caracteres</li>
+          <li>• Nome 2-100 caracteres</li>
+          <li>• Ao criar, também cria Workspace automaticamente</li>
+        </ul>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <h4 class="font-semibold text-white mb-1">Login</h4>
+        <ul class="text-sm text-gray-400 space-y-1">
+          <li>• Aceita email + senha</li>
+          <li>• Retorna JWT (15 min) + Refresh Token (7 dias)</li>
+          <li>• Rate limit: 10 req/min por IP</li>
+        </ul>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <h4 class="font-semibold text-white mb-1">Sessões</h4>
+        <ul class="text-sm text-gray-400 space-y-1">
+          <li>• Refresh token é armazenado no DB (sessions table)</li>
+          <li>• Logout remove token da DB e blacklist</li>
+          <li>• Tokens expirados são adicionados à blacklist automaticamente</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Projects Rules -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="folder" class="text-orange-400"></i>
+      Domínio: Projetos
+    </h3>
+    <div class="space-y-3">
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <h4 class="font-semibold text-white mb-1">Criação</h4>
+        <ul class="text-sm text-gray-400 space-y-1">
+          <li>• Nome: 2-100 caracteres, único no workspace</li>
+          <li>• Slug: gerado automaticamente (kebab-case)</li>
+          <li>• Status: active ou draft</li>
+          <li>• Campos opcionais: description, icon, iconColor, branch, framework, stack</li>
+        </ul>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <h4 class="font-semibold text-white mb-1">Relacionamentos</h4>
+        <ul class="text-sm text-gray-400 space-y-1">
+          <li>• Pertence a um workspace</li>
+          <li>• Criado por um usuário</li>
+          <li>• Pode ter múltiplos deploys, agentes, chats</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Agents Rules -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="bot" class="text-purple-400"></i>
+      Domínio: Agentes
+    </h3>
+    <div class="space-y-3">
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <h4 class="font-semibold text-white mb-1">Criação</h4>
+        <ul class="text-sm text-gray-400 space-y-1">
+          <li>• Nome: 2-100 caracteres</li>
+          <li>• Tipo: assistant, custom, tool, supervisor</li>
+          <li>• Categoria: dev, review, qa, deploy, custom</li>
+          <li>• Model padrão: claude-sonnet-4-20250514</li>
+        </ul>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <h4 class="font-semibold text-white mb-1">Execução</h4>
+        <ul class="text-sm text-gray-400 space-y-1">
+          <li>• Input mínimo 1 caractere</li>
+          <li>• Rate limit: 30 req/min por workspace</li>
+          <li>• Prompts passam por sanitização (anti-jailbreak)</li>
+          <li>• Tokens estimados e limitados por workspace</li>
+        </ul>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <h4 class="font-semibold text-white mb-1">Estatísticas</h4>
+        <ul class="text-sm text-gray-400 space-y-1">
+          <li>• Total de execuções (statsTotalRuns)</li>
+          <li>• Tempo médio (statsAvgDurationMs)</li>
+          <li>• Taxa de sucesso (statsSuccessRate)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Deploy Rules -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="rocket" class="text-green-400"></i>
+      Domínio: Deploys
+    </h3>
+    <div class="space-y-3">
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <h4 class="font-semibold text-white mb-1">Ambientes</h4>
+        <ul class="text-sm text-gray-400 space-y-1">
+          <li>• <span class="badge badge-info">preview</span>: Branchs feature (URL automática)</li>
+          <li>• <span class="badge badge-warning">staging</span>: Homologação</li>
+          <li>• <span class="badge badge-success">production</span>: Produção</li>
+        </ul>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <h4 class="font-semibold text-white mb-1">Status</h4>
+        <ul class="text-sm text-gray-400 space-y-1">
+          <li>• <span class="text-gray-400">queued</span>: Na fila</li>
+          <li>• <span class="text-blue-400">building</span>: Build em andamento</li>
+          <li>• <span class="text-yellow-400">deploying</span>: Fazendo deploy</li>
+          <li>• <span class="text-green-400">success</span>: Concluído</li>
+          <li>• <span class="text-red-400">failed</span>: Falhou</li>
+          <li>• <span class="text-gray-500">cancelled</span>: Cancelado</li>
+        </ul>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <h4 class="font-semibold text-white mb-1">Variáveis de Ambiente</h4>
+        <ul class="text-sm text-gray-400 space-y-1">
+          <li>• Criptografadas no banco (valueEncrypted)</li>
+          <li>• Marcadas como secret (não expostas na UI)</li>
+          <li>• Por deploy (isoladas)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Automations Rules -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="zap" class="text-yellow-400"></i>
+      Domínio: Automações
+    </h3>
+    <div class="space-y-3">
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <h4 class="font-semibold text-white mb-1">Triggers</h4>
+        <ul class="text-sm text-gray-400 space-y-1">
+          <li>• <span class="text-cyan-400">schedule</span>: Cron jobs</li>
+          <li>• <span class="text-green-400">webhook</span>: HTTP POST</li>
+          <li>• <span class="text-purple-400">event</span>: Eventos do sistema</li>
+          <li>• <span class="text-orange-400">manual</span>: Execução manual</li>
+        </ul>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <h4 class="font-semibold text-white mb-1">Configuração</h4>
+        <ul class="text-sm text-gray-400 space-y-1">
+          <li>• Actions: array JSON de ações a executar</li>
+          <li>• Pode habilitar/desabilitar (enabled)</li>
+          <li>• Registra runs com status e output</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workspace Rules -->
+  <div class="card">
+    <h3 class="card-title flex items-center gap-2 mb-4">
+      <i data-lucide="building-2" class="text-blue-400"></i>
+      Domínio: Workspaces (Multi-Tenancy)
+    </h3>
+    <div class="space-y-3">
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <h4 class="font-semibold text-white mb-1">Estrutura</h4>
+        <ul class="text-sm text-gray-400 space-y-1">
+          <li>• Cada usuário pertence a um workspace</li>
+          <li>• Workspace pode ter múltiplos usuários</li>
+          <li>• Todos os dados são filtrados por workspaceId</li>
+          <li>• Isolamento total entre workspaces</li>
+        </ul>
+      </div>
+      <div class="p-3 bg-gray-900 rounded-lg">
+        <h4 class="font-semibold text-white mb-1">Planos</h4>
+        <ul class="text-sm text-gray-400 space-y-1">
+          <li>• <span class="badge badge-info">free</span>: Limites básicos</li>
+          <li>• <span class="badge badge-warning">pro</span>: Mais recursos</li>
+          <li>• <span class="badge badge-success">enterprise</span>: Ilimitado</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
